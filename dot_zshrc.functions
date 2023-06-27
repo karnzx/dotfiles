@@ -1,0 +1,172 @@
+#!\bin\bash
+
+RED="\033[31m"
+YELLOW="\033[33m"
+GREEN="\033[32m"
+RESET="\033[0m"
+
+print_yellow() {
+    echo -e "${YELLOW}${1}${RESET}"
+}
+
+print_red() {
+    echo -e "${RED}${1}${RESET}"
+}
+
+print_green() {
+    echo -e "${GREEN}${1}${RESET}"
+}
+
+# check if command is exist
+isCommandExist(){
+        # $1: command
+        # $2: install source apt, git repo
+        command -v $1 >/dev/null 2>&1 || {
+                echo "require $1 but it's not installed. Aborting.";
+                [[ ! -z "$2" ]] && echo "Install: $2";
+                return 1;
+        }
+}
+
+# cat yaml file with color
+ycat() {
+    # Get the last argument (assumes it's a filename)
+    filename="$@[-1]"
+    # Get the file extension
+    extension="${filename:t:e}"
+    # convert to lowercase
+    if command -v yq >/dev/null 2>&1 && [[ "${extension:l}" =~ "y.?ml" ]]; then 
+	yq $@
+    else
+	cat $@
+    fi
+}
+alias cat='ycat'
+# SonarQube server management (Docker Container)
+sonarQube(){
+  NAME="sonarQube" # Container name
+  if [[ $# -ne 1 ]]; then
+    print_yellow "-- sonarqube server creation command (using docker) --"
+    print_yellow "$ $0 {start | stop | restart | status | clear}"
+    return 1
+  fi
+  status() {
+    output=$( docker ps -a -f name="${NAME}" | grep "${NAME}" 2> /dev/null )
+    if [[ ! -z ${output} ]]; then 
+      echo "$( echo ${output} | awk '{ print $7 }' )"
+    else
+      print_red "not Exist"
+    fi
+  }
+  if [[ "$1" == "start" ]]; then
+    if [ $( docker ps -a -f name="${NAME}" | wc -l ) -eq 2 ]; then
+      if [[ $(status) == "Up" ]]; then
+        print_yellow "${NAME} already running"
+        return 1
+      fi
+      docker start "${NAME}"
+      print_green "Starting ${NAME}..."
+    else
+      docker run -d --name "${NAME}" \
+      -p 9000:9000 \
+      -v sonarqube_data:/opt/sonarqube/data \
+      -v sonarqube_extensions:/opt/sonarqube/extensions \
+      -v sonarqube_logs:/opt/sonarqube/logs \
+      sonarqube:latest
+      print_green "Creating ${NAME}..."
+    fi
+    print_green "${NAME} run at http://localhost:9000"
+  elif [[ "$1" == "stop" ]]; then
+    if [[ $(status) == "Exited" ]]; then
+      print_red "${NAME} is not running"
+      return 1
+    elif [[ $(status) == "not Exist" ]]; then
+      print_red "${NAME} is not Exist"
+      return 1
+    fi
+    docker stop "${NAME}"
+  elif [[ "$1" == "restart" ]]; then
+    if [[ $(status) == "not Exist" ]]; then
+      print_red "${NAME} is not Exist"
+      return 1
+    fi
+    docker restart "${NAME}"
+    print_green "${NAME} run at http://localhost:9000"
+  elif [[ "$1" == "status" ]]; then
+    print_green "${NAME} is $(status)"
+  elif [[ "$1" == "clear" ]]; then
+    print_green "Stop ${NAME}"
+    docker stop ${NAME}
+    print_green "Removing container"
+    docker rm ${NAME}
+    print_green "Removing volume"
+    docker volume rm sonarqube_data sonarqube_extensions sonarqube_logs
+  fi
+  return 0
+}
+
+# sonarScanner using docker
+sonarScan(){
+  if [[ $# -lt 2 ]]; then
+    print_yellow "-- SonarScanner using docker (sonar-scanner-cli) --"
+    print_yellow "$ sonarScan {Token} {ProjectKey} {hostUrl}"
+    print_yellow "(default hostUrl is http://localhost:9000)"
+    print_yellow "EX. $ sonarScan sqp_a550f6c619131a1f12eca53819aea88b534d8908 projectKey"
+    print_yellow "$ sonarScan sqp_a550f6c619131a1f12eca53819aea88b534d8908 projectKey http://{ip-addr}:port"
+    return 1
+  fi
+  HOST_URL=http://localhost:9000
+  if [[ ! -z "$3" ]]; then
+    HOST_URL=$3
+  fi
+  docker run \
+  --network=host \
+  --rm \
+  --user="$(id -u):$(id -g)" \
+  -e SONAR_HOST_URL=${HOST_URL}\
+  -e SONAR_LOGIN=$1 \
+  -v "$(pwd):/usr/src" \
+  sonarsource/sonar-scanner-cli -Dsonar.projectKey=$2;
+}
+
+# Counting given text characters
+count(){
+  if [[ $# -ne 1 ]]; then
+    print_yellow "Couning given chars in text"
+    print_yellow "$0 {text}"
+    return 1
+  fi
+  echo -n $1 | wc -m 
+}
+
+gitDoRecursive(){
+  if [[ $# -ne 1 ]]; then
+    print_yellow "-- do git command recursively to all subdirectory --"
+    print_yellow "ex. $ $0 status"
+    return 1
+  fi
+  find . -type d -name .git -exec sh -c "cd \"{}\"/../ && pwd && git rev-parse --abbrev-ref HEAD && git ${1}" \;
+}
+
+gitCloneMultiple(){
+  if [[ $# -gt 1 ]]; then
+    print_yellow "-- do git clone multiple repo --"
+    print_yellow "** url with no space between ',' || arg2 is optional **"
+    print_yellow "ex. $ $0 \"url1,url2\" \"-b dev\" "
+    return 1
+  fi
+  for i in {$1}; do echo -e "\n$i" && git clone "$i" ${2}; done;
+}
+
+# aws profile switcher context 
+awsctx(){
+	if [[ $# -ne 1 ]]; then
+	    print_yellow "-- Change aws profile --"
+	    print_yellow "ex. $ $0 <profile_name>"
+	    aws configure list-profiles
+	    return 1
+	fi
+	export AWS_PROFILE=$1
+	aws configure list
+}
+

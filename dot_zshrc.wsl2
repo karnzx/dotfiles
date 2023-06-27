@@ -1,0 +1,13 @@
+# fix date not sync with window
+alias fixDate="sudo hwclock -sv; echo '>>>$(date)'"
+# pen current(file) directory
+alias ofd="/mnt/c/WINDOWS/explorer.exe ."
+# Window terminal
+alias wt="/mnt/c/WINDOWS/system32/cmd.exe /c 'wt.exe'"
+# PowerShell
+alias powershell="/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0//powershell.exe"
+## Simple split (no need just use "alt+shift+plus/minus)
+# alias sv="wt -w 0 sp -V 2> /dev/null "
+# alias sh="wt -w 0 sp -H 2> /dev/null "
+## Split 3 panes for workspace
+alias ide="wt -w 0 sp -H -s .35 -D 2> /dev/null \; sp -V -D \; mf up"

@@ -1,0 +1,10 @@
+# add directory into fpath and autoload will make the script be function
+# so it can access zsh ENV too like below
+# no need execute permission on the file
+# (`autoload` will load when function is needed) so `which` will show after first run only
+# fpath+=(~/directory)
+# autoload -Uz -- example
+emulate -L zsh
+echo $Z4H
+echo $HISTFILE
+echo 'script name ${(q-)ZSH_SCRIPT:t}'

@@ -1,0 +1,10 @@
+Include config-private
+
+Host *
+  ServerAliveInterval 60
+  ConnectTimeout 10
+  AddKeysToAgent yes
+  EscapeChar `
+  ControlMaster auto
+  ControlPersist 72000
+  ControlPath ~/.ssh/s/%C

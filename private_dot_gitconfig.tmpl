@@ -1,0 +1,32 @@
+[user]
+	user = {{ .git.email | quote }}
+	name = {{ .git.name | quote }}
+[difftool]
+	prompt = false
+[core]
+	pager = diff-so-fancy | less -RFXMx4
+	untrackedCache = true
+[color]
+	ui = true
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+[color "diff"]
+	meta = yellow
+	frag = magenta bold
+	commit = yellow bold
+	old = red bold
+	new = green bold
+	whitespace = red reverse
+[submodule]
+	recurse = true
+	fetchJobs = 0
+[rebase]
+	autoStash = true
+[alias]
+  patch = apply --ignore-space-change --ignore-whitespace
+[init]
+  defaultBranch = main
+

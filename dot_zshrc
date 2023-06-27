@@ -1,0 +1,228 @@
+# Periodic auto-update on Zsh startup: 'ask' or 'no'.
+# You can manually run `z4h update` to update everything.
+zstyle ':z4h:' auto-update      'no'
+zstyle ':z4h:' auto-update-days '28'
+
+zstyle ':z4h:bindkey' 		keyboard  'pc'
+zstyle ':z4h:term-title:ssh'    precmd                 ${${${Z4H_SSH##*:}//\%/%%}:-%m}': %~'
+zstyle ':z4h:term-title:ssh'    preexec                ${${${Z4H_SSH##*:}//\%/%%}:-%m}': ${1//\%/%%}'
+zstyle ':z4h:' 			term-shell-integration 'yes'
+
+# Enable direnv to automatically source .envrc files.
+zstyle ':z4h:direnv'         enable 'no'
+zstyle ':z4h:direnv:success' notify 'yes'
+
+zstyle  ':z4h:'                         start-tmux              no
+# zstyle        ':z4h:'                         start-tmux             command tmux -u new -A -D -t z4h
+zstyle  ':z4h:'                         prompt-at-bottom       'no' # affect tmux if start-tmux is yes
+# zstyle        ':z4h:'                         term-vresize           top
+# ssh Section
+zstyle	  ':z4h:ssh:*'                   enable 'no'
+zstyle	  ':z4h:ssh:*.example-hostname2' enable 'no'
+zstyle	  ':z4h:ssh:*' 			send-extra-files '~/.nanorc' '~/.env.zsh'
+zstyle    ':z4h:ssh:*' 			ssh-command      command ssh
+zstyle -e ':z4h:ssh:*' 			retrieve-history 'reply=($ZDOTDIR/.zsh_history.${(%):-%m}:$z4h_ssh_host)'
+zstyle	  ':z4h:ssh-agent:' 		start no
+
+plugin_repo=(
+	romkatv/archive
+	romkatv/zsh-prompt-benchmark
+	ohmyzsh/ohmyzsh
+	djui/alias-tips
+	Dbz/kube-aliases
+	lukechilds/zsh-nvm
+)
+z4h install "${plugin_repo[@]}" || return
+
+
+# Install or update core components (fzf, zsh-autosuggestions, etc.) and
+# initialize Zsh. After this point console I/O is unavailable until Zsh
+# is fully initialized. Everything that requires user interaction or can
+# perform network I/O must be done above. Everything else is best done below.
+z4h init || return
+
+# Set shell options: http://zsh.sourceforge.net/Doc/Release/Options.html.
+setopt glob_dots magic_equal_subst no_multi_os no_local_loops
+setopt rm_star_silent rc_quotes glob_star_short no_auto_menu
+
+# Extend PATH.
+path=(~/bin $path)
+
+fpath=($Z4H/romkatv/archive $fpath)
+[[ -d ~/.zfunctions ]] && fpath=(~/.zfunctions $fpath)
+
+autoload -Uz -- zmv archive lsarchive unarchive ~/.zfunctions/[^_]*(N:t)
+
+## shell
+export VISUAL=${${${commands[nvim]:t}:-${commands[vim]:t}}:-vi}
+export EDITOR=$VISUAL
+export GPG_TTY=$TTY
+export PAGER=less
+export GOPATH=$HOME/go
+export SYSTEMD_LESS=${LESS}S
+export MANOPT=--no-hyphenation
+export HOMEBREW_NO_ANALYTICS=1
+
+## k8s (krew)
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+## Go
+export GOROOT=/usr/local/go
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin:$GOROOT/bin
+
+# Source additional local files if they exist.
+z4h source ~/.env.zsh
+z4h source ~/.zshrc.local # for local custom config on ssh
+
+# # Custom plugin options
+export NVM_LAZY_LOAD=true
+
+## use plugins 
+# z4h source ohmyzsh/ohmyzsh/lib/diagnostics.zsh  # source an individual file
+## load plugins
+plugins=(
+	# OhMyZsh
+	ohmyzsh/ohmyzsh/plugins/git
+	ohmyzsh/ohmyzsh/plugins/cp
+	ohmyzsh/ohmyzsh/plugins/aws
+	# others
+	lukechilds/zsh-nvm 
+	MohamedElashri/exa-zsh
+	djui/alias-tips
+	Dbz/kube-aliases
+	)
+z4h load -c -- "${plugins[@]}"
+
+# about history (fc - process the command history list)
+() {
+  local hist
+  for hist in ~/.zsh_history*~$HISTFILE(N); do
+    fc -RI $hist
+  done
+}
+
+# Define named directories: ~w <=> Windows home directory on WSL.
+[[ -z $z4h_win_home ]] || hash -d w=$z4h_win_home
+
+# Define functions and completions.
+function -arith-eval() { print -r -- $(( $@ )) }
+aliases[=]='noglob -arith-eval' # calc math expression. Ex. $ = 1 + 2 
+
+function md() { [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1" }
+
+compdef _directories md # completion only directory on md function
+compdef _default     open
+
+## history
+function z4h-ssh-configure() {
+  (( z4h_ssh_enable )) || return 0
+  local file
+  for file in $ZDOTDIR/.zsh_history.*:$z4h_ssh_host(N); do
+    (( $+z4h_ssh_send_files[$file] )) && continue
+    z4h_ssh_send_files[$file]='"$ZDOTDIR"/'${file:t}
+  done
+}
+
+# Key binding
+z4h bindkey z4h-accept-line         Enter
+z4h bindkey z4h-fzf-dir-history     Alt+Down
+z4h bindkey z4h-exit                Ctrl+D
+z4h bindkey z4h-quote-prev-zword    Alt+Q
+z4h bindkey z4h-backward-kill-word  Ctrl+Backspace     Ctrl+H
+z4h bindkey z4h-backward-kill-zword Ctrl+Alt+Backspace
+
+zstyle ':z4h:fzf-dir-history'       fzf-bindings       tab:repeat
+
+zstyle ':completion:*:ls:*'                  list-dirs-first    true
+zstyle ':completion:*:ssh:argument-1:'       tag-order          hosts users
+zstyle ':completion:*:scp:argument-rest:'    tag-order          hosts files users
+zstyle ':completion:*:(ssh|scp|rdp):*:hosts' hosts
+
+function grep_no_cr() {
+  emulate -L zsh -o pipe_fail
+  local -a tty base=(grep)
+  if [[ ${${:-grep}:c:A:t} != busybox* ]]; then
+    base+=(--exclude-dir={.bzr,CVS,.git,.hg,.svn})
+    tty+=(--color=auto --line-buffered)
+  fi
+  if [[ -t 1 ]]; then
+    $base $tty "$@" | tr -d "\r"
+  else
+    $base "$@"
+  fi
+}
+compdef grep_no_cr=grep
+alias grep=grep_no_cr
+
+[[ -n $commands[diff-so-fancy] ]] && alias diff="diff-so-fancy"
+
+# Aliases
+(( $+commands[rsync] )) && alias rsync='rsync -rz --info=FLIST,COPY,DEL,REMOVE,SKIP,SYMSAFE,MISC,NAME,PROGRESS,STATS'
+if (( $+commands[exa] )); then
+  alias ls='exa -g --group-directories-first --time-style=long-iso' 
+  alias l='ls -lbF' #   list, size, type
+  alias ll='ls -la' # long, all
+  alias llm='ll --sort=modified' # list, long, sort by modification date
+  alias la='ls -lbhHigUmuSa' # all list
+  alias lx='ls -lbhHigUmuSa@' # all list and extended
+  alias tree='exa --tree' # tree view
+  alias lS='exa -1' # one column by just names
+fi
+(( $+commands[chezmoi] )) && alias cz=chezmoi
+
+## netstat 
+alias netstat="netstat -tulpn"
+## find text in files
+alias findstr="grep -rnw . -e"
+## Web app dev LAMP stack; Linux, Apache, MySQL, PHP
+# alias lampstatus="sudo service mariadb status ; sudo service apache2 status"
+# alias lampstart="sudo service mariadb start ; sudo service apache2 start"
+# alias lampstop="sudo service mariadb stop ; sudo service apache2 stop"
+# alias lamprestart="lampstop; lampstart"
+
+if [[ -v commands[xclip] && -n $DISPLAY ]]; then
+  function x() xclip -selection clipboard -in
+  function v() xclip -selection clipboard -out
+  function c() xclip -selection clipboard -in -filter
+elif [[ -v commands[base64] && -w $TTY ]]; then
+  function x() {
+    emulate -L zsh -o pipe_fail
+    {
+      print -n '\e]52;c;' && base64 | tr -d '\n' && print -n '\a'
+    } >$TTY
+  }
+  function c() {
+    emulate -L zsh -o pipe_fail
+    local data
+    data=$(tee -- $TTY && print x) || return
+    data[-1]=
+    print -rn -- $data | x
+  }
+else
+  [[ -v functions[x] ]] && unfunction x
+  [[ -v functions[v] ]] && unfunction v
+  [[ -v functions[c] ]] && unfunction c
+fi
+
+if [[ -v functions[x] ]]; then
+  function copy-buffer-to-clipboard() print -rn -- "$PREBUFFER$BUFFER" | x
+  zle -N copy-buffer-to-clipboard
+  bindkey '^S' copy-buffer-to-clipboard
+fi
+
+if [[ -x ~/bin/num-cpus ]]; then
+  if (( $+commands[make] )); then
+    alias make='make -j "${_my_num_cpus:-${_my_num_cpus::=$(~/bin/num-cpus)}}"'
+  fi
+  if (( $+commands[cmake] )); then
+    alias cmake='cmake -j "${_my_num_cpus:-${_my_num_cpus::=$(~/bin/num-cpus)}}"'
+  fi
+fi
+
+# use (source -c) compile and source if file no need to use alias in same file
+z4h source -c -- $ZDOTDIR/.zshrc.pageant # init pageant 
+z4h source -c -- $ZDOTDIR/.zshrc.functions # custome functions (also sent via ssh)
+z4h source -c -- $ZDOTDIR/.zshrc.wsl2 # for wsl2
+z4h source -c -- $ZDOTDIR/.zshrc-private
+z4h compile -- $ZDOTDIR/{.zshenv,.zprofile,.zshrc,.zlogin,.zlogout}
+
