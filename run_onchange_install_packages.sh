@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # for no confussed
-## (( !WSL )) && return 0 
-### exit if not WSL # wsl=0 -> !0 = 1 = true -> do return 0
+## (( WSL )) || return 0 
+### exit if not WSL # wsl=0 -> 0 = false -> do return 0
 #
 ## (( !WSL )) || return 0
 ### exit if WSL # wsl=1 -> !1 = 0 = false -> do return 0
@@ -95,7 +95,7 @@ function install_krew_plugin(){
 }
 
 function install_wsl2_ssh_pageant(){
-  (( !WSL )) && return 0
+  (( WSL )) || return 0
   # https://github.com/BlackReloaded/wsl2-ssh-pageant
   local win_home=$(wslpath $(cmd.exe /c 'echo %userprofile%' 2>/dev/null | sed 's/\r$//'))
   [ -d "$win_home/.ssh" ] || mkdir $win_home/.ssh
@@ -117,80 +117,6 @@ function install_in_tmp() {
 }
 
 
-# Avoid clock snafu when dual-booting Windows and Linux.
-# See https://www.howtogeek.com/323390/how-to-fix-windows-and-linux-showing-different-times-when-dual-booting/.
-function fix_clock() {
-  (( !WSL )) || return 0
-  timedatectl set-local-rtc 1 --adjust-system-clock
-}
-
-function win_install_fonts() {
-  local dst_dir
-  dst_dir="$(cmd.exe /c 'echo %LOCALAPPDATA%\Microsoft\Windows\Fonts' 2>/dev/null | sed 's/\r$//')"
-  dst_dir="$(wslpath "$dst_dir")"
-  mkdir -p "$dst_dir"
-  local src
-  for src in "$@"; do
-    local file="$(basename "$src")"
-    if [[ ! -f "$dst_dir/$file" ]]; then
-      cp -f "$src" "$dst_dir/"
-    fi
-    local win_path
-    win_path="$(wslpath -w "$dst_dir/$file")"
-    # Install font for the current user. It'll appear in "Font settings".
-    reg.exe add                                                 \
-      'HKCU\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts' \
-      /v "${file%.*} (TrueType)" /t REG_SZ /d "$win_path" /f 2>/dev/null
-  done
-}
-
-# Install a decent monospace font.
-function install_fonts() {
-  (( !WSL )) && return 0
-  win_install_fonts ~/.local/share/fonts/NerdFonts/*.ttf
-}
-
-function add_to_sudoers() {
-  # This is to be able to create /etc/sudoers.d/"$username". WITH NO PASSWORD
-  if [[ "$USER" == *'~' || "$USER" == *.* ]]; then
-    >&2 echo "$BASH_SOURCE: invalid username: $USER"
-    exit 1
-  fi
-
-  sudo usermod -aG sudo "$USER"
-  sudo tee /etc/sudoers.d/"$USER" <<<"$USER ALL=(ALL) NOPASSWD:ALL" >/dev/null
-  sudo chmod 440 /etc/sudoers.d/"$USER"
-}
-
-function add_wsl_config() {
-  (( !WSL )) && return 0
-  [[ -f /etc/wsl.conf ]] && return 0
-  cat <<EOF | sudo tee /etc/wsl.conf &>/dev/null
-[boot]
-systemd = true
-[automount]
-options = "metadata"
-EOF
-}
-
-# function fix_dbus() {
-#   (( !WSL )) && return 0
-#   sudo dbus-uuidgen --ensure
-# }
-
-# Set preferences for various applications.
-function set_preferences() {
-  # X11
-  if [[ -z "${DISPLAY+X}" ]]; then
-    export DISPLAY=:0
-  fi
-}
-
-function disable_motd_news() {
-  (( !WSL )) || return 0
-  sudo systemctl disable motd-news.timer
-}
-
 if [[ "$(id -u)" == 0 ]]; then
   echo "$BASH_SOURCE: please run as non-root" >&2
   exit 1
@@ -198,20 +124,11 @@ fi
 
 umask g-w,o-w
 
-add_to_sudoers
-add_wsl_config
-
 install_packages
 install_docker
 install_brew
-install_fonts
 install_tools
 install_krew_plugin
 install_wsl2_ssh_pageant
-
-disable_motd_news
-
-fix_clock
-set_preferences
 
 echo SUCCESS
