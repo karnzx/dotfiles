@@ -117,6 +117,10 @@ set_preferences
 
 # install package
 
+# just run zsh to load new fresh dependency and exit
+# -i for interactive (data download in interactive mode only)
+bash -c "exec zsh -ic exit"
+
 if [[ -t 0 && -n "${WSL_DISTRO_NAME-}" ]]; then
   read -p "Need to restart WSL to complete installation. Terminate WSL now? [y/N] " -n 1 -r
   echo
