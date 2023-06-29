@@ -36,7 +36,7 @@ ycat() {
     extension="${filename:t:e}"
     # convert to lowercase
     if command -v yq >/dev/null 2>&1 && [[ "${extension:l}" =~ "y.?ml" ]]; then 
-	yq $@
+	yq $@ || cat $@
     else
 	cat $@
     fi
