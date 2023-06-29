@@ -9,7 +9,7 @@ zstyle ':z4h:term-title:ssh'    preexec                ${${${Z4H_SSH##*:}//\%/%%
 zstyle ':z4h:' 			term-shell-integration 'yes'
 
 # Enable direnv to automatically source .envrc files.
-zstyle ':z4h:direnv'         enable 'no'
+zstyle ':z4h:direnv'         enable 'yes'
 zstyle ':z4h:direnv:success' notify 'yes'
 
 zstyle  ':z4h:'                         start-tmux              no
