@@ -24,7 +24,7 @@ Open PowerShell or Windows Command Prompt in administrator mode and run
 ```powershell
 wsl --install -d Debian
 ```
-### Optional
+#### Optional
 |        |                         |
 | ------ | ----------------------- |
 | vscode | the visual studio code  |
