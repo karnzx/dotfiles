@@ -44,6 +44,7 @@ function install_packages() {
     dnsutils
     num-utils
     zsh
+    direnv
   )
 
   # if (( WSL )); then
