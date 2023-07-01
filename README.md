@@ -27,7 +27,7 @@ sudo apt install -y curl
 ### Window Setup (WSL2)
 **(skip if not use WSL2)**
 
-Install Debian distro or any you like
+Install Debian distribution or any you like
 
 Open PowerShell or Windows Command Prompt in **administrator** mode and run.
 
