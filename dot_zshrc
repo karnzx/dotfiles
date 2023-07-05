@@ -131,6 +131,12 @@ z4h bindkey z4h-quote-prev-zword    Alt+Q
 z4h bindkey z4h-backward-kill-word  Ctrl+Backspace     Ctrl+H
 z4h bindkey z4h-backward-kill-zword Ctrl+Alt+Backspace
 
+# i dont like "shift" keybinding of z4h (move between dir)
+bindkey "^[[1;2A" z4h-do-nothing
+bindkey "^[[1;2B" z4h-do-nothing
+bindkey "^[[1;2C" z4h-do-nothing
+bindkey "^[[1;2D" z4h-do-nothing
+
 zstyle ':z4h:fzf-dir-history'       fzf-bindings       tab:repeat
 
 zstyle ':completion:*:ls:*'                  list-dirs-first    true
