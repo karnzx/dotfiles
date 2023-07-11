@@ -176,6 +176,7 @@ if (( $+commands[exa] )); then
 fi
 (( $+commands[chezmoi] )) && alias cz=chezmoi
 
+alias vim=$VISUAL
 ## netstat 
 alias netstat="netstat -tulpn"
 ## find text in files
