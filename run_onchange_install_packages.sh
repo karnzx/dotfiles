@@ -27,12 +27,9 @@ function install_packages() {
     wget
     gawk
     git
+    file
     htop
-    jq
-    neovim
     libmagic1
-    pipx
-    command-not-found
     unzip
     zip
     tldr
@@ -71,19 +68,28 @@ function install_brew() {
 
 function install_tools(){
   local plugins=(
+    # utils
     exa
     ripgrep
     jc
     yq
+    jq
     bat
     diff-so-fancy
+    neovim
 
+    # cli
     awscli
     kubectl
     kubectx
     krew
     argocd
     k9s
+    oha     # web load test in Rust https://github.com/hatoo/oha
+
+    # monitoring
+    bpytop  # better htop
+    ctop    # docker contianer top
   )
   brew install "${plugins[@]}"
 }
