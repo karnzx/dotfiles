@@ -11,8 +11,6 @@ set -xueEo pipefail
 
 umask o-w
 
-mkdir -m 700 -p ~/.ssh/s
-
 rm -rf ~/.cache
 
 if [[ "$(</proc/version)" == *[Mm]icrosoft* ]] 2>/dev/null; then
