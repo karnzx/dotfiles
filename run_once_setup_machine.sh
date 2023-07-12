@@ -124,7 +124,7 @@ bash -c "exec zsh -ic '
 if [[ -t 0 && -n "${WSL_DISTRO_NAME-}" ]]; then
   echo 
   echo ------------------------------
-  echo Restart WSL by run
-  echo \$ wsl.exe \-t $WSL_DISTRO_NAME
+  echo Restart WSL by run this command on powershell
+  echo \$ wsl.exe \-\-shutdown
 fi
 ;exit '"
