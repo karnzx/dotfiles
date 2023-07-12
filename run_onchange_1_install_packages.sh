@@ -69,7 +69,13 @@ function install_brew() {
 
 function share_tools(){
   # create symlink from brew to /usr/local/bin/
-  sudo ln -sf /home/linuxbrew/.linuxbrew/bin/nvim /usr/local/bin/vim
+  local -A tools=(
+    [nvim]="vim"
+  )
+  for key in "${!tools[@]}"; do
+    printf "link %s to /usr/local/bin/%s\n" "$key" "${tools[$key]}"
+    sudo ln -sf /home/linuxbrew/.linuxbrew/bin/$key /usr/local/bin/${tools[$key]}
+  done
 }
 
 function install_tools(){
