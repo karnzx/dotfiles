@@ -19,7 +19,7 @@ my dotfiles managed with chezmoi
 
 - Linux or WSL2 etc.
 - curl
-- ensure you can run window binary 
+- ensure you can run window binary [fix here](#wsl2-cant-execute-window-binary)
 
 ```shell
 sudo apt install -y curl
