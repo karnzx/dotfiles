@@ -67,6 +67,11 @@ function install_brew() {
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 }
 
+function share_tools(){
+  # create symlink from brew to /usr/local/bin/
+  sudo ln -sf /home/linuxbrew/.linuxbrew/bin/nvim /usr/local/bin/vim
+}
+
 function install_tools(){
   local plugins=(
     # utils
@@ -93,6 +98,7 @@ function install_tools(){
     ctop    # docker contianer top
   )
   brew install "${plugins[@]}"
+  share_tools
 }
 
 function install_krew_plugin(){
