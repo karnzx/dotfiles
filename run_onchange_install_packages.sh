@@ -27,6 +27,7 @@ function install_packages() {
     wget
     gawk
     git
+    man
     file
     htop
     libmagic1
