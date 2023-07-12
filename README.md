@@ -19,6 +19,7 @@ my dotfiles managed with chezmoi
 
 - Linux or WSL2 etc.
 - curl
+- ensure you can run window binary 
 
 ```shell
 sudo apt install -y curl
@@ -66,3 +67,13 @@ Updating your dotfiles on any machine is a single command:
 cz update
 ```
 --- 
+
+## troubleshooting
+
+### WSL2 cant execute window binary
+
+can not run `cmd.exe` or window program etc.
+```shell
+sudo sh -c 'echo :WSLInterop:M::MZ::/init:PF > /usr/lib/binfmt.d/WSLInterop.conf'
+```
+then `wsl.exe --shutdown` in powershell
