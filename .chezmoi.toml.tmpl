@@ -1,6 +1,7 @@
-{{- writeToStdout "Git Config \n" -}}
-{{ $email := promptStringOnce . "email" "What is your email address" -}}
-{{ $name := promptStringOnce . "name" "What is your name" -}}
+{{- writeToStdout "Git Config... \n" -}}
+{{- /* prompStringOnce . "dataPath" "displayString" */ -}}
+{{ $email := promptStringOnce . "git.email" "What is your email address" -}}
+{{ $name := promptStringOnce . "git.name" "What is your name" -}}
 
 [data.git]
     email = {{ $email | quote }}
