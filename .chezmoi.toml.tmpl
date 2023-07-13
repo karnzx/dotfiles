@@ -3,13 +3,14 @@
 {{ $email := promptStringOnce . "git.email" "What is your email address" -}}
 {{ $name := promptStringOnce . "git.name" "What is your name" -}}
 
-{{- writeToStdout "Want to ReEnter data?\nForce prompt*Once template functions to prompt\n" -}}
-{{- writeToStdout "$ cz init --prompt\n" -}}
 [data.git]
     email = {{ $email | quote }}
     name = {{ $name | quote }}
-    work_email = {{ $email | quote }}
-    work_name = {{ $name | quote }}
-
+    workEmail = {{ promptStringOnce . "git.workEmail" "Work email address" | default $email | quote }}
+    workName = {{ promptStringOnce . "git.workName" "Work name" | default $name | quote }}
 [diff]
     pager = "diff-so-fancy"
+
+{{- writeToStdout "-------------------------------------------------\n" -}}
+{{- writeToStdout "Want to ReEnter data?\nForce prompt*Once template functions to prompt\n" -}}
+{{- writeToStdout "$ cz init --prompt\n" -}}
