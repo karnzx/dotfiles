@@ -3,6 +3,8 @@
 {{ $email := promptStringOnce . "git.email" "What is your email address" -}}
 {{ $name := promptStringOnce . "git.name" "What is your name" -}}
 
+{{- writeToStdout "Want to ReEnter data?\nForce prompt*Once template functions to prompt\n" -}}
+{{- writeToStdout "$ cz init --prompt\n" -}}
 [data.git]
     email = {{ $email | quote }}
     name = {{ $name | quote }}
