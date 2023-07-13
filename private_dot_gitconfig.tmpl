@@ -26,8 +26,10 @@
 [rebase]
 	autoStash = true
 [alias]
-  patch = apply --ignore-space-change --ignore-whitespace
+	patch = apply --ignore-space-change --ignore-whitespace
 [init]
-  defaultBranch = main
+	defaultBranch = main
 [pull]
 	rebase = true
+[includeIf "gitdir:~/work/**/.git"] # replace config on work dir
+	path = ~/.gitconfig.work
