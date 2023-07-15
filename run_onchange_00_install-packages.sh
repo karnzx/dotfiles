@@ -75,7 +75,7 @@ function share_tools(){
   )
   for key in "${!tools[@]}"; do
     printf "link %s to /usr/local/bin/%s\n" "$key" "${tools[$key]}"
-    sudo ln -sf $HOMEBREW_PREFIX/$key /usr/local/bin/${tools[$key]}
+    sudo ln -sf $HOMEBREW_PREFIX/bin/$key /usr/local/bin/${tools[$key]}
   done
 }
 
