@@ -19,15 +19,15 @@ my dotfiles managed with chezmoi
 ## Prerequisite
 
 - Linux or WSL2 etc.
-- curl
 - ensure you can run window binary [fix here](#wsl2-cant-execute-window-binary)
+- curl 
 
+Make sure you have curl installed. If not, you can install it with the following command:
 ```shell
 sudo apt install -y curl
 ```
 
-### Window Setup (WSL2)
-**(skip if not use WSL2)**
+### Window Setup (skip if not using WSL2)
 
 Install Debian distribution or any you like
 
@@ -36,6 +36,7 @@ Open PowerShell or Windows Command Prompt in **administrator** mode and run.
 ```powershell
 wsl --install -d Debian
 ```
+
 #### Tools
 | what   | it is                   | 
 | ------ | ----------------------- |
@@ -44,29 +45,27 @@ wsl --install -d Debian
 
 Install chocolatey see https://chocolatey.org/install
 
-Open PowerShell as **Administrator** and run:
+Open PowerShell as **Administrator** and run the following command:
 ```powershell
 choco.exe install -y microsoft-windows-terminal vscode vcxsrv 
 ```
-run XLaunch > Next > Next > Uncheck Primary Selection, Next > Save Config at `win+r` > `shell:startup` path
+
+After installation, run XLaunch and configure it as follows:
+- Click "Next" twice.
+- Uncheck "Primary Selection" and click "Next".
+- Save the configuration at the shell:startup path.
 
 ---
 ## Installation
 
-install chezmoi and clone dotfiles with bootstrap command below.
+To install chezmoi and clone the dotfiles, use the bootstrap command below. 
 
-there are 2 variables (_can be ignore_) just create for anyone fork or clone this dotfiles for personal use.
+There are two optional variables you can create for anyone who forks or clones these dotfiles for personal use:
 
 | key             | value               | 
 | --------------- | ------------------- |
 | GITHUB_USERNAME | git repo username   |
 | BITWARDEN_EMAIL | bitwarden email     |
-
-How `bootstrap.sh` work ?
-- install `bitwarden-cli` and unlock vault
-- install `chezmoi` then init & apply dofiles
-
-once cloned dotfiles chezmoi will run scripts to install all necessary things such as WSL2 config, fonts, tools etc.
 
 ```shell
 GITHUB_USERNAME=karnzx \
@@ -74,10 +73,15 @@ BITWARDEN_EMAIL=bitwarden@email.com \
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/karnzx/dotfiles/main/bootstrap.sh)"
 ```
 
+The `bootstrap.sh` script works as follows:
 
-Updating your dotfiles on any machine is a single command:
+- Installs `bitwarden-cli` and unlocks the vault.
+- Installs `chezmoi`, initializes it, and applies the dotfiles.
+- Once the dotfiles are cloned, chezmoi will run scripts to install all necessary things, such as WSL2 configuration, fonts, tools, etc.
 
-`cz` is my chezmoi alias
+## Updating your dotfiles
+To update your dotfiles on any machine, use the following command (assuming cz is your chezmoi alias):
+
 ```shell
 cz update
 ```
