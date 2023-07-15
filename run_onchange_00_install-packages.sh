@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # for no confussed
-## (( WSL )) || return 0 
+## (( WSL )) || return 0
 ### exit if not WSL # wsl=0 -> 0 = false -> do return 0
 #
 ## (( !WSL )) || return 0
@@ -37,7 +37,7 @@ function install_packages() {
     perl
     python3
     python3-pip
-    socat 
+    socat
     iproute2
     dnsutils
     num-utils
@@ -63,8 +63,9 @@ function install_docker() {
 }
 
 function install_brew() {
+  command -v brew &>/dev/null && return 0
   NONINTERACTIVE=1 bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  eval "$(brew shellenv)"
 }
 
 function share_tools(){
