@@ -11,10 +11,16 @@ my dotfiles managed with chezmoi
 | password manager | Bitwarden                                                |
 | etc.             | there a lot                                              |
 
+**there different setup see [install by branch](#installation-by-branch)**
+
 - [Prerequisite](#prerequisite)
-  - [Window Setup (skip if not use WSL2)](#window-setup-wsl2) 
+  - [Window Setup (skip if not use WSL2)](#window-setup-skip-if-not-using-wsl2) 
     - [Tools](#tools)
 - [Installation](#installation)
+- [install by branch](#installation-by-branch)
+- [Updating your dotfiles](#updating-your-dotfiles)
+- [troubleshooting](#troubleshooting)
+  - [WSL2 cant execute window binary](#wsl2-cant-execute-window-binary)
 
 ## Prerequisite
 
@@ -79,6 +85,18 @@ The `bootstrap.sh` script works as follows:
 - Installs `chezmoi`, initializes it, and applies the dotfiles.
 - Once the dotfiles are cloned, chezmoi will run scripts to install all necessary things, such as WSL2 configuration, fonts, tools, etc.
 
+## installation by branch
+
+Each branch have different setup for example.
+- `config-and-tools` branch dont have `bitwarden-cli` so there no any credentail sync
+
+Take a look at branch `README` for installation or maybe you can just add `--branch` on `chezmoi`
+
+```shell
+sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply karnzx --branch config-and-tools
+```
+
+
 ## Updating your dotfiles
 To update your dotfiles on any machine, use the following command (assuming cz is your chezmoi alias):
 
@@ -95,4 +113,7 @@ can not run `cmd.exe` or window program etc.
 ```shell
 sudo sh -c 'echo :WSLInterop:M::MZ::/init:PF > /usr/lib/binfmt.d/WSLInterop.conf'
 ```
-then `wsl.exe --shutdown` in powershell
+then run following command on powershell
+```poweshell
+wsl.exe --shutdown
+```
