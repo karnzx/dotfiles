@@ -8,6 +8,7 @@ my dotfiles managed with chezmoi
 | Shell            | ZSH ([zsh4human](https://github.com/romkatv/zsh4humans)) |
 | dotfile manager  | [chezmoi](https://www.chezmoi.io/)                       |
 | editor           | neovim or vim or vi                                      |
+| password manager | Bitwarden                                                |
 | etc.             | there a lot                                              |
 
 - [Prerequisite](#prerequisite)
@@ -52,17 +53,19 @@ run XLaunch > Next > Next > Uncheck Primary Selection, Next > Save Config at `wi
 ---
 ## Installation
 
-
 install chezmoi and clone dotfiles.
 
-once clone dotfiles chezmoi will install all necessary things such as WSL2 config, fonts, tools etc.
 ```shell
-sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply karnzx
+GITHUB_USERNAME=karnzx \
+BITWARDEN_EMAIL=bitwarden@email.com \
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/karnzx/dotfiles/main/bootstrap.sh)"
 ```
+
+once cloned dotfiles chezmoi will install all necessary things such as WSL2 config, fonts, tools etc.
 
 Updating your dotfiles on any machine is a single command:
 
-`cz` is chezmoi alias
+`cz` is my chezmoi alias
 ```shell
 cz update
 ```
