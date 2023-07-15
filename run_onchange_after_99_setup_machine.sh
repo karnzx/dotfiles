@@ -19,7 +19,7 @@ else
   readonly WSL=0
 fi
 
-sudo apt-get update
+sudo apt-get update -qq >/dev/null
 sudo sh -c 'DEBIAN_FRONTEND=noninteractive apt-get -o DPkg::options::="--force-confdef" -o DPkg::options::="--force-confold" upgrade -y'
 sudo apt-get install -y curl git
 sudo apt-get autoremove -y

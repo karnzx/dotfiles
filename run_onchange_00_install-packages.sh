@@ -49,7 +49,8 @@ function install_packages() {
   #   packages+=(dbus-x11)
   # fi
 
-  sudo apt-get update
+  sudo apt-get update -qq >/dev/null
+  # DEBIAN_FRONTEND=noninteractive sudo apt-get install -y -qq $pre_reqs >/dev/null
   sudo bash -c 'DEBIAN_FRONTEND=noninteractive apt-get -o DPkg::options::=--force-confdef -o DPkg::options::=--force-confold upgrade -y'
   sudo apt-get install -y "${packages[@]}"
   sudo apt-get autoremove -y
