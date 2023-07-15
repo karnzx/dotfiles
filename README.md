@@ -53,7 +53,20 @@ run XLaunch > Next > Next > Uncheck Primary Selection, Next > Save Config at `wi
 ---
 ## Installation
 
-install chezmoi and clone dotfiles.
+install chezmoi and clone dotfiles with bootstrap command below.
+
+there are 2 variables (_can be ignore_) just create for anyone fork or clone this dotfiles for personal use.
+
+| key             | value               | 
+| --------------- | ------------------- |
+| GITHUB_USERNAME | git repo username   |
+| BITWARDEN_EMAIL | bitwarden email     |
+
+How `bootstrap.sh` work ?
+- install `bitwarden-cli` and unlock vault
+- install `chezmoi` then init & apply dofiles
+
+once cloned dotfiles chezmoi will run scripts to install all necessary things such as WSL2 config, fonts, tools etc.
 
 ```shell
 GITHUB_USERNAME=karnzx \
@@ -61,7 +74,6 @@ BITWARDEN_EMAIL=bitwarden@email.com \
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/karnzx/dotfiles/main/bootstrap.sh)"
 ```
 
-once cloned dotfiles chezmoi will install all necessary things such as WSL2 config, fonts, tools etc.
 
 Updating your dotfiles on any machine is a single command:
 
