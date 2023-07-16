@@ -6,8 +6,6 @@
 [data.git]
     email = {{ $email | quote }}
     name = {{ $name | quote }}
-    workEmail = {{ promptStringOnce . "git.workEmail" "Work email address" | default $email | quote }}
-    workName = {{ promptStringOnce . "git.workName" "Work name" | default $name | quote }}
 [diff]
     pager = "diff-so-fancy"
 
