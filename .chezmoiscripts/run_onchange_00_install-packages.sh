@@ -100,6 +100,7 @@ function install_tools(){
     argocd
     k9s
     oha     # web load test in Rust https://github.com/hatoo/oha
+    ghq     # Manage remote repository clones
 
     # monitoring
     bpytop  # better htop
