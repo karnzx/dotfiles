@@ -1,0 +1,63 @@
+#!/bin/bash
+
+# Function to check if a directory exists
+is_directory_exists() {
+  [[ -d "$1" ]]
+}
+
+# Function to check if a file exists
+is_file_exists() {
+  [[ -f "$1" ]]
+}
+
+# Function to check if a directory contains .envrc file
+has_envrc() {
+  is_file_exists "$1/.envrc"
+}
+
+# Function to check if .envrc file contains Git configuration
+has_git_config() {
+  grep -q "# Git configuration" "$1" 2>/dev/null
+}
+
+# Function to add or modify Git configuration lines in .envrc file
+add_or_modify_git_config() {
+  local config_file="$1/.envrc"
+  local name="$2"
+  local email="$3"
+
+  if has_envrc "$1" && has_git_config "$config_file"; then
+    echo "Modifying existing Git configuration in $1/.envrc..."
+    sed -i.bak -E "s/(export GIT_AUTHOR_NAME=\")[^\"]*/\1$name/" "$config_file"
+    sed -i.bak -E "s/(export GIT_AUTHOR_EMAIL=\")[^\"]*/\1$email/" "$config_file"
+    # rm "$config_file.bak" # previous .envrc
+  else
+    echo "Create $1/.envrc and Adding Git configuration ..."
+    echo "# Git configuration" >> "$config_file"
+    echo "export GIT_AUTHOR_NAME=\"$name\"" >> "$config_file"
+    echo "export GIT_AUTHOR_EMAIL=\"$email\"" >> "$config_file"
+    echo "export GIT_COMMITTER_NAME=\"\$GIT_AUTHOR_NAME\"" >> "$config_file"
+    echo "export GIT_COMMITTER_EMAIL=\"\$GIT_AUTHOR_EMAIL\"" >> "$config_file"
+  fi
+}
+main(){
+  # Prompt user for name, email, and directory
+  read -p "Enter your name: " name
+  read -p "Enter your email: " email
+  read -e -p "Enter the directory path: " directory  # Enable path completion (-e from terminal)
+
+  # Expand the directory path if it starts with "~"
+  if [[ $directory == "~/"* ]]; then
+    directory=$(eval echo "$directory")
+  fi
+
+  # Check if the provided directory exists
+  if is_directory_exists "$directory"; then
+      add_or_modify_git_config "$directory" "$name" "$email"
+  else
+    echo "Directory does not exist. Exiting..."
+    exit 1
+  fi
+}
+
+main
