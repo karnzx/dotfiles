@@ -54,7 +54,7 @@ Install chocolatey see https://chocolatey.org/install
 
 Open PowerShell as **Administrator** and run the following command:
 ```powershell
-choco.exe install -y microsoft-windows-terminal vscode vcxsrv microsoft-windows-terminal
+choco.exe install -y microsoft-windows-terminal vscode vcxsrv
 ```
 
 After installation, run XLaunch and configure it as follows:
