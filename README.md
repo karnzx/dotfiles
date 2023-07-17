@@ -44,16 +44,17 @@ wsl --install -d Debian
 ```
 
 #### Tools
-| what   | it is                   | 
-| ------ | ----------------------- |
-| vscode | the visual studio code  |
-| vcxsrv | for diplay GUI for WSL2 |
+| what                       | it is                   |
+| -------------------------- | ----------------------- |
+| vscode                     | the visual studio code  |
+| vcxsrv                     | for diplay GUI for WSL2 |
+| microsoft-windows-terminal | window terminal         | 
 
 Install chocolatey see https://chocolatey.org/install
 
 Open PowerShell as **Administrator** and run the following command:
 ```powershell
-choco.exe install -y microsoft-windows-terminal vscode vcxsrv 
+choco.exe install -y microsoft-windows-terminal vscode vcxsrv microsoft-windows-terminal
 ```
 
 After installation, run XLaunch and configure it as follows:
