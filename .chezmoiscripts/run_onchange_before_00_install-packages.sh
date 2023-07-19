@@ -36,10 +36,9 @@ function install_packages() {
     perl
     python3
     python3-pip
-    socat
-    iproute2
+    socat iproute2 # https://github.com/BlackReloaded/wsl2-ssh-pageant#prerequisite
     dnsutils
-    num-utils
+    num-utils # math
     zsh
     direnv
     mycli
@@ -103,11 +102,13 @@ function install_tools(){
     k9s
     oha     # web load test in Rust https://github.com/hatoo/oha
     ghq     # Manage remote repository clones
+    git-standup
 
     # monitoring
     bpytop  # better htop
     ctop    # docker contianer top
   )
+  brew update
   brew install "${plugins[@]}"
   share_tools
 }
