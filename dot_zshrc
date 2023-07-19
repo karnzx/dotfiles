@@ -30,6 +30,7 @@ plugin_repo=(
 	ohmyzsh/ohmyzsh
 	djui/alias-tips
 	Dbz/kube-aliases
+	redxtech/zsh-asdf-direnv
 )
 z4h install "${plugin_repo[@]}" || return
 
@@ -49,6 +50,9 @@ path=(~/bin $path)
 
 fpath=($Z4H/romkatv/archive $fpath)
 [[ -d ~/.zfunctions ]] && fpath=(~/.zfunctions $fpath)
+# asdf 
+export ASDF_DIR="$HOME/.asdf"
+fpath+=(${ASDF_DIR}/completions)
 
 autoload -Uz -- zmv archive lsarchive unarchive ~/.zfunctions/[^_]*(N:t)
 
@@ -88,6 +92,7 @@ plugins=(
 	MohamedElashri/exa-zsh
 	djui/alias-tips
 	Dbz/kube-aliases
+	redxtech/zsh-asdf-direnv
 	)
 z4h load -c -- "${plugins[@]}"
 
@@ -231,3 +236,8 @@ z4h source -c -- $ZDOTDIR/.zshrc.wsl2 # for wsl2
 z4h source -c -- $ZDOTDIR/.zshrc-private
 z4h compile -- $ZDOTDIR/{.zshenv,.zprofile,.zshrc,.zlogin,.zlogout}
 
+# asdf
+# ** Dont delete this line. source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
+# use to fool the command "asdf direnv setup --shell zsh --verison ..." from automatic modify this file
+# i use z4h source instead of source, because complie file is a bit faster
+z4h source -c -- "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"

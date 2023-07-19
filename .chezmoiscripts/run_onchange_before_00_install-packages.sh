@@ -40,7 +40,6 @@ function install_packages() {
     dnsutils
     num-utils # math
     zsh
-    direnv
     mycli
     httpie
   )
