@@ -30,7 +30,6 @@ plugin_repo=(
 	ohmyzsh/ohmyzsh
 	djui/alias-tips
 	Dbz/kube-aliases
-	lukechilds/zsh-nvm
 )
 z4h install "${plugin_repo[@]}" || return
 
@@ -86,7 +85,6 @@ plugins=(
 	ohmyzsh/ohmyzsh/plugins/cp
 	ohmyzsh/ohmyzsh/plugins/aws
 	# others
-	lukechilds/zsh-nvm 
 	MohamedElashri/exa-zsh
 	djui/alias-tips
 	Dbz/kube-aliases

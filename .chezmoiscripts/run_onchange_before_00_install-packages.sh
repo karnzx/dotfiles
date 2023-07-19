@@ -29,7 +29,6 @@ function install_packages() {
     git
     man
     file
-    htop
     libmagic1
     unzip
     zip
@@ -43,6 +42,8 @@ function install_packages() {
     num-utils
     zsh
     direnv
+    mycli
+    httpie
   )
 
   # if (( WSL )); then
@@ -87,6 +88,7 @@ function install_tools(){
     ripgrep
     jc
     yq
+    fx # interactive with JSON
     jq
     bat
     diff-so-fancy
