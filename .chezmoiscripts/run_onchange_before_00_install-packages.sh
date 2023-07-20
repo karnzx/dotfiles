@@ -34,14 +34,14 @@ function install_packages() {
     zip
     tldr
     perl
-    python3
-    python3-pip
-    socat iproute2 # https://github.com/BlackReloaded/wsl2-ssh-pageant#prerequisite
     dnsutils
     num-utils # math
     zsh
     mycli
     httpie
+    # packages require for tools
+    socat iproute2 # install_wsl2_ssh_pageant
+    libasound2-dev # install_focus
   )
 
   # if (( WSL )); then
@@ -79,8 +79,8 @@ function share_tools(){
   done
 }
 
-function install_tools(){
-  local plugins=(
+function install_brew_packages(){
+  local packages=(
     # utils
     exa
     ripgrep
@@ -108,7 +108,7 @@ function install_tools(){
     ctop    # docker contianer top
   )
   brew update
-  brew install "${plugins[@]}"
+  brew install "${packages[@]}"
   share_tools
 }
 
@@ -119,9 +119,9 @@ function install_krew_plugin(){
   kubectl krew install "${plugins[@]}"
 }
 
+# https://github.com/BlackReloaded/wsl2-ssh-pageant
 function install_wsl2_ssh_pageant(){
   (( WSL )) || return 0
-  # https://github.com/BlackReloaded/wsl2-ssh-pageant
   local win_home=$(wslpath $(cmd.exe /c 'echo %userprofile%' 2>/dev/null | sed 's/\r$//'))
   [ -d "$win_home/.ssh" ] || mkdir $win_home/.ssh
   [ -d "$HOME/.ssh" ] || mkdir "$HOME/.ssh"
@@ -134,10 +134,23 @@ function install_wsl2_ssh_pageant(){
   ln -sf $windows_destination $linux_destination
 }
 
+# pomodoro cli https://github.com/ayoisaiah/focus
+function install_focus(){
+    local version release_url
+    version=${1-1.3.0}
+    command -v focus &>/dev/null && focus -v | grep $version && return 0
+    release_url=https://github.com/ayoisaiah/focus/releases/download/v${version}/focus_${version}_linux_amd64.tar.gz
+    curl -LO $release_url
+    tar -xvzf focus_${version}_linux_amd64.tar.gz
+    chmod +x focus
+    sudo mv focus /usr/local/bin
+}
+
 function install_in_tmp() {
   local tmp
   tmp="$(mktemp -d)"
   pushd -- "$tmp"
+  "$@"
   popd
 }
 
@@ -150,10 +163,12 @@ fi
 umask g-w,o-w
 
 install_packages
-install_docker
 install_brew
-install_tools
+install_brew_packages
 install_krew_plugin
+install_in_tmp install_focus
+
+install_docker
 install_wsl2_ssh_pageant
 
 echo SUCCESS
