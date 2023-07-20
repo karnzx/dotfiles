@@ -170,3 +170,13 @@ awsctx(){
 	aws configure list
 }
 
+# display minikube CPUs and memory
+minikube_stat () {
+        local name
+        name="minikube"
+        echo "inspect minikube (docker driver) CPUs and Memory"
+        echo "------------------------------------------------"
+        echo CPUs: $(($(docker inspect $name --format="{{ .HostConfig.NanoCpus }}")/10**9))
+        echo Memory: $(($(docker inspect $name --format="{{ .HostConfig.Memory }}")/1024**2))
+}
+
