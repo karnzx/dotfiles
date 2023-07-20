@@ -89,7 +89,7 @@ The `bootstrap.sh` script works as follows:
 ## installation by branch
 
 Each branch have different setup for example.
-- `config-and-tools` branch dont have `bitwarden-cli` so there no any credentail sync
+- [config-and-tools](https://github.com/karnzx/dotfiles/tree/config-and-tools) contain only configs and tools no password manger (bitwarden-cli)
 
 Take a look at branch `README` for installation or maybe you can just add `--branch` on `chezmoi`
 
