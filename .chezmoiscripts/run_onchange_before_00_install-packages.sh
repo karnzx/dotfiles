@@ -39,6 +39,7 @@ function install_packages() {
     zsh
     mycli
     httpie
+    taskwarrior
     # packages require for tools
     socat iproute2 # install_wsl2_ssh_pageant
     libasound2-dev # install_focus
