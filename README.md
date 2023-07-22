@@ -4,7 +4,7 @@ my dotfiles managed with chezmoi
 ### My setup
 | what             | I use                                                    | 
 | ---------------- | -------------------------------------------------------- |
-| Operating System | WSL2 (Debian)                                            |
+| Operating System | Window 11, WSL2 (Debian)                                 |
 | Shell            | ZSH ([zsh4human](https://github.com/romkatv/zsh4humans)) |
 | dotfile manager  | [chezmoi](https://www.chezmoi.io/)                       |
 | editor           | neovim or vim or vi                                      |
@@ -47,20 +47,14 @@ wsl --install -d Debian
 | what                       | it is                   |
 | -------------------------- | ----------------------- |
 | vscode                     | the visual studio code  |
-| vcxsrv                     | for diplay GUI for WSL2 |
 | microsoft-windows-terminal | window terminal         | 
 
 Install chocolatey see https://chocolatey.org/install
 
 Open PowerShell as **Administrator** and run the following command:
 ```powershell
-choco.exe install -y microsoft-windows-terminal vscode vcxsrv
+choco.exe install -y microsoft-windows-terminal vscode 
 ```
-
-After installation, run XLaunch and configure it as follows:
-- Click "Next" twice.
-- Uncheck "Primary Selection" and click "Next".
-- Save the configuration at the shell:startup path.
 
 ---
 ## Installation
