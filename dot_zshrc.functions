@@ -180,3 +180,16 @@ minikube_stat () {
         echo Memory: $(($(docker inspect $name --format="{{ .HostConfig.Memory }}")/1024**2))
 }
 
+ssh_hostkey(){
+	case "$1" in
+		-h|--help|"")
+			printf "%s\n" "Usage: $0 <HOST>"
+			return 1
+			;;
+	esac
+	local file
+	file="/tmp/keyscan_host.txt"
+	ssh-keyscan $1 2>/dev/null > $file
+	ssh-keygen -lf $file
+	rm -rf $file
+}
