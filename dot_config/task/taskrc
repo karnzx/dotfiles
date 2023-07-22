@@ -14,8 +14,8 @@
 # Use the command 'task show' to see all defaults and overrides
 
 # Files
-data.location=$HOME/.config/task/task_data
-# hooks.location=${XDG_DATA_HOME:-$HOME/.config}/task/hooks/
+data.location=$HOME/.task/
+# hooks.location=$HOME/.task/hooks/
 
 # Color theme (uncomment one to use)
 #include light-16.theme
