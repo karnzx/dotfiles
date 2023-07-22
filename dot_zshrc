@@ -190,10 +190,21 @@ alias findstr="grep -rnw . -e"
 # alias lampstop="sudo service mariadb stop ; sudo service apache2 stop"
 # alias lamprestart="lampstop; lampstart"
 
+## clipboard
+# copy  `echo "hello" | c`
+# cut   `echo "hello" | x`
+# paste `v` or `v > file`
 if [[ -v commands[xclip] && -n $DISPLAY ]]; then
   function x() xclip -selection clipboard -in
   function v() xclip -selection clipboard -out
   function c() xclip -selection clipboard -in -filter
+elif (( $+commands[clip.exe] )); then # WSL2
+  function x() clip.exe
+  function c() clip.exe
+  function v(){
+    powershell.exe Get-Clipboard | sed 's/\r$//'
+    # The `sed` will remove the unwelcome carriage-returns
+  }
 elif [[ -v commands[base64] && -w $TTY ]]; then
   function x() {
     emulate -L zsh -o pipe_fail
@@ -220,6 +231,7 @@ if [[ -v functions[x] ]]; then
   bindkey '^S' copy-buffer-to-clipboard
 fi
 
+## num-cpus utils
 if [[ -x ~/bin/num-cpus ]]; then
   if (( $+commands[make] )); then
     alias make='make -j "${_my_num_cpus:-${_my_num_cpus::=$(~/bin/num-cpus)}}"'
