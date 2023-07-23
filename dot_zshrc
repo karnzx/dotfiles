@@ -147,22 +147,6 @@ zstyle ':completion:*:ssh:argument-1:'       tag-order          hosts users
 zstyle ':completion:*:scp:argument-rest:'    tag-order          hosts files users
 zstyle ':completion:*:(ssh|scp|rdp):*:hosts' hosts
 
-function grep_no_cr() {
-  emulate -L zsh -o pipe_fail
-  local -a tty base=(grep)
-  if [[ ${${:-grep}:c:A:t} != busybox* ]]; then
-    base+=(--exclude-dir={.bzr,CVS,.git,.hg,.svn})
-    tty+=(--color=auto --line-buffered)
-  fi
-  if [[ -t 1 ]]; then
-    $base $tty "$@" | tr -d "\r"
-  else
-    $base "$@"
-  fi
-}
-compdef grep_no_cr=grep
-alias grep=grep_no_cr
-
 if (( $+commands[diff-so-fancy] )); then
   function diff() { /usr/bin/diff -ru $1 $2 | diff-so-fancy }
   unalias diff
