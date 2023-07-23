@@ -158,6 +158,7 @@ install_bitwarden-cli(){
     # unzip very quiet and move to /usr/local/bin
     sudo sh -c "unzip -qq bw.zip -d /usr/local/bin/" 
     sudo chmod +x /usr/local/bin/bw
+    echo "---- Ctrl+C (interrupt) If you dont need bitwarden ----"
     bitwarden_login
 }
 
