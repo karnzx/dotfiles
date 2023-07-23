@@ -1,7 +1,10 @@
 ## My dotfiles
 my dotfiles managed with chezmoi
 
-### My setup
+## **Need Only dotfiles configs and tools?** 
+see [config-and-tools branch](https://github.com/karnzx/dotfiles/tree/config-and-tools)
+
+## My setup
 | what             | I use                                                    | 
 | ---------------- | -------------------------------------------------------- |
 | Operating System | Window 11, WSL2 (Debian)                                 |
@@ -11,9 +14,9 @@ my dotfiles managed with chezmoi
 | password manager | Bitwarden                                                |
 | etc.             | there a lot                                              |
 
-**there different setup see [install by branch](#installation-by-branch)**
-
 - [Prerequisite](#prerequisite)
+  - [Bitwarden data](#bitwarden-data) 
+    - [notes](#notes) 
   - [Window Setup (skip if not use WSL2)](#window-setup-skip-if-not-using-wsl2) 
     - [Tools](#tools)
 - [Installation](#installation)
@@ -26,12 +29,23 @@ my dotfiles managed with chezmoi
 
 - Linux or WSL2 etc.
 - ensure you can run window binary [fix here](#wsl2-cant-execute-window-binary)
+- bitwarden data (keep sensitive files, only main branch)
 - curl 
 
 Make sure you have curl installed. If not, you can install it with the following command:
 ```shell
 sudo apt install -y curl
 ```
+
+### Bitwarden data
+
+for keep sensitive file away from public repo
+
+#### notes
+
+| name                 | contain          |
+| -------------------- | ---------------- |
+| dotfiles/.ssh/config | ssh host configs |
 
 ### Window Setup (skip if not using WSL2)
 
@@ -61,29 +75,26 @@ choco.exe install -y microsoft-windows-terminal vscode
 
 To install chezmoi and clone the dotfiles, use the bootstrap command below. 
 
-There are two optional variables you can create for anyone who forks or clones these dotfiles for personal use:
+Optional variables so you can create for anyone who forks or clones these dotfiles for himself
 
 | key             | value               | 
 | --------------- | ------------------- |
-| GITHUB_USERNAME | git repo username   |
 | BITWARDEN_EMAIL | bitwarden email     |
 
 ```shell
-GITHUB_USERNAME=karnzx \
-BITWARDEN_EMAIL=bitwarden@email.com \
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/karnzx/dotfiles/main/bootstrap.sh)"
+sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply karnzx 
 ```
 
-The `bootstrap.sh` script works as follows:
+The command works as follows:
 
-- Installs `bitwarden-cli` and unlocks the vault.
 - Installs `chezmoi`, initializes it, and applies the dotfiles.
-- Once the dotfiles are cloned, chezmoi will run scripts to install all necessary things, such as WSL2 configuration, fonts, tools, etc.
+- Once the dotfiles are cloned, chezmoi will run scripts to install all necessary things in .chezmoiscripts directory, such as WSL2 configuration, fonts, tools, etc.
+- apply chezmoi template, such as bitwarden get credential files
 
 ## installation by branch
 
 Each branch have different setup for example.
-- [config-and-tools](https://github.com/karnzx/dotfiles/tree/config-and-tools) contain only configs and tools no password manger (bitwarden-cli)
+- [config-and-tools](https://github.com/karnzx/dotfiles/tree/config-and-tools) contain only configs and tools. no password manger (bitwarden-cli)
 
 Take a look at branch `README` for installation or maybe you can just add `--branch` on `chezmoi`
 

@@ -1,4 +1,4 @@
-Include config-private
+Include config_hosts
 
 Host *
   ServerAliveInterval 60

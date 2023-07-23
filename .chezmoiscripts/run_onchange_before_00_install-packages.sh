@@ -7,7 +7,10 @@
 ## (( !WSL )) || return 0
 ### exit if WSL # wsl=1 -> !1 = 0 = false -> do return 0
 
-set -xueE -o pipefail
+# NOTE: echo with >&2 is to make it appear only in screen because i want normal echo to be return of function
+
+# set -x
+set -ueE -o pipefail
 
 if [[ "$(</proc/version)" == *[Mm]icrosoft* ]] 2>/dev/null; then
   readonly WSL=1 #true
@@ -148,6 +151,50 @@ function install_focus(){
     sudo mv focus /usr/local/bin
 }
 
+install_bitwarden-cli(){
+    command -v bw &>/dev/null && return 0
+    echo -e "Install Bitwarden-cli"
+    curl -fSL "https://vault.bitwarden.com/download/?app=cli&platform=linux" -o bw.zip
+    # unzip very quiet and move to /usr/local/bin
+    sudo sh -c "unzip -qq bw.zip -d /usr/local/bin/" 
+    sudo chmod +x /usr/local/bin/bw
+    bitwarden_login
+}
+
+bitwarden_login() {
+    # perform login
+    if ! bw login --check >/dev/null ; then
+      local bw_session
+      bw_session=$(bw login ${BITWARDEN_EMAIL:-} --raw)
+      if [ ! -z $bw_session ]; then
+          echo $bw_session
+      else
+          echo "Login failed." >&2
+          return 0
+      fi
+    else
+      echo "Logged In." >&2
+      return 0
+    fi
+}
+
+# export BW_SESSION=$(bitwarden_unlock)
+bitwarden_unlock(){
+    echo -e "Bitwarden unlock the vault" >&2
+    # get bitwarden login session
+    if bw status | grep -q '"status":"unauthenticated"'; then
+        # not logged in, call login function
+        echo "Not logged in, try login" >&2
+        bitwarden_login
+    else
+        # already logged in
+        local bw_session
+        echo "Unlock vault with current user" >&2
+        bw_session=$(bw unlock --raw)
+        echo $bw_session
+    fi
+}
+
 function install_in_tmp() {
   local tmp
   tmp="$(mktemp -d)"
@@ -169,6 +216,7 @@ install_brew
 install_brew_packages
 install_krew_plugin
 install_in_tmp install_focus
+install_in_tmp install_bitwarden-cli
 
 install_docker
 install_wsl2_ssh_pageant
