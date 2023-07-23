@@ -1,1 +1,4 @@
-{{ (bitwarden "item" "dotfiles/.ssh/config").notes }}
+
+{{- if not (eq .bitwarden.config_hosts "") }}
+{{ (bitwarden "item" .bitwarden.config_hosts).notes }}
+{{- end }}

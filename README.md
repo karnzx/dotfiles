@@ -41,11 +41,13 @@ sudo apt install -y curl
 
 for keep sensitive file away from public repo
 
+chezmoi will prompt ask when init, ignore it if not use.
+
 #### notes
 
-| name                 | contain          |
-| -------------------- | ---------------- |
-| dotfiles/.ssh/config | ssh host configs |
+| name                       | contain          |
+| -------------------------- | ---------------- |
+| dotfiles/.ssh/config_hosts | ssh host configs |
 
 ### Window Setup (skip if not using WSL2)
 

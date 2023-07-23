@@ -1,3 +1,4 @@
+{{- writeToStdout "Skip by press enter without data \n" -}}
 {{- writeToStdout "Git Config... \n" -}}
 {{- /* prompStringOnce . "dataPath" "displayString" */ -}}
 {{ $email := promptStringOnce . "git.email" "What is your email address" -}}
@@ -6,6 +7,17 @@
 [data.git]
     email = {{ $email | quote }}
     name = {{ $name | quote }}
+
+{{- $bitwarden_enabled := promptStringOnce . "bitwarden.enabled" "Enable bitwarden (y/n)" "n" }}
+{{- writeToStdout "Bitwarden data Config... \n" }}
+[data.bitwarden]
+    enabled = {{ $bitwarden_enabled | quote -}}
+{{ if eq "y" $bitwarden_enabled }}
+    config_hosts= {{ (promptStringOnce . "bitwarden.config_hosts" "bitwarden config_hosts secure note name" "dotfiles/.ssh/config_hosts") | quote }}
+{{ else }}
+    config_hosts=""
+{{ end -}}
+
 [diff]
     pager = "diff-so-fancy"
 
