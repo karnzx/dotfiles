@@ -40,6 +40,7 @@ function install_packages() {
     mycli
     httpie
     taskwarrior
+    alsa-utils pulseaudio # audio
     # packages require for tools
     socat iproute2 # install_wsl2_ssh_pageant
     libasound2-dev # install_focus
