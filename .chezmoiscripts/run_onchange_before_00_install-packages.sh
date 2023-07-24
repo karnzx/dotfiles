@@ -46,6 +46,7 @@ function install_packages() {
     alsa-utils pulseaudio # audio
     # packages require for tools
     socat iproute2 # install_wsl2_ssh_pageant
+    gnupg2 apt-transport-https # gpg repo and install_wslu
   )
 
   # if (( WSL )); then
@@ -138,6 +139,18 @@ function install_wsl2_ssh_pageant(){
   ln -sf $windows_destination $linux_destination
 }
 
+# wsl utils, https://github.com/wslutilities/wslu
+install_wslu(){
+  (( WSL )) || return 0
+  command -v wslview &>/dev/null && return 0
+  echo "Install wsl utils"
+  wget -O - https://pkg.wslutiliti.es/public.key | sudo tee -a /etc/apt/trusted.gpg.d/wslu.asc
+  VERSION_CODENAME=$(cat /etc/os-release | egrep "VERSION_CODENAME" | cut -d= -f2 | tr -d '"')
+  echo "deb https://pkg.wslutiliti.es/debian $VERSION_CODENAME main" | sudo tee -a /etc/apt/sources.list
+  sudo apt-get update -qq >/dev/null
+  sudo apt-get install -y wslu
+}
+
 install_bitwarden-cli(){
     command -v bw &>/dev/null && return 0
     echo -e "Install Bitwarden-cli"
@@ -201,6 +214,7 @@ umask g-w,o-w
 
 install_packages
 install_brew
+install_wslu
 install_brew_packages
 install_krew_plugin
 install_in_tmp install_bitwarden-cli
