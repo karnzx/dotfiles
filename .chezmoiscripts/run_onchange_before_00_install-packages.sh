@@ -46,7 +46,6 @@ function install_packages() {
     alsa-utils pulseaudio # audio
     # packages require for tools
     socat iproute2 # install_wsl2_ssh_pageant
-    libasound2-dev # install_focus
   )
 
   # if (( WSL )); then
@@ -139,24 +138,12 @@ function install_wsl2_ssh_pageant(){
   ln -sf $windows_destination $linux_destination
 }
 
-# pomodoro cli https://github.com/ayoisaiah/focus
-function install_focus(){
-    local version release_url
-    version=${1-1.3.0}
-    command -v focus &>/dev/null && focus -v | grep $version && return 0
-    release_url=https://github.com/ayoisaiah/focus/releases/download/v${version}/focus_${version}_linux_amd64.tar.gz
-    curl -LO $release_url
-    tar -xvzf focus_${version}_linux_amd64.tar.gz
-    chmod +x focus
-    sudo mv focus /usr/local/bin
-}
-
 install_bitwarden-cli(){
     command -v bw &>/dev/null && return 0
     echo -e "Install Bitwarden-cli"
     curl -fSL "https://vault.bitwarden.com/download/?app=cli&platform=linux" -o bw.zip
     # unzip very quiet and move to /usr/local/bin
-    sudo sh -c "unzip -qq bw.zip -d /usr/local/bin/" 
+    sudo sh -c "unzip -qq bw.zip -d /usr/local/bin/"
     sudo chmod +x /usr/local/bin/bw
     echo "---- Ctrl+C (interrupt) If you dont need bitwarden ----"
     bitwarden_login
@@ -216,7 +203,6 @@ install_packages
 install_brew
 install_brew_packages
 install_krew_plugin
-install_in_tmp install_focus
 install_in_tmp install_bitwarden-cli
 
 install_docker
