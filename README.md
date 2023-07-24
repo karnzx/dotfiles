@@ -131,6 +131,11 @@ can not run `cmd.exe` or window program etc.
 ```shell
 sudo sh -c 'echo :WSLInterop:M::MZ::/init:PF > /usr/lib/binfmt.d/WSLInterop.conf'
 ```
+**Interop Issue: unable to find interpreter for launching Windows .exe files using Interop**
+```shell
+sudo update-binfmts --disable cli
+```
+
 then run following command on powershell
 ```poweshell
 wsl.exe --shutdown
