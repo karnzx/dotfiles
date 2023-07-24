@@ -8,7 +8,7 @@
     email = {{ $email | quote }}
     name = {{ $name | quote }}
 
-{{- $bitwarden_enabled := promptStringOnce . "bitwarden.enabled" "Enable bitwarden (y/n)" "n" }}
+{{- $bitwarden_enabled := promptStringOnce . "bitwarden.enabled" "Enable bitwarden vault (y/n)" "n" }}
 {{- writeToStdout "Bitwarden data Config... \n" }}
 [data.bitwarden]
     enabled = {{ $bitwarden_enabled | quote -}}

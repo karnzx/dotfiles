@@ -1,8 +1,7 @@
 ## My dotfiles
 my dotfiles managed with chezmoi
 
-## **Need Only dotfiles configs and tools?** 
-see [config-and-tools branch](https://github.com/karnzx/dotfiles/tree/config-and-tools)
+### [**Looking for Just Dotfile Configs and Tools?**](#looking-for-just-dotfile-configs-and-tools-1)
 
 ## My setup
 | what             | I use                                                    | 
@@ -15,13 +14,14 @@ see [config-and-tools branch](https://github.com/karnzx/dotfiles/tree/config-and
 | etc.             | there a lot                                              |
 
 - [Prerequisite](#prerequisite)
-  - [Bitwarden data](#bitwarden-data) 
+  - [Bitwarden Vault Data](#bitwarden-vault-data) 
     - [notes](#notes) 
   - [Window Setup (skip if not use WSL2)](#window-setup-skip-if-not-using-wsl2) 
     - [Tools](#tools)
 - [Installation](#installation)
 - [install by branch](#installation-by-branch)
 - [Updating your dotfiles](#updating-your-dotfiles)
+- [Looking for Just Dotfile Configs and Tools?](#looking-for-just-dotfile-configs-and-tools-1)
 - [troubleshooting](#troubleshooting)
   - [WSL2 cant execute window binary](#wsl2-cant-execute-window-binary)
 
@@ -37,11 +37,11 @@ Make sure you have curl installed. If not, you can install it with the following
 sudo apt install -y curl
 ```
 
-### Bitwarden data
+### Bitwarden Vault Data
 
-for keep sensitive file away from public repo
+To keep sensitive files away from the public repository, I use Bitwarden for added security. The following secrets are utilized within this setup.
 
-chezmoi will prompt ask when init, ignore it if not use.
+If you don't use Bitwarden, just ignore any prompts during initialization with Chezmoi. [see.](#looking-for-just-dotfile-configs-and-tools-1)
 
 #### notes
 
@@ -77,15 +77,15 @@ choco.exe install -y microsoft-windows-terminal vscode
 
 To install chezmoi and clone the dotfiles, use the bootstrap command below. 
 
-Optional variables so you can create for anyone who forks or clones these dotfiles for himself
+```shell
+sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply karnzx 
+```
+
+Optional variables so you can create for anyone who forks or clones these dotfiles for himself, leave it empty for manualy add
 
 | key             | value               | 
 | --------------- | ------------------- |
 | BITWARDEN_EMAIL | bitwarden email     |
-
-```shell
-sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply karnzx 
-```
 
 The command works as follows:
 
@@ -96,7 +96,7 @@ The command works as follows:
 ## installation by branch
 
 Each branch have different setup for example.
-- [config-and-tools](https://github.com/karnzx/dotfiles/tree/config-and-tools) contain only configs and tools. no password manger (bitwarden-cli)
+- ~~[config-and-tools](https://github.com/karnzx/dotfiles/tree/config-and-tools) contain only configs and tools. no password manger (bitwarden-cli)~~
 
 Take a look at branch `README` for installation or maybe you can just add `--branch` on `chezmoi`
 
@@ -111,6 +111,16 @@ To update your dotfiles on any machine, use the following command (assuming cz i
 ```shell
 cz update
 ```
+
+---
+## Looking for Just Dotfile Configs and Tools?
+Are you looking for only dotfiles configs and tools without any secret files? We've got you covered!
+
+To ensure there are no secret files from Bitwarden in this repository, follow these steps
+
+- On prompted for Bitwarden login during package installation, simply press `CTRL-C` to skip it.
+- Disable Bitwarden vault when initializing with Chezmoi (Enter `n` or leave blank).
+
 --- 
 
 ## troubleshooting
