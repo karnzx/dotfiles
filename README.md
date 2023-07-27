@@ -60,16 +60,26 @@ wsl --install -d Debian
 ```
 
 #### Tools
-| what                       | it is                   |
-| -------------------------- | ----------------------- |
-| vscode                     | the visual studio code  |
-| microsoft-windows-terminal | window terminal         | 
 
+Install with [Choco](#choco) or [Winget](#winget)
+
+Tools list
+- window terminal
+- vscode
+
+##### Choco
 Install chocolatey see https://chocolatey.org/install
 
 Open PowerShell as **Administrator** and run the following command:
 ```powershell
 choco.exe install -y microsoft-windows-terminal vscode 
+```
+
+##### Winget
+
+```powershell
+winget install -e --id Microsoft.WindowsTerminal
+winget install -e --id Microsoft.VisualStudioCode 
 ```
 
 ---
