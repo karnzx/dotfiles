@@ -170,7 +170,7 @@ alias vim=$VISUAL
 ## netstat 
 alias netstat="netstat -tulpn"
 ## find text in files
-alias findstr="grep -rnw . -e"
+alias findstr="grep -rnE "
 ## Web app dev LAMP stack; Linux, Apache, MySQL, PHP
 # alias lampstatus="sudo service mariadb status ; sudo service apache2 status"
 # alias lampstart="sudo service mariadb start ; sudo service apache2 start"
