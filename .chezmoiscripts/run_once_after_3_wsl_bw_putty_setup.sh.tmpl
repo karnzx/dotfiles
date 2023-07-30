@@ -1,0 +1,117 @@
+#!/bin/bash
+
+# set -x
+set -o pipefail
+# NOTE: 
+# this Script perform sync of ssh keys from bitwarden vault items name in chezmoi data (.bitwarden.putty_ssh)
+# sed 's/\r$//' and tr -d '\r\n' is to delete newline of window (CR)
+
+create_config_file(){
+	if [[ ! -f "$1" ]]; then
+		echo "Create ssh config file at $1"
+		cat <<EOF > $1
+		Include pageant.conf # For window
+		ForwardAgent yes
+		ServerAliveInterval 100
+EOF
+	fi
+}
+
+download_sshkeys(){
+	for f in $putty_ssh_files; do
+		echo "Attachment name: $f"
+		local dst_path="${win_home_dotssh}/$f"
+		local sha
+		if [[ -f $dst_path ]]; then
+			sha=$(bw get attachment $f --itemid $putty_ssh_note_id --raw | sha256sum | sed 's|-|'$dst_path'|g')
+			if echo $sha | sha256sum --check --status ; then
+				echo "Already Synced, Skip"
+				continue
+			fi
+		fi
+		echo "Not Synced, Downloading..."
+		bw get attachment $f --itemid $putty_ssh_note_id --output $dst_path
+	done
+}
+
+# Function to create a directory if it doesn't exist
+create_directory() {
+    local directoryPath="$1" # wsl path only
+
+    # Check if the directory already exists
+    if [ ! -d "$directoryPath" ]; then
+        # Create the directory
+	echo "Path $1 not found, Create... "
+        mkdir -p "$directoryPath"
+    fi
+}
+
+update_shortcut(){
+	# Declare window ssh directory path
+	winDirSSH=$(wslpath -w "$win_home_dotssh")
+
+	# Get PuTTY Pageant Paths
+	pageantPath=$(which pageant.exe)
+	dirPageantPath=$(dirname "${pageantPath}")
+
+	winPageantPath=$(wslpath -w "$pageantPath")
+	winDirPageantPath=$(wslpath -w "$dirPageantPath")
+
+	# Set the path to the shortcut (window startup directory)
+	shortcutPath=$(echo $(powershell.exe -Command "[System.Environment]::GetFolderPath('Startup')") | tr -d '\r\n')
+	shortcutPath+="\\Pageant.lnk"
+
+	arguments="--openssh-config ${winDirSSH}\\pageant.conf "
+	sshKeys=$(find $win_home_dotssh -maxdepth 1 -type f -name "*.ppk" -exec wslpath -w {} \; | tr "\n" " ")
+	arguments+="--encrypted $sshKeys "
+	# echo $sshKeys
+
+	# Create Window ShortCut by Powershell.exe
+	echo "Replace Pageant StartUp ShortCut"
+	echo "Target is ${winPageantPath} ${arguments}"
+	powershell.exe -Command "& {
+	    \$shortcut = (New-Object -ComObject WScript.Shell).CreateShortcut('${shortcutPath}')
+	    \$shortcut.TargetPath = '${winPageantPath}'
+	    \$shortcut.Arguments = '${arguments}'
+	    \$shortcut.WorkingDirectory = '${winDirPageantPath}'
+	    \$shortcut.Save()
+	}"
+	shortcutPath_wslPath=$(wslpath "$shortcutPath")
+	echo "StartUp shortcut path: $shortcutPath_wslPath"
+
+	# copy new shortcut path from startup to appdata pageant shortcut (use when run Pageant on search with window search)
+	appDataPageantPath=$(echo $(powershell.exe -Command "(Get-ChildItem -Path \$env:APPDATA'\\Microsoft\\Windows\\Start Menu\\Programs' -Recurse | Where-Object { \$_.Name -like 'Pageant.lnk' -and \$_.FullName -notmatch '\\Startup'}).DirectoryName") | sed 's/\r$//')
+	appDataPageantPath=$(wslpath "$appDataPageantPath")
+
+	echo "Replace Pageant App ShortCut"
+	cp -v "$shortcutPath_wslPath" "$appDataPageantPath"
+}
+
+{{- if and (and (eq .chezmoi.os "linux") (eq .bitwarden.enabled "y")) (not (eq .bitwarden.putty_ssh "")) }}
+{{-   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
+
+# Check OS is WSL2 and PuTTY exists
+if uname -a | grep -ic microsoft &>/dev/null && ! command -v putty.exe &>/dev/null; then
+	echo "Not an WSL or PuTTY not found, Exit"
+	return 0
+fi
+
+win_home=$(wslpath $(cmd.exe /c 'echo %userprofile%' 2>/dev/null | sed 's/\r$//'))
+win_home_dotssh="${win_home}/.ssh"
+win_home_dotssh_config="${win_home_dotssh}/config"
+
+putty_ssh_note=$(bw list items --search {{ .bitwarden.putty_ssh }} | jq '.[] | select(.type==2)')
+putty_ssh_note_id=$(echo $putty_ssh_note | jq -r '.id')
+putty_ssh_files=$(echo $putty_ssh_note | jq -r '.attachments[].fileName')
+
+create_directory $win_home_dotssh
+
+create_config_file $win_home_dotssh_config
+download_sshkeys
+
+update_shortcut
+
+{{-   end }}
+{{- else }}
+# Skip, no command run on this script beacuse OS not WSL2 or bitwarden config not enabled or chezmoi .bitwarden.putty_ssh data is empty
+{{- end }}

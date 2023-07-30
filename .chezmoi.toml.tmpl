@@ -14,8 +14,10 @@
     enabled = {{ $bitwarden_enabled | quote -}}
 {{ if eq "y" $bitwarden_enabled }}
     config_hosts= {{ (promptStringOnce . "bitwarden.config_hosts" "bitwarden config_hosts secure note name" "dotfiles/.ssh/config_hosts") | quote }}
+    putty_ssh= {{ (promptStringOnce . "bitwarden.putty_ssh" "bitwarden putty ssh keys attachment item name" "putty-ssh") | quote }}
 {{ else }}
     config_hosts=""
+    putty_ssh=""
 {{ end -}}
 
 [diff]
