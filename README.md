@@ -66,13 +66,14 @@ Install with [Choco](#choco) or [Winget](#winget)
 Tools list
 - window terminal
 - vscode
+- putty
 
 ##### Choco
 Install chocolatey see https://chocolatey.org/install
 
 Open PowerShell as **Administrator** and run the following command:
 ```powershell
-choco.exe install -y microsoft-windows-terminal vscode 
+choco.exe install -y microsoft-windows-terminal vscode putty
 ```
 
 ##### Winget
@@ -80,6 +81,7 @@ choco.exe install -y microsoft-windows-terminal vscode
 ```powershell
 winget install -e --id Microsoft.WindowsTerminal
 winget install -e --id Microsoft.VisualStudioCode 
+winget install -e --id PuTTY.PuTTY
 ```
 
 ---
