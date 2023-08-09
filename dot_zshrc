@@ -29,7 +29,6 @@ plugin_repo=(
 	romkatv/zsh-prompt-benchmark
 	ohmyzsh/ohmyzsh
 	djui/alias-tips
-	Dbz/kube-aliases
 	redxtech/zsh-asdf-direnv
 )
 z4h install "${plugin_repo[@]}" || return
@@ -88,10 +87,10 @@ plugins=(
 	ohmyzsh/ohmyzsh/plugins/git
 	ohmyzsh/ohmyzsh/plugins/cp
 	ohmyzsh/ohmyzsh/plugins/aws
+	ohmyzsh/ohmyzsh/plugins/kubectl
 	# others
 	MohamedElashri/exa-zsh
 	djui/alias-tips
-	Dbz/kube-aliases
 	redxtech/zsh-asdf-direnv
 	)
 z4h load -c -- "${plugins[@]}"
