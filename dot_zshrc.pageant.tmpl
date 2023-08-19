@@ -1,4 +1,6 @@
 # wl2-ssh-pageant
+
+{{- if eq .putty_pageant.enabled "y" }}
 export SSH_AUTH_SOCK="$HOME/.ssh/agent.sock"
 if ! ss -a | grep -q "$SSH_AUTH_SOCK"; then
   rm -f "$SSH_AUTH_SOCK"
@@ -10,3 +12,4 @@ if ! ss -a | grep -q "$SSH_AUTH_SOCK"; then
   fi
   unset wsl2_ssh_pageant_bin
 fi
+{{ end -}}

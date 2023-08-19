@@ -8,6 +8,15 @@
     email = {{ $email | quote }}
     name = {{ $name | quote }}
 
+{{- if eq .chezmoi.os "linux" }}
+[data.putty_pageant]
+{{-   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
+    enabled = {{ (promptStringOnce . "putty_pageant.enabled" "Enable PUTTY pageant ? (y/n) " "n") | quote }}
+{{-  else }}
+    enabled = "n"
+{{   end -}}
+{{ end -}}
+
 {{- $bitwarden_enabled := promptStringOnce . "bitwarden.enabled" "Enable bitwarden vault (y/n)" "n" }}
 {{- writeToStdout "Bitwarden data Config... \n" }}
 [data.bitwarden]
