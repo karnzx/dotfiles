@@ -70,7 +70,7 @@ function install_docker() {
 function install_brew() {
   command -v brew &>/dev/null && return 0
   NONINTERACTIVE=1 bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  eval "$(brew shellenv)"
+  eval "$(/home/linuxbrew/.linuxbrew/Homebrew/bin/brew shellenv)"
 }
 
 function share_tools(){
