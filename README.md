@@ -87,7 +87,7 @@ winget install -e --id PuTTY.PuTTY
 ---
 ## Installation
 
-To install chezmoi and clone the dotfiles, use the bootstrap command below. 
+To install chezmoi and clone the dotfiles in `$HOME` directory , use the bootstrap command below. 
 
 ```shell
 sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply karnzx 
