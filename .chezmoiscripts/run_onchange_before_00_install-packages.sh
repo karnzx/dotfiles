@@ -44,6 +44,7 @@ function install_packages() {
     httpie
     taskwarrior
     alsa-utils pulseaudio # audio
+    net-tools
     # packages require for tools
     socat iproute2 # install_wsl2_ssh_pageant
     gnupg2 apt-transport-https # gpg repo and install_wslu
@@ -63,14 +64,16 @@ function install_packages() {
 
 function install_docker() {
   command -v docker &>/dev/null && return 0
+  echo "install docker"
   curl -fsSL https://get.docker.com -o - | sh
   sudo usermod -aG docker $USER
 }
 
 function install_brew() {
   command -v brew &>/dev/null && return 0
+  echo "install brew"
   NONINTERACTIVE=1 bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  eval "$(/home/linuxbrew/.linuxbrew/Homebrew/bin/brew shellenv)"
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 }
 
 function share_tools(){
@@ -159,7 +162,7 @@ install_bitwarden-cli(){
     sudo sh -c "unzip -qq bw.zip -d /usr/local/bin/"
     sudo chmod +x /usr/local/bin/bw
     echo "---- Ctrl+C (interrupt) If you dont need bitwarden ----"
-    bitwarden_login
+    export BW_SESSION=$(bitwarden_unlock)
 }
 
 bitwarden_login() {
@@ -213,13 +216,13 @@ fi
 umask g-w,o-w
 
 install_packages
+install_docker
+install_wsl2_ssh_pageant
+
 install_brew
 install_wslu
 install_brew_packages
 install_krew_plugin
 install_in_tmp install_bitwarden-cli
-
-install_docker
-install_wsl2_ssh_pageant
 
 echo SUCCESS

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # for no confussed
-## (( WSL )) || return 0 
+## (( WSL )) || return 0
 ### exit if not WSL # wsl=0 -> 0 = false -> do return 0
 #
 ## (( !WSL )) || return 0
@@ -37,7 +37,10 @@ function add_to_sudoers() {
     exit 1
   fi
 
+  echo "Grant user a sudoer"
   sudo usermod -aG sudo "$USER"
+  (( WSL )) || return 0
+  echo "Remove user password for sudo"
   sudo tee /etc/sudoers.d/"$USER" <<<"$USER ALL=(ALL) NOPASSWD:ALL" >/dev/null
   sudo chmod 440 /etc/sudoers.d/"$USER"
 }
@@ -120,7 +123,7 @@ set_preferences
 # bash -c "exec zsh -ic 'echo wsl.exe --terminate $WSL_DISTRO_NAME; exit'"
 bash -c "exec zsh -ic '
 if [[ -t 0 && -n "${WSL_DISTRO_NAME-}" ]]; then
-  echo 
+  echo
   echo ------------------------------
   echo Restart WSL by run this command on powershell
   echo \$ wsl.exe \-\-shutdown
