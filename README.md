@@ -105,18 +105,6 @@ The command works as follows:
 - Once the dotfiles are cloned, chezmoi will run scripts to install all necessary things in .chezmoiscripts directory, such as WSL2 configuration, fonts, tools, etc.
 - apply chezmoi template, such as bitwarden get credential files
 
-## installation by branch
-
-Each branch have different setup for example.
-- ~~[config-and-tools](https://github.com/karnzx/dotfiles/tree/config-and-tools) contain only configs and tools. no password manger (bitwarden-cli)~~
-
-Take a look at branch `README` for installation or maybe you can just add `--branch` on `chezmoi`
-
-```shell
-sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply karnzx --branch config-and-tools
-```
-
-
 ## Updating your dotfiles
 To update your dotfiles on any machine, use the following command (assuming cz is your chezmoi alias):
 
