@@ -1,0 +1,6 @@
+
+# kubectl
+alias -g DR="--dry-run=client"
+alias -g Y="-o yaml"
+alias kns="kubens"
+alias kctx="kubectx"
