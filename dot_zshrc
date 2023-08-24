@@ -136,6 +136,7 @@ z4h bindkey z4h-backward-kill-word  Ctrl+Backspace     Ctrl+H
 z4h bindkey z4h-backward-kill-zword Ctrl+Alt+Backspace
 
 # i dont like "shift" keybinding of z4h (move between dir)
+bindkey -s "^T" 'tmux^M' # Ctrl-T to run `tmux`
 bindkey "^[[1;2A" z4h-do-nothing
 bindkey "^[[1;2B" z4h-do-nothing
 bindkey "^[[1;2C" z4h-do-nothing
