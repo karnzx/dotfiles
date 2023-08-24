@@ -12,10 +12,12 @@ zstyle ':z4h:' 			term-shell-integration 'yes'
 zstyle ':z4h:direnv'         enable 'yes'
 zstyle ':z4h:direnv:success' notify 'yes'
 
-zstyle  ':z4h:'                         start-tmux              no
-# zstyle  ':z4h:'                         start-tmux             command tmux -u new -A -D -t z4h
+# tmux
+zstyle  ':z4h:'                         start-tmux             no
+# zstyle  ':z4h:'                         start-tmux             command tmux -u new -A -D -t zsh
 zstyle  ':z4h:'                         prompt-at-bottom       'no' # affect tmux if start-tmux is yes
-# zstyle        ':z4h:'                         term-vresize           top
+zstyle  ':z4h:'                         term-vresize           top
+
 # ssh Section
 zstyle	  ':z4h:ssh:*'                   enable 'no'
 zstyle	  ':z4h:ssh:*.example-hostname2' enable 'no'
@@ -77,7 +79,7 @@ z4h source ~/.env.zsh
 z4h source ~/.zshrc.local # for local custom config on ssh
 
 # # Custom plugin options
-export NVM_LAZY_LOAD=true
+# ....
 
 ## use plugins 
 # z4h source ohmyzsh/ohmyzsh/lib/diagnostics.zsh  # source an individual file

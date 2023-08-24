@@ -45,6 +45,7 @@ function install_packages() {
     taskwarrior
     alsa-utils pulseaudio # audio
     net-tools
+    tmux
     # packages require for tools
     socat iproute2 # install_wsl2_ssh_pageant
     gnupg2 apt-transport-https # gpg repo and install_wslu
