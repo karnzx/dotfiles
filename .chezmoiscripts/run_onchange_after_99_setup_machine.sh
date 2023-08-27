@@ -107,6 +107,9 @@ function install_fonts() {
 #   sudo dbus-uuidgen --ensure
 # }
 
+# asdf-direnv setup
+zsh -c "asdf direnv setup --shell zsh --version latest"
+
 add_to_sudoers
 add_wsl_config
 
