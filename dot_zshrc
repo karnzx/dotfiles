@@ -62,17 +62,12 @@ export VISUAL=${${${commands[nvim]:t}:-${commands[vim]:t}}:-vi}
 export EDITOR=$VISUAL
 export GPG_TTY=$TTY
 export PAGER=less
-export GOPATH=$HOME/go
 export SYSTEMD_LESS=${LESS}S
 export MANOPT=--no-hyphenation
 export HOMEBREW_NO_ANALYTICS=1
 
 ## k8s (krew)
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
-## Go
-export GOROOT=/usr/local/go
-export GOPATH=$HOME/go
-export PATH=$PATH:$GOPATH/bin:$GOROOT/bin
 
 # Source additional local files if they exist.
 z4h source ~/.env.zsh
