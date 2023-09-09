@@ -28,20 +28,21 @@ isCommandExist(){
         }
 }
 
-# cat yaml file with color
-ycat() {
-    # Get the last argument (assumes it's a filename)
-    filename="$@[-1]"
-    # Get the file extension
-    extension="${filename:t:e}"
-    # convert to lowercase
-    if command -v yq >/dev/null 2>&1 && [[ "${extension:l}" =~ "y.?ml" ]]; then 
-	yq $@ || cat $@
-    else
-	cat $@
-    fi
-}
-alias cat='ycat'
+# # cat yaml file with color
+# ycat() {
+#     # Get the last argument (assumes it's a filename)
+#     filename="$@[-1]"
+#     # Get the file extension
+#     extension="${filename:t:e}"
+#     # convert to lowercase
+#     if command -v yq >/dev/null 2>&1 && [[ "${extension:l}" =~ "y.?ml" ]]; then 
+# 	yq $@ || cat $@
+#     else
+# 	cat $@
+#     fi
+# }
+# alias cat='ycat'
+
 # SonarQube server management (Docker Container)
 sonarQube(){
   NAME="sonarQube" # Container name

@@ -169,6 +169,7 @@ if (( $+commands[exa] )); then
   alias lS='exa -1' # one column by just names
 fi
 (( $+commands[chezmoi] )) && alias cz=chezmoi
+(( $+commands[bat] )) && alias cat="bat"
 
 alias vim=$VISUAL
 ## netstat 
