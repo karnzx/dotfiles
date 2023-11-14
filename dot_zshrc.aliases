@@ -2,5 +2,7 @@
 # kubectl
 alias -g DR="--dry-run=client"
 alias -g Y="-o yaml"
+alias -g H="--help"
+
 alias kns="kubens"
 alias kctx="kubectx"
