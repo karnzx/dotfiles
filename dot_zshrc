@@ -69,6 +69,10 @@ export HOMEBREW_NO_ANALYTICS=1
 ## k8s (krew)
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
+## Vagrant (with VirtualBox on window)
+# export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
+# export PATH=$PATH:/mnt/d/VirtualBox # VirtualBox installed path on Window
+
 # Source additional local files if they exist.
 z4h source ~/.env.zsh
 z4h source ~/.zshrc.local # for local custom config on ssh
