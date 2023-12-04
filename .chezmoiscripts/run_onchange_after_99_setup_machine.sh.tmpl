@@ -9,13 +9,17 @@
 
 set -xueEo pipefail
 
-function install_z4h() {
-    sudo apt-get update -qq >/dev/null
-    sudo sh -c 'DEBIAN_FRONTEND=noninteractive apt-get -o DPkg::options::="--force-confdef" -o DPkg::options::="--force-confold" upgrade -y'
-    sudo apt-get install -y curl git
-    sudo apt-get autoremove -y
-    sudo apt-get autoclean
+function preinstall() {
+    if (( WSL )); then
+        sudo apt-get update -qq >/dev/null
+        sudo sh -c 'DEBIAN_FRONTEND=noninteractive apt-get -o DPkg::options::="--force-confdef" -o DPkg::options::="--force-confold" upgrade -y'
+        sudo apt-get install -y curl git
+        sudo apt-get autoremove -y
+        sudo apt-get autoclean
+    fi
+}
 
+function install_z4h() {
     # install zsh5.8 on /usr/local/bin for non-root user  (default is /usr/bin)
     sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/romkatv/zsh-bin/master/install)" \
         sh -d /usr/local -e yes
@@ -64,7 +68,6 @@ function set_preferences() {
 }
 
 function win_install_fonts() {
-    ((WSL)) || return 0
     local dst_dir
     dst_dir="$(cmd.exe /c 'echo %LOCALAPPDATA%\Microsoft\Windows\Fonts' 2>/dev/null | sed 's/\r$//')"
     dst_dir="$(wslpath "$dst_dir")"
@@ -96,6 +99,7 @@ function main() {
 
     rm -rf ~/.cache
 
+    preinstall
     install_z4h
 
     # asdf-direnv setup
