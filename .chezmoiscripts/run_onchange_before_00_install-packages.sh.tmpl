@@ -224,7 +224,7 @@ function main() {
     install_brew_packages
     install_krew_plugin
 
-    {{ if (eq .bitwarden.enabled "y") -}}
+    {{ if eq .bitwarden.enabled "y" -}}
     install_in_tmp install_bitwarden-cli
     {{- end }}
 
