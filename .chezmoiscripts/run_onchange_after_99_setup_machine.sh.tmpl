@@ -10,10 +10,11 @@
 set -xueEo pipefail
 
 function preinstall() {
+    # install_z4h() required curl
     if (( WSL )); then
         sudo apt-get update -qq >/dev/null
         sudo sh -c 'DEBIAN_FRONTEND=noninteractive apt-get -o DPkg::options::="--force-confdef" -o DPkg::options::="--force-confold" upgrade -y'
-        sudo apt-get install -y curl git
+        sudo apt-get install -y curl
         sudo apt-get autoremove -y
         sudo apt-get autoclean
     fi
