@@ -2,8 +2,8 @@
 
 # set -x
 set -o pipefail
-# NOTE: 
-# this Script perform sync of ssh keys from bitwarden vault items name in chezmoi data (.bitwarden.putty_ssh)
+# NOTE:
+# this Script perform sync of ssh keys from bitwarden vault items name in chezmoi data (.bitwarden.putty_ssh_key)
 # sed 's/\r$//' and tr -d '\r\n' is to delete newline of window (CR)
 
 create_config_file(){
@@ -18,19 +18,19 @@ EOF
 }
 
 download_sshkeys(){
-	for f in $putty_ssh_files; do
+	for f in $putty_ssh_key_files; do
 		echo "Attachment name: $f"
 		local dst_path="${win_home_dotssh}/$f"
 		local sha
 		if [[ -f $dst_path ]]; then
-			sha=$(bw get attachment $f --itemid $putty_ssh_note_id --raw | sha256sum | sed 's|-|'$dst_path'|g')
+			sha=$(bw get attachment $f --itemid $putty_ssh_key_note_id --raw | sha256sum | sed 's|-|'$dst_path'|g')
 			if echo $sha | sha256sum --check --status ; then
 				echo "Already Synced, Skip"
 				continue
 			fi
 		fi
 		echo "Not Synced, Downloading..."
-		bw get attachment $f --itemid $putty_ssh_note_id --output $dst_path
+		bw get attachment $f --itemid $putty_ssh_key_note_id --output $dst_path
 	done
 }
 
@@ -87,7 +87,8 @@ update_shortcut(){
 	cp -v "$shortcutPath_wslPath" "$appDataPageantPath"
 }
 
-{{- if and (and (eq .chezmoi.os "linux") (eq .bitwarden.enabled "y")) (not (eq .bitwarden.putty_ssh "")) }}
+# Main -- only WSL
+{{- if and (and (eq .chezmoi.os "linux") (eq .bitwarden.enabled "y")) (not (eq .bitwarden.putty_ssh_key "")) }}
 {{-   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
 
 # Check OS is WSL2 and PuTTY exists
@@ -100,9 +101,9 @@ win_home=$(wslpath $(cmd.exe /c 'echo %userprofile%' 2>/dev/null | sed 's/\r$//'
 win_home_dotssh="${win_home}/.ssh"
 win_home_dotssh_config="${win_home_dotssh}/config"
 
-putty_ssh_note=$(bw list items --search {{ .bitwarden.putty_ssh }} | jq '.[] | select(.type==2)')
-putty_ssh_note_id=$(echo $putty_ssh_note | jq -r '.id')
-putty_ssh_files=$(echo $putty_ssh_note | jq -r '.attachments[].fileName')
+putty_ssh_key_note=$(bw list items --search {{ .bitwarden.putty_ssh_key }} | jq '.[] | select(.type==2)')
+putty_ssh_key_note_id=$(echo $putty_ssh_key_note | jq -r '.id')
+putty_ssh_key_files=$(echo $putty_ssh_key_note | jq -r '.attachments[].fileName')
 
 create_directory $win_home_dotssh
 
@@ -113,5 +114,5 @@ update_shortcut
 
 {{-   end }}
 {{- else }}
-# Skip, no command run on this script beacuse OS not WSL2 or bitwarden config not enabled or chezmoi .bitwarden.putty_ssh data is empty
+# Skip, no command run on this script beacuse OS not WSL2 or bitwarden config not enabled or chezmoi .bitwarden.putty_ssh_key data is empty
 {{- end }}
