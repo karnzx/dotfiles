@@ -9,27 +9,18 @@
 
 set -xueEo pipefail
 
-umask o-w
+function install_z4h() {
+    sudo apt-get update -qq >/dev/null
+    sudo sh -c 'DEBIAN_FRONTEND=noninteractive apt-get -o DPkg::options::="--force-confdef" -o DPkg::options::="--force-confold" upgrade -y'
+    sudo apt-get install -y curl git
+    sudo apt-get autoremove -y
+    sudo apt-get autoclean
 
-rm -rf ~/.cache
-
-if [[ "$(</proc/version)" == *[Mm]icrosoft* ]] 2>/dev/null; then
-    readonly WSL=1 #true
-else
-    readonly WSL=0
-fi
-
-sudo apt-get update -qq >/dev/null
-sudo sh -c 'DEBIAN_FRONTEND=noninteractive apt-get -o DPkg::options::="--force-confdef" -o DPkg::options::="--force-confold" upgrade -y'
-sudo apt-get install -y curl git
-sudo apt-get autoremove -y
-sudo apt-get autoclean
-
-# install zsh5.8 on /usr/local/bin for non-root user  (default is /usr/bin)
-sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/romkatv/zsh-bin/master/install)" \
-    sh -d /usr/local -e yes
-sudo chsh -s /usr/local/bin/zsh "$USER"
-
+    # install zsh5.8 on /usr/local/bin for non-root user  (default is /usr/bin)
+    sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/romkatv/zsh-bin/master/install)" \
+        sh -d /usr/local -e yes
+    sudo chsh -s /usr/local/bin/zsh "$USER"
+}
 function add_to_sudoers() {
     # This is to be able to create /etc/sudoers.d/"$username". WITH NO PASSWORD
     if [[ "$USER" == *'~' || "$USER" == *.* ]]; then
@@ -100,33 +91,48 @@ function install_fonts() {
     win_install_fonts ~/.local/share/fonts/NerdFonts/*.ttf
 }
 
-# function fix_dbus() {
-#   (( WSL )) || return 0
-#   sudo dbus-uuidgen --ensure
-# }
+function main() {
+    umask o-w
 
-# asdf-direnv setup
-zsh -c "asdf direnv setup --shell zsh --version latest"
+    rm -rf ~/.cache
 
-add_to_sudoers
-add_wsl_config
+    install_z4h
 
-install_fonts
+    # asdf-direnv setup
+    zsh -c "asdf direnv setup --shell zsh --version latest"
 
-fix_clock
-set_preferences
+    add_to_sudoers
+    add_wsl_config
 
-# install package
+    install_fonts
 
-# just run zsh to load new fresh dependency and print terminate wsl command and exit
-# -i for interactive (data download in interactive mode only)
-# bash -c "exec zsh -ic 'echo wsl.exe --terminate $WSL_DISTRO_NAME; exit'"
-zsh -ic '
-if [[ -t 0 && -n "${WSL_DISTRO_NAME-}" ]]; then
-  echo
-  echo ------------------------------
-  echo Restart WSL by run this command on powershell
-  echo \$ wsl.exe \-\-shutdown
-fi
-;exit
-'
+    fix_clock
+    set_preferences
+
+    # just run zsh to load new fresh dependency and print terminate wsl command and exit
+    # -i for interactive (data download in interactive mode only)
+    # bash -c "exec zsh -ic 'echo wsl.exe --terminate $WSL_DISTRO_NAME; exit'"
+    zsh -ic '
+    if [[ -t 0 && -n "${WSL_DISTRO_NAME-}" ]]; then
+    echo
+    echo ------------------------------
+    echo Restart WSL by run this command on powershell
+    echo \$ wsl.exe \-\-shutdown
+    fi
+    ;exit
+    '
+}
+
+# assume default is linux on WSL=0 && MACOS=0
+WSL=0
+MACOS=0
+
+{{ if eq .chezmoi.os "darwin" -}}
+readonly MACOS=1
+{{- else if eq .chezmoi.os "linux" -}}
+{{-   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
+readonly WSL=1 # is WSL2
+{{-  end -}}
+{{- end }}
+
+main

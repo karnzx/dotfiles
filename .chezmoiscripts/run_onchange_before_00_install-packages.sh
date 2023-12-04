@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# for no confussed
+#### NOTE: for normal bash script WSL check
 ### if [[ "$(</proc/version)" == *[Mm]icrosoft* ]] 2>/dev/null; then
 ###     readonly WSL=1 #true
 ### else
@@ -16,12 +16,6 @@
 
 # set -x
 set -ueE -o pipefail
-
-if [[ "$(</proc/version)" == *[Mm]icrosoft* ]] 2>/dev/null; then
-    readonly WSL=1 #true
-else
-    readonly WSL=0
-fi
 
 # Install a bunch of debian packages.
 function install_packages() {
@@ -51,14 +45,14 @@ function install_packages() {
         alsa-utils pulseaudio # audio
         net-tools
         tmux
-        # packages require for tools
-        socat iproute2             # install_wsl2_ssh_pageant
-        gnupg2 apt-transport-https # gpg repo and install_wslu
     )
 
-    # if (( WSL )); then
-    #   packages+=(dbus-x11)
-    # fi
+    if (( WSL )); then
+      packages+=(
+        socat iproute2             # install_wsl2_ssh_pageant
+        gnupg2 apt-transport-https # gpg repo and install_wslu
+      )
+    fi
 
     sudo apt-get update -qq >/dev/null
     # DEBIAN_FRONTEND=noninteractive sudo apt-get install -y -qq $pre_reqs >/dev/null
@@ -135,7 +129,6 @@ function install_krew_plugin() {
 
 # https://github.com/BlackReloaded/wsl2-ssh-pageant
 function install_wsl2_ssh_pageant() {
-    ((WSL)) || return 0
     local win_home
     win_home=$(wslpath "$(cmd.exe /c 'echo %userprofile%' 2>/dev/null | sed 's/\r$//')")
     [ -d "$win_home/.ssh" ] || mkdir "$win_home"/.ssh
@@ -151,7 +144,6 @@ function install_wsl2_ssh_pageant() {
 
 # wsl utils, https://github.com/wslutilities/wslu
 install_wslu() {
-    ((WSL)) || return 0
     command -v wslview &>/dev/null && return 0
     echo "Install wsl utils"
     wget -O - https://pkg.wslutiliti.es/public.key | sudo tee -a /etc/apt/trusted.gpg.d/wslu.asc
@@ -168,7 +160,6 @@ install_bitwarden-cli() {
     # unzip very quiet and move to /usr/local/bin
     sudo sh -c "unzip -qq bw.zip -d /usr/local/bin/"
     sudo chmod +x /usr/local/bin/bw
-    echo "---- Ctrl+C (interrupt) If you dont need bitwarden ----"
     BW_SESSION=$(bitwarden_unlock)
     export BW_SESSION
 }
@@ -215,21 +206,41 @@ function install_in_tmp() {
     popd
 }
 
-if [[ "$(id -u)" == 0 ]]; then
-    echo "$0: please run as non-root" >&2
-    exit 1
-fi
+function main() {
+    if [[ "$(id -u)" == 0 ]]; then
+        echo "$0: please run as non-root" >&2
+        exit 1
+    fi
 
-umask g-w,o-w
+    umask g-w,o-w
 
-install_packages
-install_docker
-install_wsl2_ssh_pageant
+    install_packages
+    install_wsl2_ssh_pageant
+    install_wslu
 
-install_brew
-install_wslu
-install_brew_packages
-install_krew_plugin
-install_in_tmp install_bitwarden-cli
+    install_docker
 
-echo SUCCESS
+    install_brew
+    install_brew_packages
+    install_krew_plugin
+
+    {{ if (eq .bitwarden.enabled "y") -}}
+    install_in_tmp install_bitwarden-cli
+    {{- end }}
+
+    echo SUCCESS
+}
+
+# assume default is linux on WSL=0 && MACOS=0
+WSL=0
+MACOS=0
+
+{{ if eq .chezmoi.os "darwin" -}}
+readonly MACOS=1
+{{- else if eq .chezmoi.os "linux" -}}
+{{-   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
+readonly WSL=1 # is WSL2
+{{-  end -}}
+{{- end }}
+
+main
