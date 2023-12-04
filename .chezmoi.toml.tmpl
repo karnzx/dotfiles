@@ -25,14 +25,14 @@
 {{- if eq "y" $bitwarden_enabled -}}
 {{-   $bw_ssh_config_hosts = (promptStringOnce . "bitwarden.config_hosts" "bitwarden config_hosts secure note name" "dotfiles/.ssh/config_hosts") -}}
 {{-   if eq "y" $putty_pageant -}}
-{{-     $bw_putty_ssh_key =  (promptStringOnce . "bitwarden.putty_ssh" "bitwarden putty ssh keys attachment item name" "putty-ssh") -}}
+{{-     $bw_putty_ssh_key =  (promptStringOnce . "bitwarden.putty_ssh_key" "bitwarden putty ssh keys attachment item name" "putty-ssh") -}}
 {{-   end -}}
 {{- end }}
 
 [data.bitwarden]
     enabled = {{ $bitwarden_enabled | quote }}
     config_hosts = {{ $bw_ssh_config_hosts | quote }}
-    putty_ssh = {{ $bw_putty_ssh_key | quote }}
+    putty_ssh_key = {{ $bw_putty_ssh_key | quote }}
 
 [diff]
     pager = "diff-so-fancy"
