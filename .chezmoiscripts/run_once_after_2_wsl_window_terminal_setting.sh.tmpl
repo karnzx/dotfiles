@@ -1,32 +1,32 @@
 #!/bin/bash
 
-function window_terminal_setting_path(){
+function window_terminal_setting_path() {
     dst_dir=$(cmd.exe /c 'echo %LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json' 2>/dev/null | sed 's/\r$//')
     dst_dir="$(wslpath "$dst_dir")"
-    echo $dst_dir
+    echo "$dst_dir"
 }
 
-function main(){
-    [[ "$(</proc/version)" == *[Mm]icrosoft* ]] 2>/dev/null || return 0 # not a WSL
+function main() {
+    # [[ "$(</proc/version)" == *[Mm]icrosoft* ]] 2>/dev/null || return 0 # only wsl
     # command exist
-    cmd.exe /c 'where wt.exe' &>/dev/null || return 0
-    dst_dir=$(window_terminal_setting_path)
-    echo "window terminal setting path is $dst_dir"
-    defaultProfile=$(jq '.defaultProfile' $dst_dir)
-    profileList=$(jq '.profiles.list' $dst_dir --tab)
-    echo "apply setting..."
-cat << EOF > $dst_dir
+    # cmd.exe /c 'where wt.exe' &>/dev/null || return 0
+    # dst_dir=$(window_terminal_setting_path)
+    # echo "window terminal setting path is '$dst_dir'"
+    # defaultProfile=$(jq '.defaultProfile' "$dst_dir")
+    # profileList=$(jq '.profiles.list' "$dst_dir" --tab)
+    # echo "apply setting..."
+    cat <<EOF >"test"
 {
     "\$help": "https://aka.ms/terminal-documentation",
     "\$schema": "https://aka.ms/terminal-profiles-schema",
-    "actions": 
+    "actions":
     [
         {
             "command": "find",
             "keys": "ctrl+shift+f"
         },
         {
-            "command": 
+            "command":
             {
                 "action": "splitPane",
                 "split": "auto",
@@ -35,7 +35,7 @@ cat << EOF > $dst_dir
             "keys": "alt+shift+d"
         },
         {
-            "command": 
+            "command":
             {
                 "action": "moveFocus",
                 "direction": "down"
@@ -43,7 +43,7 @@ cat << EOF > $dst_dir
             "keys": "alt+j"
         },
         {
-            "command": 
+            "command":
             {
                 "action": "moveFocus",
                 "direction": "left"
@@ -51,7 +51,7 @@ cat << EOF > $dst_dir
             "keys": "alt+h"
         },
         {
-            "command": 
+            "command":
             {
                 "action": "moveFocus",
                 "direction": "right"
@@ -59,7 +59,7 @@ cat << EOF > $dst_dir
             "keys": "alt+l"
         },
         {
-            "command": 
+            "command":
             {
                 "action": "moveFocus",
                 "direction": "up"
@@ -72,20 +72,20 @@ cat << EOF > $dst_dir
     "defaultProfile": $defaultProfile,
     "experimental.rendering.forceFullRepaint": false,
     "experimental.rendering.software": false,
-    "newTabMenu": 
+    "newTabMenu":
     [
         {
             "type": "remainingProfiles"
         }
     ],
     "newTabPosition": "afterCurrentTab",
-    "profiles": 
+    "profiles":
     {
-        "defaults": 
+        "defaults":
         {
             "closeOnExit": "always",
             "colorScheme": "One Half Dark (bg modded)",
-            "font": 
+            "font":
             {
                 "face": "Delugia Mono",
                 "size": 11.0
@@ -96,7 +96,7 @@ cat << EOF > $dst_dir
         },
         "list": $profileList
     },
-    "schemes": 
+    "schemes":
     [
         {
             "background": "#0C0C0C",
@@ -354,17 +354,17 @@ cat << EOF > $dst_dir
     ],
     "startOnUserLogin": true,
     "tabWidthMode": "equal",
-    "themes": 
+    "themes":
     [
         {
             "name": "legacyDark",
-            "tab": 
+            "tab":
             {
                 "background": null,
                 "showCloseButton": "always",
                 "unfocusedBackground": null
             },
-            "window": 
+            "window":
             {
                 "applicationTheme": "dark",
                 "useMica": false
@@ -372,13 +372,13 @@ cat << EOF > $dst_dir
         },
         {
             "name": "legacyLight",
-            "tab": 
+            "tab":
             {
                 "background": null,
                 "showCloseButton": "always",
                 "unfocusedBackground": null
             },
-            "window": 
+            "window":
             {
                 "applicationTheme": "light",
                 "useMica": false
@@ -386,13 +386,13 @@ cat << EOF > $dst_dir
         },
         {
             "name": "legacySystem",
-            "tab": 
+            "tab":
             {
                 "background": null,
                 "showCloseButton": "always",
                 "unfocusedBackground": null
             },
-            "window": 
+            "window":
             {
                 "applicationTheme": "system",
                 "useMica": false
@@ -405,4 +405,8 @@ cat << EOF > $dst_dir
 EOF
 }
 
+{{ if eq .chezmoi.os "linux" -}}
+{{-   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") -}}
 main
+{{-   end -}}
+{{- end -}}
