@@ -65,18 +65,15 @@ function fix_clock() {
 
 # Set preferences for various applications.
 function set_preferences() {
+  (( WSL )) || return 0
   # X11
   if [[ -z "${DISPLAY+X}" ]]; then
     export DISPLAY=:0
   fi
 }
 
-function disable_motd_news() {
-  (( !WSL )) || return 0
-  sudo systemctl disable motd-news.timer
-}
-
 function win_install_fonts() {
+  (( WSL )) || return 0
   local dst_dir
   dst_dir="$(cmd.exe /c 'echo %LOCALAPPDATA%\Microsoft\Windows\Fonts' 2>/dev/null | sed 's/\r$//')"
   dst_dir="$(wslpath "$dst_dir")"
@@ -115,7 +112,6 @@ add_wsl_config
 
 install_fonts
 
-disable_motd_news
 fix_clock
 set_preferences
 
