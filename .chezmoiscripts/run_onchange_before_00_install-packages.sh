@@ -1,6 +1,11 @@
 #!/bin/bash
 
 # for no confussed
+### if [[ "$(</proc/version)" == *[Mm]icrosoft* ]] 2>/dev/null; then
+###     readonly WSL=1 #true
+### else
+###     readonly WSL=0
+# fi
 ## (( WSL )) || return 0
 ### exit if not WSL # wsl=0 -> 0 = false -> do return 0
 #
@@ -13,149 +18,150 @@
 set -ueE -o pipefail
 
 if [[ "$(</proc/version)" == *[Mm]icrosoft* ]] 2>/dev/null; then
-  readonly WSL=1 #true
+    readonly WSL=1 #true
 else
-  readonly WSL=0
+    readonly WSL=0
 fi
 
 # Install a bunch of debian packages.
 function install_packages() {
-  local packages=(
-    build-essential
-    software-properties-common
-    zsh
-    rsync
-    ssh
-    curl
-    wget
-    gawk
-    git
-    man
-    file
-    libmagic1
-    unzip
-    zip
-    tldr
-    perl
-    dnsutils
-    num-utils # math
-    zsh
-    mycli
-    httpie
-    taskwarrior
-    alsa-utils pulseaudio # audio
-    net-tools
-    tmux
-    # packages require for tools
-    socat iproute2 # install_wsl2_ssh_pageant
-    gnupg2 apt-transport-https # gpg repo and install_wslu
-  )
+    local packages=(
+        build-essential
+        software-properties-common
+        zsh
+        rsync
+        ssh
+        curl
+        wget
+        gawk
+        git
+        man
+        file
+        libmagic1
+        unzip
+        zip
+        tldr
+        perl
+        dnsutils
+        num-utils # math
+        zsh
+        mycli
+        httpie
+        taskwarrior
+        alsa-utils pulseaudio # audio
+        net-tools
+        tmux
+        # packages require for tools
+        socat iproute2             # install_wsl2_ssh_pageant
+        gnupg2 apt-transport-https # gpg repo and install_wslu
+    )
 
-  # if (( WSL )); then
-  #   packages+=(dbus-x11)
-  # fi
+    # if (( WSL )); then
+    #   packages+=(dbus-x11)
+    # fi
 
-  sudo apt-get update -qq >/dev/null
-  # DEBIAN_FRONTEND=noninteractive sudo apt-get install -y -qq $pre_reqs >/dev/null
-  sudo bash -c 'DEBIAN_FRONTEND=noninteractive apt-get -o DPkg::options::=--force-confdef -o DPkg::options::=--force-confold upgrade -y'
-  sudo apt-get install -y "${packages[@]}"
-  sudo apt-get autoremove -y
-  sudo apt-get autoclean
+    sudo apt-get update -qq >/dev/null
+    # DEBIAN_FRONTEND=noninteractive sudo apt-get install -y -qq $pre_reqs >/dev/null
+    sudo bash -c 'DEBIAN_FRONTEND=noninteractive apt-get -o DPkg::options::=--force-confdef -o DPkg::options::=--force-confold upgrade -y'
+    sudo apt-get install -y "${packages[@]}"
+    sudo apt-get autoremove -y
+    sudo apt-get autoclean
 }
 
 function install_docker() {
-  command -v docker &>/dev/null && return 0
-  echo "install docker"
-  curl -fsSL https://get.docker.com -o - | sh
-  sudo usermod -aG docker $USER
+    command -v docker &>/dev/null && return 0
+    echo "install docker"
+    curl -fsSL https://get.docker.com -o - | sh
+    sudo usermod -aG docker "$USER"
 }
 
 function install_brew() {
-  command -v brew &>/dev/null && return 0
-  echo "install brew"
-  NONINTERACTIVE=1 bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    command -v brew &>/dev/null && return 0
+    echo "install brew"
+    NONINTERACTIVE=1 bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 }
 
-function share_tools(){
-  # create symlink from brew to /usr/local/bin/
-  local -A tools=(
-    [nvim]="vim"
-  )
-  for key in "${!tools[@]}"; do
-    printf "link %s to /usr/local/bin/%s\n" "$key" "${tools[$key]}"
-    sudo ln -sf $HOMEBREW_PREFIX/bin/$key /usr/local/bin/${tools[$key]}
-  done
+function share_tools() {
+    # create symlink from brew to /usr/local/bin/
+    local -A tools=(
+        [nvim]="vim"
+    )
+    for key in "${!tools[@]}"; do
+        printf "link %s to /usr/local/bin/%s\n" "$key" "${tools[$key]}"
+        sudo ln -sf "$HOMEBREW_PREFIX"/bin/"$key" /usr/local/bin/"${tools[$key]}"
+    done
 }
 
-function install_brew_packages(){
-  local packages=(
-    # utils
-    exa
-    ripgrep
-    jc
-    yq
-    fx # interactive with JSON
-    jq
-    bat
-    diff-so-fancy
-    neovim
+function install_brew_packages() {
+    local packages=(
+        # utils
+        exa
+        ripgrep
+        jc
+        yq
+        fx # interactive with JSON
+        jq
+        bat
+        diff-so-fancy
+        neovim
 
-    # cli
-    awscli
-    kubectl
-    kubectx
-    krew
-    argocd
-    k9s
-    oha     # web load test in Rust https://github.com/hatoo/oha
-    ghq     # Manage remote repository clones
-    git-standup
+        # cli
+        awscli
+        kubectl
+        kubectx
+        krew
+        argocd
+        k9s
+        oha # web load test in Rust https://github.com/hatoo/oha
+        ghq # Manage remote repository clones
+        git-standup
 
-    # monitoring
-    bpytop  # better htop
-    ctop    # docker contianer top
-  )
-  brew update
-  brew install "${packages[@]}"
-  share_tools
+        # monitoring
+        bpytop # better htop
+        ctop   # docker contianer top
+    )
+    brew update
+    brew install "${packages[@]}"
+    share_tools
 }
 
-function install_krew_plugin(){
-  local plugins=(
-    oidc-login
-  )
-  kubectl krew install "${plugins[@]}"
+function install_krew_plugin() {
+    local plugins=(
+        oidc-login
+    )
+    kubectl krew install "${plugins[@]}"
 }
 
 # https://github.com/BlackReloaded/wsl2-ssh-pageant
-function install_wsl2_ssh_pageant(){
-  (( WSL )) || return 0
-  local win_home=$(wslpath $(cmd.exe /c 'echo %userprofile%' 2>/dev/null | sed 's/\r$//'))
-  [ -d "$win_home/.ssh" ] || mkdir $win_home/.ssh
-  [ -d "$HOME/.ssh" ] || mkdir "$HOME/.ssh"
-  windows_destination="$win_home/.ssh/wsl2-ssh-pageant.exe"
-  linux_destination="$HOME/.ssh/wsl2-ssh-pageant.exe"
-  [ -f $linux_destination ] && return 0
-  echo "Install wsl-ssh-pageant"
-  wget -O "$windows_destination" "https://github.com/BlackReloaded/wsl2-ssh-pageant/releases/latest/download/wsl2-ssh-pageant.exe"
-  chmod +x "$windows_destination"
-  ln -sf $windows_destination $linux_destination
+function install_wsl2_ssh_pageant() {
+    ((WSL)) || return 0
+    local win_home
+    win_home=$(wslpath "$(cmd.exe /c 'echo %userprofile%' 2>/dev/null | sed 's/\r$//')")
+    [ -d "$win_home/.ssh" ] || mkdir "$win_home"/.ssh
+    [ -d "$HOME/.ssh" ] || mkdir "$HOME/.ssh"
+    windows_destination="$win_home/.ssh/wsl2-ssh-pageant.exe"
+    linux_destination="$HOME/.ssh/wsl2-ssh-pageant.exe"
+    [ -f "$linux_destination" ] && return 0
+    echo "Install wsl-ssh-pageant"
+    wget -O "$windows_destination" "https://github.com/BlackReloaded/wsl2-ssh-pageant/releases/latest/download/wsl2-ssh-pageant.exe"
+    chmod +x "$windows_destination"
+    ln -sf "$windows_destination" "$linux_destination"
 }
 
 # wsl utils, https://github.com/wslutilities/wslu
-install_wslu(){
-  (( WSL )) || return 0
-  command -v wslview &>/dev/null && return 0
-  echo "Install wsl utils"
-  wget -O - https://pkg.wslutiliti.es/public.key | sudo tee -a /etc/apt/trusted.gpg.d/wslu.asc
-  VERSION_CODENAME=$(cat /etc/os-release | egrep "VERSION_CODENAME" | cut -d= -f2 | tr -d '"')
-  echo "deb https://pkg.wslutiliti.es/debian $VERSION_CODENAME main" | sudo tee -a /etc/apt/sources.list
-  sudo apt-get update -qq >/dev/null
-  sudo apt-get install -y wslu
+install_wslu() {
+    ((WSL)) || return 0
+    command -v wslview &>/dev/null && return 0
+    echo "Install wsl utils"
+    wget -O - https://pkg.wslutiliti.es/public.key | sudo tee -a /etc/apt/trusted.gpg.d/wslu.asc
+    VERSION_CODENAME=$(/etc/os-release | grep -E "VERSION_CODENAME" | cut -d= -f2 | tr -d '"')
+    echo "deb https://pkg.wslutiliti.es/debian $VERSION_CODENAME main" | sudo tee -a /etc/apt/sources.list
+    sudo apt-get update -qq >/dev/null
+    sudo apt-get install -y wslu
 }
 
-install_bitwarden-cli(){
+install_bitwarden-cli() {
     command -v bw &>/dev/null && return 0
     echo -e "Install Bitwarden-cli"
     curl -fSL "https://vault.bitwarden.com/download/?app=cli&platform=linux" -o bw.zip
@@ -163,28 +169,29 @@ install_bitwarden-cli(){
     sudo sh -c "unzip -qq bw.zip -d /usr/local/bin/"
     sudo chmod +x /usr/local/bin/bw
     echo "---- Ctrl+C (interrupt) If you dont need bitwarden ----"
-    export BW_SESSION=$(bitwarden_unlock)
+    BW_SESSION=$(bitwarden_unlock)
+    export BW_SESSION
 }
 
 bitwarden_login() {
     # perform login
-    if ! bw login --check >/dev/null ; then
-      local bw_session
-      bw_session=$(bw login ${BITWARDEN_EMAIL:-} --raw)
-      if [ ! -z $bw_session ]; then
-          echo $bw_session
-      else
-          echo "Login failed." >&2
-          return 0
-      fi
+    if ! bw login --check >/dev/null; then
+        local bw_session
+        bw_session=$(bw login "${BITWARDEN_EMAIL:-}" --raw)
+        if [ -n "$bw_session" ]; then
+            echo "$bw_session"
+        else
+            echo "Login failed." >&2
+            return 0
+        fi
     else
-      echo "Logged In." >&2
-      return 0
+        echo "Logged In." >&2
+        return 0
     fi
 }
 
 # export BW_SESSION=$(bitwarden_unlock)
-bitwarden_unlock(){
+bitwarden_unlock() {
     echo -e "Bitwarden unlock the vault" >&2
     # get bitwarden login session
     if bw status | grep -q '"status":"unauthenticated"'; then
@@ -196,22 +203,21 @@ bitwarden_unlock(){
         local bw_session
         echo "Unlock vault with current user" >&2
         bw_session=$(bw unlock --raw)
-        echo $bw_session
+        echo "$bw_session"
     fi
 }
 
 function install_in_tmp() {
-  local tmp
-  tmp="$(mktemp -d)"
-  pushd -- "$tmp"
-  "$@"
-  popd
+    local tmp
+    tmp="$(mktemp -d)"
+    pushd -- "$tmp"
+    "$@"
+    popd
 }
 
-
 if [[ "$(id -u)" == 0 ]]; then
-  echo "$BASH_SOURCE: please run as non-root" >&2
-  exit 1
+    echo "$0: please run as non-root" >&2
+    exit 1
 fi
 
 umask g-w,o-w
