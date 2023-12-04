@@ -88,8 +88,6 @@ update_shortcut(){
 }
 
 main() {
-    {{- if and (and (eq .chezmoi.os "linux") (eq .bitwarden.enabled "y")) (not (eq .bitwarden.putty_ssh_key "")) }}
-    {{-   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
 
     # Check OS is WSL2 and PuTTY exists
     if uname -a | grep -ic microsoft &>/dev/null && ! command -v putty.exe &>/dev/null; then
@@ -111,11 +109,12 @@ main() {
     download_sshkeys
 
     update_shortcut
-
-    {{-   end }}
-    {{- else }}
-    # Skip, no command run on this script beacuse OS not WSL2 or bitwarden config not enabled or chezmoi .bitwarden.putty_ssh_key data is empty
-    {{- end }}
 }
 
+{{ if and (and (eq .chezmoi.os "linux") (eq .bitwarden.enabled "y")) (not (eq .bitwarden.putty_ssh_key "")) -}}
+{{-   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") -}}
 main
+{{-   end }}
+{{- else }}
+# Skip, no command run on this script beacuse OS not WSL2 or bitwarden config not enabled or chezmoi .bitwarden.putty_ssh_key data is empty
+{{- end }}
