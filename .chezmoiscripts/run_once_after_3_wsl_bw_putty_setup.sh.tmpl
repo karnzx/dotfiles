@@ -87,32 +87,35 @@ update_shortcut(){
 	cp -v "$shortcutPath_wslPath" "$appDataPageantPath"
 }
 
-# Main -- only WSL
-{{- if and (and (eq .chezmoi.os "linux") (eq .bitwarden.enabled "y")) (not (eq .bitwarden.putty_ssh_key "")) }}
-{{-   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
+main() {
+    {{- if and (and (eq .chezmoi.os "linux") (eq .bitwarden.enabled "y")) (not (eq .bitwarden.putty_ssh_key "")) }}
+    {{-   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
 
-# Check OS is WSL2 and PuTTY exists
-if uname -a | grep -ic microsoft &>/dev/null && ! command -v putty.exe &>/dev/null; then
-	echo "Not an WSL or PuTTY not found, Exit"
-	return 0
-fi
+    # Check OS is WSL2 and PuTTY exists
+    if uname -a | grep -ic microsoft &>/dev/null && ! command -v putty.exe &>/dev/null; then
+        echo "Not an WSL or PuTTY not found, Exit"
+        return 0
+    fi
 
-win_home=$(wslpath $(cmd.exe /c 'echo %userprofile%' 2>/dev/null | sed 's/\r$//'))
-win_home_dotssh="${win_home}/.ssh"
-win_home_dotssh_config="${win_home_dotssh}/config"
+    win_home=$(wslpath $(cmd.exe /c 'echo %userprofile%' 2>/dev/null | sed 's/\r$//'))
+    win_home_dotssh="${win_home}/.ssh"
+    win_home_dotssh_config="${win_home_dotssh}/config"
 
-putty_ssh_key_note=$(bw list items --search {{ .bitwarden.putty_ssh_key }} | jq '.[] | select(.type==2)')
-putty_ssh_key_note_id=$(echo $putty_ssh_key_note | jq -r '.id')
-putty_ssh_key_files=$(echo $putty_ssh_key_note | jq -r '.attachments[].fileName')
+    putty_ssh_key_note=$(bw list items --search {{ .bitwarden.putty_ssh_key }} | jq '.[] | select(.type==2)')
+    putty_ssh_key_note_id=$(echo $putty_ssh_key_note | jq -r '.id')
+    putty_ssh_key_files=$(echo $putty_ssh_key_note | jq -r '.attachments[].fileName')
 
-create_directory $win_home_dotssh
+    create_directory $win_home_dotssh
 
-create_config_file $win_home_dotssh_config
-download_sshkeys
+    create_config_file $win_home_dotssh_config
+    download_sshkeys
 
-update_shortcut
+    update_shortcut
 
-{{-   end }}
-{{- else }}
-# Skip, no command run on this script beacuse OS not WSL2 or bitwarden config not enabled or chezmoi .bitwarden.putty_ssh_key data is empty
-{{- end }}
+    {{-   end }}
+    {{- else }}
+    # Skip, no command run on this script beacuse OS not WSL2 or bitwarden config not enabled or chezmoi .bitwarden.putty_ssh_key data is empty
+    {{- end }}
+}
+
+main
