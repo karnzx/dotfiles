@@ -1,33 +1,38 @@
-{{- writeToStdout "Skip by press enter without data \n" -}}
-{{- writeToStdout "Git Config... \n" -}}
+{{- writeToStdout "Press 'enter' to use default vault \n" -}}
+{{- writeToStdout " --- Git Config --- \n" -}}
 {{- /* prompStringOnce . "dataPath" "displayString" */ -}}
-{{ $email := promptStringOnce . "git.email" "What is your email address" -}}
-{{ $name := promptStringOnce . "git.name" "What is your name" -}}
+{{- $email := promptStringOnce . "git.email" "What is your email address" -}}
+{{- $name := promptStringOnce . "git.name" "What is your name" -}}
 
 [data.git]
     email = {{ $email | quote }}
     name = {{ $name | quote }}
 
-{{- if eq .chezmoi.os "linux" }}
-[data.putty_pageant]
-{{-   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
-    enabled = {{ (promptStringOnce . "putty_pageant.enabled" "Enable PUTTY pageant ? (y/n) " "n") | quote }}
-{{-  else }}
-    enabled = "n"
-{{   end -}}
-{{ end -}}
+{{- $putty_pageant := "n" -}}
+{{- if eq .chezmoi.os "linux" -}}
+{{-   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") -}}
+{{-     $putty_pageant = (promptStringOnce . "putty_pageant.enabled" "Enable PUTTY pageant ? (y/n) " "n") -}}
+{{-   end -}}
+{{- end }}
 
-{{- $bitwarden_enabled := promptStringOnce . "bitwarden.enabled" "Enable bitwarden vault (y/n)" "n" }}
-{{- writeToStdout "Bitwarden data Config... \n" }}
+[data.putty_pageant]
+    enabled = {{ $putty_pageant | quote }}
+
+{{- writeToStdout " --- Bitwarden data Config --- \n" -}}
+{{- $bitwarden_enabled := promptStringOnce . "bitwarden.enabled" "Enable bitwarden vault (y/n)" "n" -}}
+{{- $bw_ssh_config_hosts := "" -}}
+{{- $bw_putty_ssh_key := "" -}}
+{{- if eq "y" $bitwarden_enabled -}}
+{{-   $bw_ssh_config_hosts = (promptStringOnce . "bitwarden.config_hosts" "bitwarden config_hosts secure note name" "dotfiles/.ssh/config_hosts") -}}
+{{-   if eq "y" $putty_pageant -}}
+{{-     $bw_putty_ssh_key =  (promptStringOnce . "bitwarden.putty_ssh" "bitwarden putty ssh keys attachment item name" "putty-ssh") -}}
+{{-   end -}}
+{{- end }}
+
 [data.bitwarden]
-    enabled = {{ $bitwarden_enabled | quote -}}
-{{ if eq "y" $bitwarden_enabled }}
-    config_hosts= {{ (promptStringOnce . "bitwarden.config_hosts" "bitwarden config_hosts secure note name" "dotfiles/.ssh/config_hosts") | quote }}
-    putty_ssh= {{ (promptStringOnce . "bitwarden.putty_ssh" "bitwarden putty ssh keys attachment item name" "putty-ssh") | quote }}
-{{ else }}
-    config_hosts=""
-    putty_ssh=""
-{{ end -}}
+    enabled = {{ $bitwarden_enabled | quote }}
+    config_hosts = {{ $bw_ssh_config_hosts | quote }}
+    putty_ssh = {{ $bw_putty_ssh_key | quote }}
 
 [diff]
     pager = "diff-so-fancy"
