@@ -72,7 +72,11 @@ function install_brew() {
     command -v brew &>/dev/null && return 0
     echo "install brew"
     NONINTERACTIVE=1 bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    if (( ! MACOS )); then
+        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    else
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    fi
 }
 
 function share_tools() {
@@ -102,6 +106,7 @@ function install_brew_packages() {
         awscli
         kubectl
         kubectx
+        terraform
         krew
         argocd
         k9s
