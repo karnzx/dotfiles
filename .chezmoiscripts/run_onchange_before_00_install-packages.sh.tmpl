@@ -19,7 +19,7 @@ set -ueE -o pipefail
 
 # Install a bunch of debian packages.
 function install_linux_packages() {
-    local packages=$1
+    local packages=${1:-""}
     packages+=(
         build-essential
         software-properties-common
@@ -85,7 +85,10 @@ function share_tools() {
 }
 
 function install_brew_packages() {
-    local packages=$1
+    local packages
+    if [[ -n "${1:-}" ]]; then
+        packages+=$1
+    fi
     # utils for linux (that not in APT)
     packages+=(
         # utils
@@ -211,7 +214,7 @@ function main() {
         exit 1
     fi
 
-    local linux_packages=() brew_packages=()
+    local linux_packages="" brew_packages=""
     umask g-w,o-w
 
     {{ if eq .chezmoi.os "darwin" -}}
