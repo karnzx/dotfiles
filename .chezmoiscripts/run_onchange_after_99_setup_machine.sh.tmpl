@@ -10,7 +10,7 @@
 set -xueEo pipefail
 
 function preinstall() {
-    # install_z4h() required curl
+    # install_z4h() required curl (macos already have curl)
     if (( WSL )); then
         sudo apt-get update -qq >/dev/null
         sudo sh -c 'DEBIAN_FRONTEND=noninteractive apt-get -o DPkg::options::="--force-confdef" -o DPkg::options::="--force-confold" upgrade -y'
@@ -27,6 +27,7 @@ function install_z4h() {
     sudo chsh -s /usr/local/bin/zsh "$USER"
 }
 function add_to_sudoers() {
+    (( ! MACOS )) || return 0
     # This is to be able to create /etc/sudoers.d/"$username". WITH NO PASSWORD
     if [[ "$USER" == *'~' || "$USER" == *.* ]]; then
         echo >&2 "$0: invalid username: $USER"
