@@ -68,11 +68,6 @@ function install_docker() {
     sudo usermod -aG docker "$USER"
 }
 
-function install_diff_so_fancy(){
-    echo "install diff-so-fancy"
-    curl -fsSLO https://github.com/so-fancy/diff-so-fancy/releases/download/v1.4.4/diff-so-fancy && chmod +x diff-so-fancy && sudo mv diff-so-fancy /usr/local/bin/
-}
-
 function install_brew() {
     command -v brew &>/dev/null && return 0
     echo "install brew"
@@ -100,6 +95,7 @@ function install_brew_packages() {
         fx # interactive with JSON
         jq
         bat
+        diff-so-fancy
         neovim
 
         # cli
@@ -225,8 +221,6 @@ function main() {
     install_brew
     install_brew_packages
     install_krew_plugin
-
-    install_in_tmp install_diff_so_fancy
 
     {{ if eq .bitwarden.enabled "y" -}}
     install_in_tmp install_bitwarden-cli
