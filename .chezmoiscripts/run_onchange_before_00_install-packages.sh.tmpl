@@ -19,8 +19,8 @@ set -ueE -o pipefail
 
 # Install a bunch of debian packages.
 function install_linux_packages() {
-    (( ! MACOS )) || return 0
-    local packages=(
+    local packages=$1
+    packages+=(
         build-essential
         software-properties-common
         rsync
@@ -47,13 +47,6 @@ function install_linux_packages() {
         tmux
     )
 
-    if (( WSL )); then
-      packages+=(
-        socat iproute2             # install_wsl2_ssh_pageant
-        gnupg2 apt-transport-https # gpg repo and install_wslu
-      )
-    fi
-
     sudo apt-get update -qq >/dev/null
     # DEBIAN_FRONTEND=noninteractive sudo apt-get install -y -qq $pre_reqs >/dev/null
     sudo bash -c 'DEBIAN_FRONTEND=noninteractive apt-get -o DPkg::options::=--force-confdef -o DPkg::options::=--force-confold upgrade -y'
@@ -63,7 +56,6 @@ function install_linux_packages() {
 }
 
 function install_docker_engine() {
-    (( WSL )) || return 0
     command -v docker &>/dev/null && return 0
     echo "install docker"
     curl -fsSL https://get.docker.com -o - | sh
@@ -93,10 +85,7 @@ function share_tools() {
 }
 
 function install_brew_packages() {
-    local packages=()
-    # todo if macos add nessesary packages here
-    # packages+=()
-
+    local packages=$1
     # utils for linux (that not in APT)
     packages+=(
         # utils
@@ -139,7 +128,6 @@ function install_krew_plugin() {
 
 # https://github.com/BlackReloaded/wsl2-ssh-pageant
 function install_wsl2_ssh_pageant() {
-    (( WSL )) || return 0
     local win_home
     win_home=$(wslpath "$(cmd.exe /c 'echo %userprofile%' 2>/dev/null | sed 's/\r$//')")
     [ -d "$win_home/.ssh" ] || mkdir "$win_home"/.ssh
@@ -155,7 +143,6 @@ function install_wsl2_ssh_pageant() {
 
 # wsl utils, https://github.com/wslutilities/wslu
 install_wslu() {
-    (( WSL )) || return 0
     command -v wslview &>/dev/null && return 0
     echo "Install wsl utils"
     wget -O - https://pkg.wslutiliti.es/public.key | sudo tee -a /etc/apt/trusted.gpg.d/wslu.asc
@@ -224,39 +211,40 @@ function main() {
         exit 1
     fi
 
+    local linux_packages=() brew_packages=()
     umask g-w,o-w
 
-    install_linux_packages
-    install_brew
-    install_brew_packages
-
-    install_krew_plugin
-
-    # -- LINUX & WSL --
+    {{ if eq .chezmoi.os "darwin" -}}
+    # MACOS
+    # todo if macos add nessesary packages here
+    # brew_packages+=()
+    {{- else if eq .chezmoi.os "linux" -}}
+    {{-   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
+    # WSL
+    linux_packages+=(
+        socat iproute2             # install_wsl2_ssh_pageant
+        gnupg2 apt-transport-https # gpg repo and install_wslu
+    )
+    install_linux_packages $linux_packages
     install_wsl2_ssh_pageant
     install_wslu
+    {{-   else }}
+    # LINUX
+    install_linux_packages
+    {{-   end }}
+
+    # both LINUX and WSL
+    install_brew
+    install_brew_packages $brew_packages
+
     install_docker_engine
-    # ----
+    install_krew_plugin
 
-    {{ if eq .bitwarden.enabled "y" -}}
-    {{    if eq .chezmoi.os "linux" -}}
+    {{    if eq .bitwarden.enabled "y" -}}
     install_in_tmp install_bitwarden-cli
-    {{-   end -}}
+    {{-   end }}
     {{- end }}
-
-    echo SUCCESS
+    echo SUCCESS install packages
 }
-
-# assume default is linux on WSL=0 && MACOS=0
-WSL=0
-MACOS=0
-
-{{ if eq .chezmoi.os "darwin" -}}
-readonly MACOS=1
-{{- else if eq .chezmoi.os "linux" -}}
-{{-   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
-readonly WSL=1 # is WSL2
-{{-  end -}}
-{{- end }}
 
 main
