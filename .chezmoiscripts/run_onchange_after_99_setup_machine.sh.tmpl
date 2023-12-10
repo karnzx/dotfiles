@@ -11,13 +11,11 @@ set -xueEo pipefail
 
 function preinstall() {
     # install_z4h() required curl (macos already have curl)
-    if (( WSL )); then
-        sudo apt-get update -qq >/dev/null
-        sudo sh -c 'DEBIAN_FRONTEND=noninteractive apt-get -o DPkg::options::="--force-confdef" -o DPkg::options::="--force-confold" upgrade -y'
-        sudo apt-get install -y curl
-        sudo apt-get autoremove -y
-        sudo apt-get autoclean
-    fi
+    sudo apt-get update -qq >/dev/null
+    sudo sh -c 'DEBIAN_FRONTEND=noninteractive apt-get -o DPkg::options::="--force-confdef" -o DPkg::options::="--force-confold" upgrade -y'
+    sudo apt-get install -y curl
+    sudo apt-get autoremove -y
+    sudo apt-get autoclean
 }
 
 function install_z4h() {
@@ -27,7 +25,6 @@ function install_z4h() {
     sudo chsh -s /usr/local/bin/zsh "$USER"
 }
 function add_to_sudoers() {
-    (( ! MACOS )) || return 0
     # This is to be able to create /etc/sudoers.d/"$username". WITH NO PASSWORD
     if [[ "$USER" == *'~' || "$USER" == *.* ]]; then
         echo >&2 "$0: invalid username: $USER"
@@ -36,14 +33,13 @@ function add_to_sudoers() {
 
     echo "Grant user a sudoer"
     sudo usermod -aG sudo "$USER"
-    ((WSL)) || return 0
+    (( WSL )) || return 0
     echo "Remove user password for sudo"
     sudo tee /etc/sudoers.d/"$USER" <<<"$USER ALL=(ALL) NOPASSWD:ALL" >/dev/null
     sudo chmod 440 /etc/sudoers.d/"$USER"
 }
 
 function add_wsl_config() {
-    ((WSL)) || return 0
     [[ -f /etc/wsl.conf ]] && return 0
     cat <<EOF | sudo tee /etc/wsl.conf &>/dev/null
 [boot]
@@ -56,13 +52,11 @@ EOF
 # Avoid clock snafu when dual-booting Windows and Linux.
 # See https://www.howtogeek.com/323390/how-to-fix-windows-and-linux-showing-different-times-when-dual-booting/.
 function fix_clock() {
-    ((!WSL)) || return 0
     timedatectl set-local-rtc 1 --adjust-system-clock
 }
 
 # Set preferences for various applications.
 function set_preferences() {
-    ((WSL)) || return 0
     # X11
     if [[ -z "${DISPLAY+X}" ]]; then
         export DISPLAY=:0
@@ -92,28 +86,38 @@ function win_install_fonts() {
 
 # Install a decent monospace font.
 function install_fonts() {
-    ((WSL)) || return 0
     win_install_fonts ~/.local/share/fonts/NerdFonts/*.ttf
 }
 
 function main() {
     umask o-w
+    local WSL=0
 
     rm -rf ~/.cache
-
-    preinstall
-    install_z4h
 
     # asdf-direnv setup
     zsh -c "asdf direnv setup --shell zsh --version latest"
 
-    add_to_sudoers
+    {{ if eq .chezmoi.os "darwin" -}}
+    # MACOS
+    {{- else if eq .chezmoi.os "linux" -}}
+    preinstall
+    {{-   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
+    # WSL
+    WSL=1
     add_wsl_config
-
     install_fonts
-
     fix_clock
     set_preferences
+    {{-   else }}
+    # LINUX
+    {{-  end }}
+
+    # both LINUX and WSL
+    add_to_sudoers
+    {{- end }}
+
+    install_z4h
 
     # just run zsh to load new fresh dependency and print terminate wsl command and exit
     # -i for interactive (data download in interactive mode only)
@@ -128,17 +132,5 @@ function main() {
     ;exit
     '
 }
-
-# assume default is linux on WSL=0 && MACOS=0
-WSL=0
-MACOS=0
-
-{{ if eq .chezmoi.os "darwin" -}}
-readonly MACOS=1
-{{- else if eq .chezmoi.os "linux" -}}
-{{-   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
-readonly WSL=1 # is WSL2
-{{-  end -}}
-{{- end }}
 
 main
