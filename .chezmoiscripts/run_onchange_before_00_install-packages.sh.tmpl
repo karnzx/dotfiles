@@ -66,11 +66,6 @@ function install_brew() {
     command -v brew &>/dev/null && return 0
     echo "install brew"
     NONINTERACTIVE=1 bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    if (( ! MACOS )); then
-        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-    else
-        eval "$(/opt/homebrew/bin/brew shellenv)"
-    fi
 }
 
 function share_tools() {
@@ -221,6 +216,8 @@ function main() {
     # MACOS
     # todo if macos add nessesary packages here
     # brew_packages+=()
+    install_brew
+    eval "$(/opt/homebrew/bin/brew shellenv)" # macos brew shellnv
     {{- else if eq .chezmoi.os "linux" -}}
     {{-   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
     # WSL
@@ -238,6 +235,7 @@ function main() {
 
     # both LINUX and WSL
     install_brew
+    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" # linux brew shellenv
     install_brew_packages $brew_packages
 
     install_docker_engine
