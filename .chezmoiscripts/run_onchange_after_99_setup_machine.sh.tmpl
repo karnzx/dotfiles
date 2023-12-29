@@ -96,7 +96,7 @@ function main() {
     rm -rf ~/.cache
 
     # asdf-direnv setup
-    zsh -c "asdf direnv setup --shell zsh --version latest"
+    bash -c "asdf direnv setup --shell zsh --version latest"
 
     {{ if eq .chezmoi.os "darwin" -}}
     # MACOS
