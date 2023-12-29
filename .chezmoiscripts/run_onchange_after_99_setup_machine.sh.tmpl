@@ -118,7 +118,7 @@ function main() {
 
     # just run zsh to load new fresh dependency and print terminate wsl command and exit
     # -i for interactive (data download in interactive mode only)
-    bash -c "exec zsh -ic '
+    zsh -ic '
     if [[ -t 0 && -n "${WSL_DISTRO_NAME-}" ]]; then
     echo
     echo ------------------------------
@@ -126,7 +126,7 @@ function main() {
     echo \$ wsl.exe \-\-shutdown
     fi
     ;exit
-    '"
+    '
 
     # asdf-direnv setup
     zsh -c "asdf direnv setup --shell zsh --version latest"
