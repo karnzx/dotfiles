@@ -33,5 +33,7 @@
 	rebase = true
 [checkout]
     defaultRemote = origin
+[credential]
+    helper = cache
 [includeIf "gitdir:~/work/**/.git"] # replace config on work dir
 	path = ~/.gitconfig.work
