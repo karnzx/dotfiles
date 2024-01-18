@@ -90,6 +90,7 @@ plugins=(
 	ohmyzsh/ohmyzsh/plugins/aws
 	ohmyzsh/ohmyzsh/plugins/kubectl
 	ohmyzsh/ohmyzsh/plugins/brew
+	ohmyzsh/ohmyzsh/plugins/terraform
 	# others
 	MohamedElashri/exa-zsh
 	djui/alias-tips
