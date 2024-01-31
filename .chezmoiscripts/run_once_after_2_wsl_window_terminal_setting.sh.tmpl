@@ -7,15 +7,14 @@ function window_terminal_setting_path() {
 }
 
 function main() {
-    # [[ "$(</proc/version)" == *[Mm]icrosoft* ]] 2>/dev/null || return 0 # only wsl
-    # command exist
-    # cmd.exe /c 'where wt.exe' &>/dev/null || return 0
-    # dst_dir=$(window_terminal_setting_path)
-    # echo "window terminal setting path is '$dst_dir'"
-    # defaultProfile=$(jq '.defaultProfile' "$dst_dir")
-    # profileList=$(jq '.profiles.list' "$dst_dir" --tab)
-    # echo "apply setting..."
-    cat <<EOF >"test"
+    [[ "$(</proc/version)" == *[Mm]icrosoft* ]] 2>/dev/null || return 0 # only wsl command exist
+    cmd.exe /c 'where wt.exe' &>/dev/null || return 0 # window terminal exist
+    dst_dir=$(window_terminal_setting_path)
+    echo "window terminal setting path is '$dst_dir'"
+    defaultProfile=$(jq '.defaultProfile' "$dst_dir")
+    profileList=$(jq '.profiles.list' "$dst_dir" --tab)
+    echo "apply setting..."
+    cat <<EOF > $dst_dir
 {
     "\$help": "https://aka.ms/terminal-documentation",
     "\$schema": "https://aka.ms/terminal-profiles-schema",
