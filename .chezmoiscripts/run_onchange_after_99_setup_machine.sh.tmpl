@@ -62,7 +62,7 @@ function set_preferences() {
 }
 
 function show_fonts_directory_wsl() {
-    echo "manual install fonts"
+    echo -e "\033[0;36m Manual install fonts \033[0m"
     echo "right-click the font file and click Install for all users. This will install the font onto your machine."
     local path=$(wslpath $(cmd.exe /c "echo %LOCALAPPDATA%\Microsoft\\Windows\\Fonts" 2>/dev/null | sed 's/\r$//'))
     echo "$ open ${path}"
@@ -101,15 +101,16 @@ function main() {
     # asdf-direnv setup
     zsh -ic "asdf direnv setup --shell zsh --version latest"
 
+    echo
+    echo "------------------------------"
+    
     {{ if and (eq .chezmoi.os "linux") ((.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
     show_fonts_directory_wsl
     {{-  end }}
 
     zsh -c '
     if [[ -t 0 && -n "${WSL_DISTRO_NAME-}" ]]; then
-    echo
-    echo ------------------------------
-    echo Restart WSL by run this command
+    echo -e "\033[0;36m Restart WSL by run this command \033[0m"
     echo \$ wsl.exe \-\-shutdown
     fi
     ;exit
