@@ -114,12 +114,9 @@ cz update
 
 ---
 ## Looking for Just Dotfile Configs and Tools?
-Are you looking for only dotfiles configs and tools without any secret files? We've got you covered!
+Are you looking for only dotfiles configs and tools without any secret files download from bitwarden? We've got you covered!
 
-To ensure there are no secret files from Bitwarden in this repository, follow these steps
-
-- On prompted for Bitwarden login during package installation, simply press `CTRL-C` to skip it.
-- Disable Bitwarden vault when initializing with Chezmoi (Enter `n` or leave blank).
+when installing there a prompt ark to install bitwarden, putty. just hit `Enter`
 
 --- 
 
