@@ -61,30 +61,10 @@ function set_preferences() {
     fi
 }
 
-function win_install_fonts() {
-    local dst_dir
-    dst_dir="$(cmd.exe /c 'echo %LOCALAPPDATA%\Microsoft\Windows\Fonts' 2>/dev/null | sed 's/\r$//')"
-    dst_dir="$(wslpath "$dst_dir")"
-    mkdir -p "$dst_dir"
-    local src
-    for src in "$@"; do
-        local file
-        file="$(basename "$src")"
-        if [[ ! -f "$dst_dir/$file" ]]; then
-            cp -f "$src" "$dst_dir/"
-        fi
-        local win_path
-        win_path="$(wslpath -w "$dst_dir/$file")"
-        # Install font for the current user. It'll appear in "Font settings".
-        reg.exe add \
-            'HKCU\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts' \
-            /v "${file%.*} (TrueType)" /t REG_SZ /d "$win_path" /f 2>/dev/null
-    done
-}
-
-# Install a decent monospace font.
-function install_fonts() {
-    win_install_fonts ~/.local/share/fonts/NerdFonts/*.ttf
+function show_fonts_directory_wsl() {
+    echo "manual install fonts"
+    echo "right-click the font file and click Install for all users. This will install the font onto your machine."
+    bash -c "$ open $(wslpath $(cmd.exe /c "echo %LOCALAPPDATA%\Microsoft\\Windows\\Fonts" 2>/dev/null | sed 's/\r$//'))"
 }
 
 function main() {
@@ -101,7 +81,6 @@ function main() {
     # WSL
     WSL=1
     add_wsl_config
-    install_fonts
     fix_clock
     set_preferences
     {{-   else }}
@@ -119,6 +98,10 @@ function main() {
 
     # asdf-direnv setup
     zsh -ic "asdf direnv setup --shell zsh --version latest"
+
+    {{ if and (eq .chezmoi.os "linux") ((.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
+    show_fonts_directory_wsl
+    {{-  end }}
 
     zsh -c '
     if [[ -t 0 && -n "${WSL_DISTRO_NAME-}" ]]; then
