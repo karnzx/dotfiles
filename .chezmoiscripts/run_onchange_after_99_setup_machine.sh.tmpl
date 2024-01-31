@@ -7,7 +7,7 @@
 ## (( !WSL )) || return 0
 ### exit if WSL # wsl=1 -> !1 = 0 = false -> do return 0
 
-set -xueEo pipefail
+set -ueEo pipefail
 
 function preinstall() {
     # install_z4h() required curl (macos already have curl)
@@ -114,20 +114,21 @@ function main() {
 
     install_z4h
 
-    # just run zsh to load new fresh dependency and print terminate wsl command and exit
+    #  run zsh to load new fresh dependency and print terminate wsl command and exit
     # -i for interactive (data download in interactive mode only)
-    zsh -ic '
+
+    # asdf-direnv setup
+    zsh -ic "asdf direnv setup --shell zsh --version latest"
+
+    zsh -c '
     if [[ -t 0 && -n "${WSL_DISTRO_NAME-}" ]]; then
     echo
     echo ------------------------------
-    echo Restart WSL by run this command on powershell
+    echo Restart WSL by run this command
     echo \$ wsl.exe \-\-shutdown
     fi
     ;exit
     '
-
-    # asdf-direnv setup
-    zsh -ic "asdf direnv setup --shell zsh --version latest"
 }
 
 main
