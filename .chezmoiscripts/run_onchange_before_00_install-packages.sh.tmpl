@@ -226,7 +226,9 @@ function main() {
         gnupg2 apt-transport-https # gpg repo and install_wslu
     )
     install_linux_packages $linux_packages
+    {{    if eq .putty_pageant.enabled "y" -}}
     install_wsl2_ssh_pageant
+    {{-   end }}
     install_wslu
     {{-   else }}
     # LINUX
