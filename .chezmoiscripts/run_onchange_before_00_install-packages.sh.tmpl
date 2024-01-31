@@ -144,7 +144,7 @@ install_wslu() {
     command -v wslview &>/dev/null && return 0
     echo "Install wsl utils"
     wget -O - https://pkg.wslutiliti.es/public.key | sudo tee -a /etc/apt/trusted.gpg.d/wslu.asc
-    VERSION_CODENAME=$(/etc/os-release | grep -E "VERSION_CODENAME" | cut -d= -f2 | tr -d '"')
+    VERSION_CODENAME=$(cat /etc/os-release | grep -E "VERSION_CODENAME" | cut -d= -f2 | tr -d '"')
     echo "deb https://pkg.wslutiliti.es/debian $VERSION_CODENAME main" | sudo tee -a /etc/apt/sources.list
     sudo apt-get update -qq >/dev/null
     sudo apt-get install -y wslu
