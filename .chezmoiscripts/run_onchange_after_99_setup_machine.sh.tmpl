@@ -64,7 +64,9 @@ function set_preferences() {
 function show_fonts_directory_wsl() {
     echo "manual install fonts"
     echo "right-click the font file and click Install for all users. This will install the font onto your machine."
-    bash -c "$ open $(wslpath $(cmd.exe /c "echo %LOCALAPPDATA%\Microsoft\\Windows\\Fonts" 2>/dev/null | sed 's/\r$//'))"
+    local path=$(wslpath $(cmd.exe /c "echo %LOCALAPPDATA%\Microsoft\\Windows\\Fonts" 2>/dev/null | sed 's/\r$//'))
+    echo "$ open ${path}"
+    bash -c "open ${path}"
 }
 
 function main() {
