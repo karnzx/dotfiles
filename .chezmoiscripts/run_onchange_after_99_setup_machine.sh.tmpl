@@ -64,7 +64,7 @@ function set_preferences() {
 function show_fonts_directory_wsl() {
     echo -e "\033[0;36m Manual install fonts \033[0m"
     echo "right-click the font file and click Install for all users. This will install the font onto your machine."
-    local path=$(wslpath $(cmd.exe /c "echo %LOCALAPPDATA%\Microsoft\\Windows\\Fonts" 2>/dev/null | sed 's/\r$//'))
+    local path="${HOME}/.local/share/fonts/NerdFonts/"
     echo "$ open ${path}"
     bash -c "open ${path}"
 }
@@ -103,7 +103,7 @@ function main() {
 
     echo
     echo "------------------------------"
-    
+
     {{ if and (eq .chezmoi.os "linux") ((.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
     show_fonts_directory_wsl
     {{-  end }}
