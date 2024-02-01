@@ -1,9 +1,11 @@
 Include config_hosts
+Include pageant.conf # For window
 
 Host *
   ServerAliveInterval 60
   ConnectTimeout 10
   AddKeysToAgent yes
+  ForwardAgent yes
   EscapeChar `
   ControlMaster auto
   ControlPersist 72000
