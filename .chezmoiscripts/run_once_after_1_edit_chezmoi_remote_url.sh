@@ -5,6 +5,7 @@ set -o pipefail
 function getGitRemoteURL() {
     chezmoi git remote get-url origin
 }
+cd $(~/bin/chezmoi source-path)
 currentRemoteURL=$(getGitRemoteURL)
 echo current git remote origin "$currentRemoteURL"
 
@@ -14,6 +15,7 @@ if [[ "$currentRemoteURL" == git@* ]]; then
 fi
 
 read -r -p "Do you want to change git http url to ssh url? (y/n or enter): " -n 1
+echo
 if [[ "$REPLY" == "y" ]]; then
     remoteSSH=$(chezmoi git remote get-url origin | sed 's#https://github.com/#git@github.com:#')
     echo change to "$remoteSSH"
@@ -21,3 +23,4 @@ if [[ "$REPLY" == "y" ]]; then
 
     echo ">> $(getGitRemoteURL)"
 fi
+cd - &> /dev/null
