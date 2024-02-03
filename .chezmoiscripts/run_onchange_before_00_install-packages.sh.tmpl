@@ -113,7 +113,7 @@ function install_brew_packages() {
         ctop   # docker contianer top
     )
     brew update
-    brew install "${packages[@]}"
+    HOMEBREW_NO_AUTO_UPDATE=1 brew install "${packages[@]}"
     share_tools
 }
 
