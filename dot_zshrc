@@ -93,7 +93,6 @@ plugins=(
 	ohmyzsh/ohmyzsh/plugins/brew
 	ohmyzsh/ohmyzsh/plugins/terraform
 	# others
-	MohamedElashri/exa-zsh
 	djui/alias-tips
 	redxtech/zsh-asdf-direnv
 	)
@@ -165,15 +164,15 @@ fi
 
 # Aliases
 (( $+commands[rsync] )) && alias rsync='rsync -rz --info=FLIST,COPY,DEL,REMOVE,SKIP,SYMSAFE,MISC,NAME,PROGRESS,STATS'
-if (( $+commands[exa] )); then
-  alias ls='exa -g --group-directories-first --time-style=long-iso' 
+if (( $+commands[eza] )); then
+  alias ls='eza -g --group-directories-first --time-style=long-iso' 
   alias l='ls -lbF' #   list, size, type
   alias ll='ls -la' # long, all
   alias llm='ll --sort=modified' # list, long, sort by modification date
   alias la='ls -lbhHigUmuSa' # all list
   alias lx='ls -lbhHigUmuSa@' # all list and extended
-  alias tree='exa --tree' # tree view
-  alias lS='exa -1' # one column by just names
+  alias tree='eza --tree' # tree view
+  alias lS='eza -1' # one column by just names
 fi
 (( $+commands[chezmoi] )) && alias cz=chezmoi
 (( $+commands[bat] )) && alias cat="bat"
