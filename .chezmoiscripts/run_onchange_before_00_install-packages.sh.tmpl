@@ -148,6 +148,7 @@ install_wslu() {
     echo "deb https://pkg.wslutiliti.es/debian $VERSION_CODENAME main" | sudo tee -a /etc/apt/sources.list
     sudo apt-get update -qq >/dev/null
     sudo apt-get install -y wslu
+    sudo ln -s $(which wslview) /usr/local/bin/xdg-open
 }
 
 install_bitwarden-cli() {
