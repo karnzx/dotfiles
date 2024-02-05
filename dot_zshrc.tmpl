@@ -24,8 +24,11 @@ zstyle	  ':z4h:ssh:*.example-hostname2' enable 'no'
 zstyle	  ':z4h:ssh:*' 			send-extra-files '$ZDOTDIR/.zshrc.functions' '$ZDOTDIR/.zshrc.aliases'
 zstyle    ':z4h:ssh:*' 			ssh-command      command ssh
 zstyle -e ':z4h:ssh:*' 			retrieve-history 'reply=($ZDOTDIR/.zsh_history.${(%):-%m}:$z4h_ssh_host)'
-zstyle	  ':z4h:ssh-agent:' 		start no
+
+{{- if eq .putty_pageant.enabled "n" }}
+zstyle	  ':z4h:ssh-agent:' 		start yes
 zstyle 	  ':z4h:ssh-agent:' 		extra-args -t 20h
+{{ end -}}
 
 plugin_repo=(
 	romkatv/archive
@@ -52,7 +55,7 @@ path=(~/bin $path)
 
 fpath=($Z4H/romkatv/archive $fpath)
 [[ -d ~/.zfunctions ]] && fpath=(~/.zfunctions $fpath)
-# asdf 
+# asdf
 export ASDF_DIR="$HOME/.asdf"
 fpath+=(${ASDF_DIR}/completions)
 
@@ -81,7 +84,7 @@ z4h source ~/.zshrc.local # for local custom config on ssh
 # # Custom plugin options
 # ....
 
-## use plugins 
+## use plugins
 # z4h source ohmyzsh/ohmyzsh/lib/diagnostics.zsh  # source an individual file
 ## load plugins
 plugins=(
@@ -111,7 +114,7 @@ z4h load -c -- "${plugins[@]}"
 
 # Define functions and completions.
 function -arith-eval() { print -r -- $(( $@ )) }
-aliases[=]='noglob -arith-eval' # calc math expression. Ex. $ = 1 + 2 
+aliases[=]='noglob -arith-eval' # calc math expression. Ex. $ = 1 + 2
 
 function md() { [[ $# == 1 ]] && mkdir -p -- "$1" && cd -- "$1" }
 
@@ -151,13 +154,13 @@ zstyle ':completion:*:scp:argument-rest:'    tag-order          hosts files user
 zstyle ':completion:*:(ssh|scp|rdp):*:hosts' hosts
 
 if (( $+commands[diff-so-fancy] )); then
-  function diff() { 
+  function diff() {
     if [[ -z "$1" || -z "$2" ]]; then
 	    print -Pr -- "%F{3}diff%f <file1> <file2>"
 	    print -Pr -- "%F{3}diff%f <directory1> <directory2>"
-	    return 0 
+	    return 0
     fi
-    /usr/bin/diff -ru $1 $2 | diff-so-fancy 
+    /usr/bin/diff -ru $1 $2 | diff-so-fancy
   }
   unalias diff
 fi
@@ -165,7 +168,7 @@ fi
 # Aliases
 (( $+commands[rsync] )) && alias rsync='rsync -rz --info=FLIST,COPY,DEL,REMOVE,SKIP,SYMSAFE,MISC,NAME,PROGRESS,STATS'
 if (( $+commands[eza] )); then
-  alias ls='eza -g --group-directories-first --time-style=long-iso' 
+  alias ls='eza -g --group-directories-first --time-style=long-iso'
   alias l='ls -lbF' #   list, size, type
   alias ll='ls -la' # long, all
   alias llm='ll --sort=modified' # list, long, sort by modification date
@@ -178,7 +181,7 @@ fi
 (( $+commands[bat] )) && alias cat="bat"
 
 alias vim=$VISUAL
-## netstat 
+## netstat
 alias netstat="netstat -tulpn"
 ## find text in files
 alias findstr="grep -rnE "
@@ -240,7 +243,7 @@ if [[ -x ~/bin/num-cpus ]]; then
 fi
 
 # use (source -c) compile and source if file no need to use alias in same file
-z4h source -c -- $ZDOTDIR/.zshrc.pageant # init pageant 
+z4h source -c -- $ZDOTDIR/.zshrc.pageant # init pageant
 z4h source -c -- $ZDOTDIR/.zshrc.functions # custome functions (also sent via ssh)
 z4h source -c -- $ZDOTDIR/.zshrc.aliases # aliases
 z4h source -c -- $ZDOTDIR/.zshrc.wsl2 # for wsl2
