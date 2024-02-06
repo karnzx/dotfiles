@@ -6,3 +6,6 @@ alias -g H="--help"
 
 alias kns="kubens"
 alias kctx="kubectx"
+
+# look and use ssh
+alias gq="ghq get -l -p"
