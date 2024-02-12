@@ -79,7 +79,7 @@ function share_tools() {
     done
 }
 
-function install_brew_packages() {
+function install_linux_brew_packages() {
     local packages
     if [[ -n "${1:-}" ]]; then
         packages+=$1
@@ -151,7 +151,7 @@ install_wslu() {
     sudo ln -s $(which wslview) /usr/local/bin/xdg-open
 }
 
-install_bitwarden-cli() {
+install_linux_bitwarden-cli() {
     command -v bw &>/dev/null && return 0
     echo -e "Install Bitwarden-cli"
     curl -fSL "https://vault.bitwarden.com/download/?app=cli&platform=linux" -o bw.zip
@@ -239,13 +239,13 @@ function main() {
     # both LINUX and WSL
     install_brew
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" # linux brew shellenv
-    install_brew_packages $brew_packages
+    install_linux_brew_packages $brew_packages
 
     install_docker_engine
     install_krew_plugin
 
     {{    if eq .bitwarden.enabled "y" -}}
-    install_in_tmp install_bitwarden-cli
+    install_in_tmp install_linux_bitwarden-cli
     {{-   end }}
     {{- end }}
     echo SUCCESS install packages
