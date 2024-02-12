@@ -65,7 +65,7 @@ function install_docker_engine() {
 function install_brew() {
     command -v brew &>/dev/null && return 0
     echo "install brew"
-    NONINTERACTIVE=1 bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 }
 
 function share_tools() {
