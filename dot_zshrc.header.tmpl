@@ -1,0 +1,4 @@
+{{- if eq .putty_pageant.enabled "n" }}
+zstyle	  ':z4h:ssh-agent:' 		start yes
+zstyle 	  ':z4h:ssh-agent:' 		extra-args -t 20h
+{{ end -}}
