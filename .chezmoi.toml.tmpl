@@ -18,6 +18,15 @@
 [data.putty_pageant]
     enabled = {{ $putty_pageant | quote }}
 
+{{- $mac_mas_enable := "n" -}}
+{{- if eq .chezmoi.os "darwin" -}}
+{{- writeToStdout " --- MacOS --- \n" -}}
+{{- $mac_mas_enable = (promptStringOnce . "mac.mas.enabled" "Install my Mac App store apps (see https://github.com/karnzx/dotfiles#my-mac-app-store-apps) ? (y/n) " "n") -}}
+{{- end }}
+
+[data.mac.mas]
+    enabled = {{ $mac_mas_enable | quote }}
+
 {{- writeToStdout " --- Bitwarden data Config --- \n" -}}
 {{- $bitwarden_enabled := promptStringOnce . "bitwarden.enabled" "Enable bitwarden CLI (y/n)" "n" -}}
 {{- $bw_ssh_config_hosts := "" -}}

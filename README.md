@@ -6,7 +6,7 @@ my dotfiles managed with chezmoi
 ## My setup
 | what             | I use                                                    | 
 | ---------------- | -------------------------------------------------------- |
-| Operating System | Window 11, WSL2 (Debian)                                 |
+| Operating System | Window 11, WSL2 (Debian), MacBook M2 Pro                 |
 | Shell            | ZSH ([zsh4human](https://github.com/romkatv/zsh4humans)) |
 | dotfile manager  | [chezmoi](https://www.chezmoi.io/)                       |
 | editor           | neovim or vim or vi                                      |
@@ -14,10 +14,11 @@ my dotfiles managed with chezmoi
 | etc.             | there a lot                                              |
 
 - [Prerequisite](#prerequisite)
-  - [Bitwarden Vault Data](#bitwarden-vault-data) 
-    - [notes](#notes) 
-  - [Window Setup (skip if not use WSL2)](#window-setup-skip-if-not-using-wsl2) 
-    - [Tools](#tools)
+- [Bitwarden CLI](#bitwarden-cli) 
+  - [notes](#notes)
+- [Window](#window)
+  - [Tools](#tools)
+- [MacOS](#macos)
 - [Installation](#installation)
 - [install by branch](#installation-by-branch)
 - [Updating your dotfiles](#updating-your-dotfiles)
@@ -37,7 +38,7 @@ Make sure you have curl installed. If not, you can install it with the following
 sudo apt install -y curl
 ```
 
-### Bitwarden Vault Data
+### Bitwarden CLI
 
 To keep sensitive files away from the public repository, I use Bitwarden for added security. The following secrets are utilized within this setup.
 
@@ -49,7 +50,7 @@ If you don't use Bitwarden, just ignore any prompts during initialization with C
 | -------------------------- | ---------------- |
 | dotfiles/.ssh/config_hosts | ssh host configs |
 
-### Window Setup (skip if not using WSL2)
+### Window
 
 Install Debian distribution or any you like
 
@@ -83,6 +84,13 @@ winget install -e --id Microsoft.WindowsTerminal
 winget install -e --id Microsoft.VisualStudioCode 
 winget install -e --id PuTTY.PuTTY
 ```
+
+---
+## MacOS
+
+### My Mac App Store Apps
+I use [MAS](https://github.com/mas-cli/mas) so these tools have to installed on apple account before.
+- [Bitwarden](https://apps.apple.com/th/app/bitwarden/id1352778147?mt=12)
 
 ---
 ## Installation
