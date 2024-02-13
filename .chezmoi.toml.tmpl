@@ -19,7 +19,7 @@
     enabled = {{ $putty_pageant | quote }}
 
 {{- writeToStdout " --- Bitwarden data Config --- \n" -}}
-{{- $bitwarden_enabled := promptStringOnce . "bitwarden.enabled" "Enable bitwarden vault (y/n)" "n" -}}
+{{- $bitwarden_enabled := promptStringOnce . "bitwarden.enabled" "Enable bitwarden CLI (y/n)" "n" -}}
 {{- $bw_ssh_config_hosts := "" -}}
 {{- $bw_putty_ssh_key := "" -}}
 {{- if eq "y" $bitwarden_enabled -}}
