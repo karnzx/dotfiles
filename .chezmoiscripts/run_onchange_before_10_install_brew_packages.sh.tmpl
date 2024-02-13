@@ -1,0 +1,48 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+
+brew update
+
+brew bundle --no-lock --file=/dev/stdin <<EOF
+## BREW
+
+brew 'mas' # Mac App Store manager
+
+# utils
+brew "git"
+brew "wget"
+brew "tmux"
+brew "neovim"
+brew "diff-so-fancy"
+brew "tldr"
+brew "ripgrep"
+brew "eza"
+brew "yq"
+brew "fx" # interactive with JSON
+brew "jq"
+brew "jc"
+brew "bat"
+brew "num-utils" # math
+
+# dev
+brew "mycli"
+
+## CASK
+
+# common
+cask "google-chrome"
+cask "iterm2"
+cask "obsidian"
+cask "rectangle"
+cask "onedrive"
+
+# dev
+# cask "docker"
+cask "visual-studio-code"
+
+## MAS (Mac Apple Store)
+mas 'Bitwarden', id: 1352778147
+EOF
+
+brew cleanup
+{{ end -}}
