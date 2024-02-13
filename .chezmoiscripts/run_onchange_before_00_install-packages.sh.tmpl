@@ -41,7 +41,6 @@ function install_linux_packages() {
         num-utils # math
         mycli # mysqlcli
         httpie
-        taskwarrior
         alsa-utils pulseaudio # audio
         net-tools
         tmux
@@ -215,11 +214,10 @@ function main() {
 
     {{ if eq .chezmoi.os "darwin" -}}
     # MACOS
-    # todo if macos add nessesary packages here
-    # brew_packages+=()
     xcode-select --install 2>/dev/null || true
     install_brew
     eval "$(/opt/homebrew/bin/brew shellenv)" # macos brew shellnv
+
     {{- else if eq .chezmoi.os "linux" -}}
     {{-   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
     # WSL
