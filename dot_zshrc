@@ -6,7 +6,6 @@ z4h source -c -- $ZDOTDIR/.zshrc.header
 zstyle ':z4h:' auto-update      'no'
 zstyle ':z4h:' auto-update-days '28'
 
-zstyle ':z4h:bindkey' 		keyboard  'pc'
 zstyle ':z4h:term-title:ssh'    precmd                 ${${${Z4H_SSH##*:}//\%/%%}:-%m}': %~'
 zstyle ':z4h:term-title:ssh'    preexec                ${${${Z4H_SSH##*:}//\%/%%}:-%m}': ${1//\%/%%}'
 zstyle ':z4h:' 			term-shell-integration 'yes'
@@ -147,6 +146,7 @@ zstyle ':completion:*:scp:argument-rest:'    tag-order          hosts files user
 zstyle ':completion:*:(ssh|scp|rdp):*:hosts' hosts
 
 if (( $+commands[diff-so-fancy] )); then
+  [[ -n $(alias diff) ]] && unalias diff
   function diff() {
     if [[ -z "$1" || -z "$2" ]]; then
 	    print -Pr -- "%F{3}diff%f <file1> <file2>"
@@ -155,7 +155,6 @@ if (( $+commands[diff-so-fancy] )); then
     fi
     /usr/bin/diff -ru $1 $2 | diff-so-fancy
   }
-  unalias diff
 fi
 
 # Aliases
