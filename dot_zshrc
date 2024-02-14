@@ -140,6 +140,11 @@ bindkey "^[[1;2D" z4h-do-nothing
 
 zstyle ':z4h:fzf-dir-history'       fzf-bindings       tab:repeat
 
+# Recursively traverse directories when TAB-completing files.
+zstyle ':z4h:fzf-complete' recurse-dirs yes
+# Rebind Tab in fzf from up to repeat
+zstyle ':z4h:fzf-complete' fzf-bindings tab:repeat
+
 zstyle ':completion:*:ls:*'                  list-dirs-first    true
 zstyle ':completion:*:ssh:argument-1:'       tag-order          hosts users
 zstyle ':completion:*:scp:argument-rest:'    tag-order          hosts files users
