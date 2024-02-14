@@ -1,0 +1,15 @@
+plugins:
+  edit-secret:
+    shortCut: Ctrl-X
+    description: "Edit Decoded Secret"
+    scopes:
+      - secrets
+    command: kubectl
+    background: false
+    args:
+      - modify-secret
+      - --namespace
+      - $NAMESPACE
+      - --context
+      - $CONTEXT
+      - $NAME
