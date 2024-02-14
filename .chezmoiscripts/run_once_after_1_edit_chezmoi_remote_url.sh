@@ -17,7 +17,7 @@ fi
 read -r -p "Do you want to change git http url to ssh url? (y/n or enter): " -n 1
 echo
 if [[ "$REPLY" == "y" ]]; then
-    remoteSSH=$(~/bin/chezmoi git remote get-url origin | sed 's#https://github.com/#git@github.com:#')
+    remoteSSH=$(~/bin/chezmoi git remote get-url origin | sed 's#https://#ssh://git@#')
     echo change to "$remoteSSH"
     ~/bin/chezmoi git remote set-url origin "$remoteSSH"
 
