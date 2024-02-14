@@ -119,6 +119,7 @@ function install_linux_brew_packages() {
 function install_krew_plugin() {
     local plugins=(
         oidc-login
+        modify-secret
     )
     kubectl krew install "${plugins[@]}"
 }
