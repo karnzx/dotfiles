@@ -120,6 +120,7 @@ function install_krew_plugin() {
     local plugins=(
         oidc-login
         modify-secret
+        resource-capacity
     )
     kubectl krew install "${plugins[@]}"
 }
