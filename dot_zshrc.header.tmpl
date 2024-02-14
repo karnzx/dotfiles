@@ -1,4 +1,11 @@
 {{- if eq .putty_pageant.enabled "n" }}
 zstyle	  ':z4h:ssh-agent:' 		start yes
 zstyle 	  ':z4h:ssh-agent:' 		extra-args -t 20h
+{{ end }}
+
+# Keyboard type: 'mac' or 'pc'.
+{{ if eq .chezmoi.os "darwin" -}}
+zstyle ':z4h:bindkey' keyboard  'mac'
+{{ else -}}
+zstyle ':z4h:bindkey' keyboard  'pc'
 {{ end -}}
