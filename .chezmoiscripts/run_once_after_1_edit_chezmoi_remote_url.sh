@@ -9,7 +9,7 @@ cd $(~/bin/chezmoi source-path)
 currentRemoteURL=$(getGitRemoteURL)
 echo current git remote origin "$currentRemoteURL"
 
-if [[ "$currentRemoteURL" == git@* ]]; then
+if [[ "$currentRemoteURL" == *git@* ]]; then
     echo "already SSH | exit"
     exit 0
 fi
