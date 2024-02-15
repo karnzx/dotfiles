@@ -112,19 +112,8 @@ function install_linux_brew_packages() {
         ctop   # docker contianer top
     )
     brew update
-    HOMEBREW_NO_AUTO_UPDATE=1 brew install "${packages[@]}"
+    HOMEBREW_NO_INSTALL_UPGRADE=1 brew install "${packages[@]}"
     share_tools
-}
-
-function install_krew_plugin() {
-    local plugins=(
-        oidc-login
-        modify-secret
-        resource-capacity
-        netshoot/netshoot
-    )
-    [[ $(kubectl krew index list | grep netshoot) ]] || kubectl krew index add netshoot https://github.com/nilic/kubectl-netshoot.it
-    kubectl krew install "${plugins[@]}"
 }
 
 # https://github.com/BlackReloaded/wsl2-ssh-pageant
@@ -245,7 +234,6 @@ function main() {
     install_linux_brew_packages $brew_packages
 
     install_docker_engine
-    install_krew_plugin
 
     {{    if eq .bitwarden.enabled "y" -}}
     install_in_tmp install_linux_bitwarden-cli
