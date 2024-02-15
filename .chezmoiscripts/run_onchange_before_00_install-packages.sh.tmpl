@@ -121,7 +121,9 @@ function install_krew_plugin() {
         oidc-login
         modify-secret
         resource-capacity
+        netshoot/netshoot
     )
+    [[ $(kubectl krew index list | grep netshoot) ]] || kubectl krew index add netshoot https://github.com/nilic/kubectl-netshoot.it
     kubectl krew install "${plugins[@]}"
 }
 
