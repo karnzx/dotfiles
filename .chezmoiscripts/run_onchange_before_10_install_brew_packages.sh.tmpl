@@ -1,7 +1,11 @@
 {{- if eq .chezmoi.os "darwin" -}}
 #!/bin/bash
 
-brew update
+# no need to update and clean up commands
+# brew auto update before install (brew update)
+# brew auto cleanup old version after 30 days (brew cleanup)
+
+HOMEBREW_NO_INSTALL_UPGRADE=1
 
 brew bundle --no-lock --file=/dev/stdin <<EOF
 ## Taps
@@ -73,5 +77,4 @@ mas 'Bitwarden', id: 1352778147
 {{- end }}
 EOF
 
-brew cleanup
 {{ end -}}
