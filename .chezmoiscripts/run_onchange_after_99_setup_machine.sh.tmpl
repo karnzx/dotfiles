@@ -103,6 +103,7 @@ function main() {
 
     echo
     echo "------------------------------"
+    echo "Done Setup, please restart the terminal"
 
     {{ if and (eq .chezmoi.os "linux") ((.chezmoi.kernel.osrelease | lower | contains "microsoft")) -}}
     show_fonts_directory_wsl
