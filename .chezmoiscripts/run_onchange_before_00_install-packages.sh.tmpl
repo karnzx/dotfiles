@@ -78,44 +78,6 @@ function share_tools() {
     done
 }
 
-function install_linux_brew_packages() {
-    local packages
-    if [[ -n "${1:-}" ]]; then
-        packages+=$1
-    fi
-    # utils for linux (that not in APT)
-    packages+=(
-        # utils
-        eza
-        ripgrep
-        yq
-        fx # interactive with JSON
-        jq
-        bat
-        diff-so-fancy
-        neovim
-
-        # cli
-        awscli
-        kubectl
-        kubectx
-        terraform
-        krew
-        argocd
-        k9s
-        oha # web load test in Rust https://github.com/hatoo/oha
-        ghq # Manage remote repository clones
-        git-standup
-
-        # monitoring
-        bpytop # better htop
-        ctop   # docker contianer top
-    )
-    brew update
-    HOMEBREW_NO_INSTALL_UPGRADE=1 brew install "${packages[@]}"
-    share_tools
-}
-
 # https://github.com/BlackReloaded/wsl2-ssh-pageant
 function install_wsl2_ssh_pageant() {
     local win_home
@@ -231,7 +193,6 @@ function main() {
     # both LINUX and WSL
     install_brew
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" # linux brew shellenv
-    install_linux_brew_packages $brew_packages
 
     install_docker_engine
 

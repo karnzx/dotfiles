@@ -1,59 +1,25 @@
-{{- if eq .chezmoi.os "darwin" -}}
 #!/bin/bash
 
 # no need to update and clean up commands
 # brew auto update before install (brew update)
 # brew auto cleanup old version after 30 days (brew cleanup)
-
 HOMEBREW_NO_INSTALL_UPGRADE=1
 
+{{ if eq .chezmoi.os "darwin" -}}
 brew bundle --no-lock --file=/dev/stdin <<EOF
 ## Taps
 tap 'homebrew/cask-fonts'
 
 ## BREW
-
 brew 'mas' # Mac App Store manager
-brew 'chezmoi'
-
-# utils
 brew "git"
 brew "wget"
 brew "tmux"
-brew "neovim"
-brew "diff-so-fancy"
 brew "tldr"
-brew "ripgrep"
-brew "eza"
-brew "yq"
-brew "fx" # interactive with JSON
-brew "jq"
-brew "jc"
-brew "bat"
 brew "num-utils" # math
-
-# dev
-brew "mycli"
-brew "ghq" # Manage remote repository clones
-brew "git-standup"
-brew "oha" # web load test in Rust https://github.com/hatoo/oha
-
-# devops
-brew "awscli"
-brew "kubectl"
-brew "kubectx"
-brew "terraform"
-brew "krew"
-brew "argocd"
-brew "k9s"
-brew "minikube"
-
-# monitoring
-brew "bpytop" # better htop
-brew "ctop"   # docker contianer top
+brew "jc"
 
 ## CASK
-
 # common
 cask "google-chrome"
 cask "iterm2"
@@ -75,6 +41,43 @@ cask "visual-studio-code"
 ## MAS (Mac Apple Store)
 mas 'Bitwarden', id: 1352778147
 {{- end }}
-EOF
 
+EOF
 {{ end -}}
+
+brew bundle --no-lock --file=/dev/stdin <<EOF
+## BREW
+
+brew 'chezmoi'
+
+# utils
+brew "neovim"
+brew "diff-so-fancy"
+brew "ripgrep"
+brew "eza"
+brew "yq"
+brew "fx" # interactive with JSON
+brew "jq"
+brew "bat"
+
+# dev
+brew "mycli"
+brew "ghq" # Manage remote repository clones
+brew "git-standup"
+brew "oha" # web load test in Rust https://github.com/hatoo/oha
+
+# devops
+brew "awscli"
+brew "kubectl"
+brew "kubectx"
+brew "terraform"
+brew "krew"
+brew "argocd"
+brew "k9s"
+brew "minikube"
+
+# monitoring
+brew "bpytop" # better htop
+brew "ctop"   # docker contianer top
+
+EOF
