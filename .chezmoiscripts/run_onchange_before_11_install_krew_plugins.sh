@@ -8,9 +8,12 @@ function add_index() {
     kubectl krew index add "$1" "$2" || true
 }
 
-add_index netshoot https://github.com/nilic/kubectl-netshoot.it
+add_index default https://github.com/kubernetes-sigs/krew-index.git
+add_index netshoot https://github.com/nilic/kubectl-netshoot.git
 
-kubectl krew install --no-update-index <<EOF
+KREW_NO_UPGRADE_CHECK=1
+
+kubectl krew install <<EOF
 oidc-login
 modify-secret
 resource-capacity
