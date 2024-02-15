@@ -7,16 +7,9 @@
 ## (( !WSL )) || return 0
 ### exit if WSL # wsl=1 -> !1 = 0 = false -> do return 0
 
-set -ueEo pipefail
+# install_z4h() required curl (macos already have curl)
 
-function preinstall() {
-    # install_z4h() required curl (macos already have curl)
-    sudo apt-get update -qq >/dev/null
-    sudo sh -c 'DEBIAN_FRONTEND=noninteractive apt-get -o DPkg::options::="--force-confdef" -o DPkg::options::="--force-confold" upgrade -y'
-    sudo apt-get install -y curl
-    sudo apt-get autoremove -y
-    sudo apt-get autoclean
-}
+set -ueEo pipefail
 
 function install_z4h() {
     # install zsh5.8 on /usr/local/bin for non-root user  (default is /usr/bin)
@@ -78,7 +71,7 @@ function main() {
     {{ if eq .chezmoi.os "darwin" -}}
     # MACOS
     {{- else if eq .chezmoi.os "linux" -}}
-    preinstall
+    # Linux
     {{-   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
     # WSL
     WSL=1
