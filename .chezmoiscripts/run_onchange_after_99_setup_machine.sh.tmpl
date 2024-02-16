@@ -56,7 +56,7 @@ function set_preferences() {
 
 function show_fonts_directory_wsl() {
     echo -e "\033[0;36m Manual install fonts \033[0m"
-    echo "right-click the font file and click Install for all users. This will install the font onto your machine."
+    echo -e "right-click the font file and click \033[0;36m Install for all users. \033[0m This will install the font onto your machine."
     local path="${HOME}/.local/share/fonts/NerdFonts/"
     echo "$ ~/bin/open ${path}"
     bash -c "~/bin/open ${path}"
