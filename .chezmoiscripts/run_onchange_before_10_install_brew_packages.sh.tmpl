@@ -30,6 +30,9 @@ cask "onedrive"
 cask "unnaturalscrollwheels"
 cask "slack"
 cask "raycast"
+cask "cheatsheet"
+cask "prettyclean"
+cask "itsycal"
 
 # fonts
 cask "font-meslo-lg-nerd-font"
@@ -38,7 +41,7 @@ cask "font-caskaydia-cove-nerd-font"
 cask "font-caskaydia-mono-nerd-font"
 
 # dev
-# cask "docker"
+cask "docker"
 cask "visual-studio-code"
 
 {{- if eq .bitwarden.enabled "y" -}}
@@ -49,6 +52,7 @@ brew "bitwarden-cli"
 {{- if eq .mac.mas.enabled "y" -}}
 ## MAS (Mac Apple Store)
 mas 'Bitwarden', id: 1352778147
+mas 'RunCat', id: 1429033973
 {{- end }}
 
 EOF

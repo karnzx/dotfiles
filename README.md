@@ -4,7 +4,7 @@ my dotfiles managed with chezmoi
 ### [**Looking for Just Dotfile Configs and Tools?**](#looking-for-just-dotfile-configs-and-tools-1)
 
 ## My setup
-| what             | I use                                                    | 
+| what             | I use                                                    |
 | ---------------- | -------------------------------------------------------- |
 | Operating System | Window 11, WSL2 (Debian), MacBook M2 Pro                 |
 | Shell            | ZSH ([zsh4human](https://github.com/romkatv/zsh4humans)) |
@@ -14,7 +14,7 @@ my dotfiles managed with chezmoi
 | etc.             | there a lot                                              |
 
 - [Prerequisite](#prerequisite)
-- [Bitwarden CLI](#bitwarden-cli) 
+- [Bitwarden CLI](#bitwarden-cli)
   - [notes](#notes)
 - [Window](#window)
   - [Tools](#tools)
@@ -31,7 +31,7 @@ my dotfiles managed with chezmoi
 - Linux or WSL2 etc.
 - ensure you can run window binary [fix here](#wsl2-cant-execute-window-binary)
 - bitwarden data (keep sensitive files, only main branch)
-- curl 
+- curl
 
 Make sure you have curl installed. If not, you can install it with the following command:
 ```shell
@@ -81,7 +81,7 @@ choco.exe install -y microsoft-windows-terminal vscode putty
 
 ```powershell
 winget install -e --id Microsoft.WindowsTerminal
-winget install -e --id Microsoft.VisualStudioCode 
+winget install -e --id Microsoft.VisualStudioCode
 winget install -e --id PuTTY.PuTTY
 ```
 
@@ -91,19 +91,20 @@ winget install -e --id PuTTY.PuTTY
 ### My Mac App Store Apps
 I use [MAS](https://github.com/mas-cli/mas) so these tools have to installed on apple account before.
 - [Bitwarden](https://apps.apple.com/th/app/bitwarden/id1352778147?mt=12)
+- [RunCat](https://apps.apple.com/th/app/runcat/id1429033973?mt=12)
 
 ---
 ## Installation
 
-To install chezmoi and clone the dotfiles in `$HOME` directory , use the bootstrap command below. 
+To install chezmoi and clone the dotfiles in `$HOME` directory , use the bootstrap command below.
 
 ```shell
-sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply karnzx 
+sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply karnzx
 ```
 
 Optional variables so you can create for anyone who forks or clones these dotfiles for himself, leave it empty for manualy add
 
-| key             | value               | 
+| key             | value               |
 | --------------- | ------------------- |
 | BITWARDEN_EMAIL | bitwarden email     |
 
@@ -126,7 +127,7 @@ Are you looking for only dotfiles configs and tools without any secret files dow
 
 when installing there a prompt ark to install bitwarden, putty. just hit `Enter`
 
---- 
+---
 
 ## troubleshooting
 
