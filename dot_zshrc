@@ -32,6 +32,7 @@ plugin_repo=(
 	ohmyzsh/ohmyzsh
 	djui/alias-tips
 	redxtech/zsh-asdf-direnv
+	mattmc3/zman # zsh docs search plugin
 )
 z4h install "${plugin_repo[@]}" || return
 
@@ -90,6 +91,7 @@ plugins=(
 	# others
 	djui/alias-tips
 	redxtech/zsh-asdf-direnv
+	mattmc3/zman
 	)
 z4h load -c -- "${plugins[@]}"
 
