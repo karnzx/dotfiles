@@ -48,13 +48,11 @@ setopt glob_dots magic_equal_subst no_multi_os no_local_loops
 setopt rm_star_silent rc_quotes glob_star_short no_auto_menu
 
 # Extend PATH.
+# NOTE: precedence overwrite left to right
 path=(~/bin $path)
 
 fpath=($Z4H/romkatv/archive $fpath)
 [[ -d ~/.zfunctions ]] && fpath=(~/.zfunctions $fpath)
-# asdf
-export ASDF_DIR="$HOME/.asdf"
-fpath+=(${ASDF_DIR}/completions)
 
 autoload -Uz -- zmv archive lsarchive unarchive ~/.zfunctions/[^_]*(N:t)
 
