@@ -1,0 +1,10 @@
+# system curl not provide good completion, so use brew curl
+
+path=(/opt/homebrew/opt/curl/bin # curl
+	$path
+)
+
+fpath=(/opt/homebrew/opt/curl/share/zsh/site-functions/ # curl
+	$fpath
+)
+

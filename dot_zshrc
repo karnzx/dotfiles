@@ -246,6 +246,7 @@ z4h source -c -- $ZDOTDIR/.zshrc.pageant # init pageant
 z4h source -c -- $ZDOTDIR/.zshrc.functions # custome functions (also sent via ssh)
 z4h source -c -- $ZDOTDIR/.zshrc.aliases # aliases
 z4h source -c -- $ZDOTDIR/.zshrc.wsl2 # for wsl2
+z4h source -c -- $ZDOTDIR/.zshrc.osx # for macOS
 z4h source -c -- $ZDOTDIR/.zshrc-private
 # for local custom config on ssh
 z4h source -c -- $ZDOTDIR/.zshrc.local
