@@ -150,6 +150,16 @@ bitwarden_unlock() {
     fi
 }
 
+function install_iterm_imgcat() {
+    TERM_PROGRAM=${TERM_PROGRAM:-}
+    [[ $TERM_PROGRAM != "iTerm.app" ]] && return 0
+    command -v imgcat &>/dev/null && return 0
+    echo "Downloading iterm imgcat utility"
+    curl -fsSL https://raw.githubusercontent.com/gnachman/iTerm2-shell-integration/main/utilities/imgcat -o imgcat
+    chmod +x ./imgcat
+    sudo mv ./imgcat /usr/local/bin/
+}
+
 function install_in_tmp() {
     local tmp
     tmp="$(mktemp -d)"
@@ -172,6 +182,8 @@ function main() {
     xcode-select --install 2>/dev/null || true
     install_brew
     eval "$(/opt/homebrew/bin/brew shellenv)" # macos brew shellnv
+
+    install_in_tmp install_iterm_imgcat
 
     {{- else if eq .chezmoi.os "linux" -}}
     {{-   if (.chezmoi.kernel.osrelease | lower | contains "microsoft") }}
