@@ -34,6 +34,7 @@ brew_packages:
     - "cheatsheet"
     - "prettyclean"
     - "itsycal"
+    - "kap" # screen recorder
     # fonts
     - "font-meslo-lg-nerd-font"
     - "font-hack-nerd-font"
