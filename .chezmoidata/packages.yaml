@@ -1,0 +1,93 @@
+# brew packages list
+# MacOs use all
+# Linux, WSL2 use only .brew_packages.linux
+brew_packages:
+  # HomeBrew MacOS only
+  darwin:
+    taps:
+    - 'homebrew/cask-fonts'
+
+    brews:
+    - 'mas'
+    - 'mas' # Mac App Store manager
+    - "git"
+    - "wget"
+    - "tmux"
+    - "tldr"
+    - "num-utils" # math
+    - "jc"
+
+    # bitwarden-cli in install_brew_packages.sh.tmpl
+
+    casks:
+    # common
+    - "google-chrome"
+    - "brave-browser"
+    - "iterm2"
+    - "obsidian"
+    - "rectangle"
+    - "onedrive"
+    - "unnaturalscrollwheels"
+    - "slack"
+    - "raycast"
+    - "cheatsheet"
+    - "prettyclean"
+    - "itsycal"
+    # fonts
+    - "font-meslo-lg-nerd-font"
+    - "font-hack-nerd-font"
+    - "font-caskaydia-cove-nerd-font"
+    - "font-caskaydia-mono-nerd-font"
+    # dev
+    - "docker"
+    - "visual-studio-code"
+
+    # fonts
+    - "font-meslo-lg-nerd-font"
+    - "font-hack-nerd-font"
+    - "font-caskaydia-cove-nerd-font"
+    - "font-caskaydia-mono-nerd-font"
+
+    ## MAS (Mac Apple Store)
+    mas:
+    - name: 'Bitwarden'
+      id: 1352778147
+    - name: 'RunCat'
+      id: 1429033973
+
+  # LinuxBrew (Linux, WSL2) and additional for MacOS
+  linux:
+    taps: {}
+    brews:
+    - 'chezmoi'
+
+    # utils
+    - "neovim"
+    - "diff-so-fancy"
+    - "ripgrep"
+    - "eza"
+    - "yq"
+    - "fx" # interactive with JSON
+    - "jq"
+    - "bat"
+
+    # dev
+    - "mycli"
+    - "ghq" # Manage remote repository clones
+    - "git-standup"
+    - "oha" # web load test in Rust https://github.com/hatoo/oha
+
+    # devops
+    - "awscli"
+    - "kubectl"
+    - "kubectx"
+    - "terraform"
+    - "krew"
+    - "argocd"
+    - "k9s"
+    - "minikube"
+
+    # monitoring
+    - "bpytop" # better htop
+    - "ctop"   # docker contianer top
+

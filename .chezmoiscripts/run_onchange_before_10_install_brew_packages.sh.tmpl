@@ -6,91 +6,36 @@
 HOMEBREW_NO_INSTALL_UPGRADE=1
 
 {{ if eq .chezmoi.os "darwin" -}}
+
 brew bundle --no-lock --file=/dev/stdin <<EOF
-## Taps
-tap 'homebrew/cask-fonts'
-
-## BREW
-brew 'mas' # Mac App Store manager
-brew "git"
-brew "wget"
-brew "tmux"
-brew "tldr"
-brew "num-utils" # math
-brew "jc"
-
-## CASK
-# common
-cask "google-chrome"
-cask "brave-browser"
-cask "iterm2"
-cask "obsidian"
-cask "rectangle"
-cask "onedrive"
-cask "unnaturalscrollwheels"
-cask "slack"
-cask "raycast"
-cask "cheatsheet"
-cask "prettyclean"
-cask "itsycal"
-
-# fonts
-cask "font-meslo-lg-nerd-font"
-cask "font-hack-nerd-font"
-cask "font-caskaydia-cove-nerd-font"
-cask "font-caskaydia-mono-nerd-font"
-
-# dev
-cask "docker"
-cask "visual-studio-code"
-
-{{- if eq .bitwarden.enabled "y" -}}
-## Bitwarden-CLI
-brew "bitwarden-cli"
-{{- end }}
-
-{{- if eq .mac.mas.enabled "y" -}}
-## MAS (Mac Apple Store)
-mas 'Bitwarden', id: 1352778147
-mas 'RunCat', id: 1429033973
-{{- end }}
-
+{{ range .brew_packages.darwin.taps -}}
+tap {{ . | quote }}
+{{ end -}}
+{{ range .brew_packages.darwin.brews -}}
+brew {{ . | quote }}
+{{ end -}}
+{{ range .brew_packages.darwin.casks -}}
+cask {{ . | quote }}
+{{ end -}}
 EOF
+
+{{ if eq .bitwarden.enabled "y" -}}
+brew "bitwarden-cli" # Bitwarden-CLI
 {{ end -}}
 
+{{ if eq .mac.mas.enabled "y" -}}
+{{ range .brew_packages.darwin.mas -}}
+mas {{ .name | quote }}, id: {{ .id }}
+{{ end -}}
+{{ end -}}
+{{ end -}} # end macos section
+
 brew bundle --no-lock --file=/dev/stdin <<EOF
-## BREW
-
-brew 'chezmoi'
-
-# utils
-brew "neovim"
-brew "diff-so-fancy"
-brew "ripgrep"
-brew "eza"
-brew "yq"
-brew "fx" # interactive with JSON
-brew "jq"
-brew "bat"
-
-# dev
-brew "mycli"
-brew "ghq" # Manage remote repository clones
-brew "git-standup"
-brew "oha" # web load test in Rust https://github.com/hatoo/oha
-
-# devops
-brew "awscli"
-brew "kubectl"
-brew "kubectx"
-brew "terraform"
-brew "krew"
-brew "argocd"
-brew "k9s"
-brew "minikube"
-
-# monitoring
-brew "bpytop" # better htop
-brew "ctop"   # docker contianer top
-
+{{ range .brew_packages.linux.taps -}}
+tap {{ . | quote }}
+{{ end -}}
+{{ range .brew_packages.linux.brews -}}
+brew {{ . | quote }}
+{{ end -}}
 EOF
+
