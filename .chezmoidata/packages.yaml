@@ -85,6 +85,8 @@ brew_packages:
     - "kubectl"
     - "kubectx"
     - "terraform"
+    - "helm"
+    - "helmfile"
     - "krew"
     - "argocd"
     - "k9s"
