@@ -1,3 +1,0 @@
-{{- /* chezmoi:modify-template */ -}}
-{{- /* set logger sinceSeconds to show all logs */ -}}
-{{ fromYaml .chezmoi.stdin | setValueAtPath "k9s.logger.sinceSeconds" -1 | toYaml }}
