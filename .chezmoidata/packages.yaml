@@ -74,7 +74,8 @@ brew_packages:
     - "bat"
 
     # dev
-    - "mycli"
+    - "mycli" # mysql cli
+    - "glab"
     - "ghq" # Manage remote repository clones
     - "git-standup"
     - "oha" # web load test in Rust https://github.com/hatoo/oha
