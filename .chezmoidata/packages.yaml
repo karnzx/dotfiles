@@ -6,6 +6,7 @@ brew_packages:
   darwin:
     taps:
     - 'homebrew/cask-fonts'
+    - 'hashicorp/tap'
 
     brews:
     - 'mas'
@@ -84,7 +85,7 @@ brew_packages:
     - "awscli"
     - "kubectl"
     - "kubectx"
-    - "terraform"
+    - 'hashicorp/tap/terraform'
     - "helm"
     - "helmfile"
     - "krew"
