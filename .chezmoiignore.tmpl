@@ -1,0 +1,11 @@
+README.md
+bootstrap.sh
+
+{{- if ne .chezmoi.os "darwin" }}
+.zshrc.osx
+{{- end }}
+
+{{- if not (and (eq .chezmoi.os "linux") (.chezmoi.kernel.osrelease | lower | contains "microsoft")) }}
+.zshrc.wsl2
+.zshrc.pageant
+{{- end }}
