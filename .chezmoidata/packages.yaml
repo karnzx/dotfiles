@@ -44,6 +44,8 @@ brew_packages:
     # dev
     - "docker"
     - "visual-studio-code"
+    # vpn
+    - "openvpn-connect"
 
     # fonts
     - "font-meslo-lg-nerd-font"
