@@ -8,3 +8,6 @@ fpath=(/opt/homebrew/opt/curl/share/zsh/site-functions/ # curl
 	$fpath
 )
 
+# change config paths
+export K9S_CONFIG_DIR=~/.config/k9s
+
