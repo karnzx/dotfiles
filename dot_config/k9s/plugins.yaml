@@ -1,4 +1,5 @@
 plugins:
+  # edit secret 
   edit-secret:
     shortCut: Ctrl-X
     description: "Edit Decoded Secret"
@@ -13,3 +14,88 @@ plugins:
       - --context
       - $CONTEXT
       - $NAME
+
+  #--- Create debug container for selected pod in current namespace
+  # See https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/#ephemeral-container
+  debug:
+    shortCut: Shift-D
+    description: Add debug container
+    scopes:
+      - containers
+    command: bash
+    background: false
+    confirm: true
+    args:
+      - -c
+      - "kubectl debug -it -n=$NAMESPACE $POD --target=$NAME --image=nicolaka/netshoot:v0.11 --share-processes -- bash"
+
+  # watch events on selected resources
+  # requires linux "watch" command
+  # change '-n' to adjust refresh time in seconds
+  watch-events:
+    shortCut: Shift-E
+    confirm: false
+    description: Get Events
+    scopes:
+    - all
+    command: sh
+    background: false
+    args:
+    - -c
+    - "watch -n 5 kubectl get events --context $CONTEXT --namespace $NAMESPACE --field-selector involvedObject.name=$NAME"
+
+  # Logs
+  raw-logs-follow:
+    shortCut: Ctrl-L
+    description: logs -f
+    scopes:
+    - po
+    command: kubectl
+    background: false
+    args:
+    - logs
+    - -f
+    - $NAME
+    - -n
+    - $NAMESPACE
+    - --context
+    - $CONTEXT
+    - --kubeconfig
+    - $KUBECONFIG
+  log-less:
+    shortCut: Shift-L
+    description: "logs|less"
+    scopes:
+    - po
+    - containers
+    command: bash
+    background: false
+    args:
+    - -c
+    - '"$@" | less'
+    - dummy-arg
+    - kubectl
+    - logs
+    - $NAME
+    - -n
+    - $NAMESPACE
+    - --context
+    - $CONTEXT
+    - --kubeconfig
+    - $KUBECONFIG
+    - $KUBECONFIG
+
+  # Annotate each line in the given resource's YAML with information from the managedFields to show who last modified the field.
+  # Source: https://github.com/knight42/kubectl-blame
+  blame:
+    shortCut: b
+    confirm: false
+    description: "Blame"
+    scopes:
+      - all
+    command: sh
+    background: false
+    args:
+      - -c
+      - "kubectl-blame $RESOURCE_NAME $NAME -n $NAMESPACE --context $CONTEXT | less"
+
