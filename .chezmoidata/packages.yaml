@@ -9,7 +9,6 @@ brew_packages:
     - 'hashicorp/tap'
 
     brews:
-    - 'mas'
     - 'mas' # Mac App Store manager
     - "git"
     - "curl"
@@ -18,6 +17,7 @@ brew_packages:
     - "tldr"
     - "num-utils" # math
     - "jc"
+    - "watch"
 
     # bitwarden-cli in install_brew_packages.sh.tmpl
 
