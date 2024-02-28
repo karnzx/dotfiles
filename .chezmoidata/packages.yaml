@@ -113,4 +113,5 @@ krew:
     - whoami
     - tree
     - netshoot/netshoot
-
+    - blame
+    - get-all
