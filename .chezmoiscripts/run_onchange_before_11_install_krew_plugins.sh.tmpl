@@ -8,18 +8,14 @@ function add_index() {
     kubectl krew index add "$1" "$2" || true
 }
 
-add_index default https://github.com/kubernetes-sigs/krew-index.git
-add_index netshoot https://github.com/nilic/kubectl-netshoot.git
-
 KREW_NO_UPGRADE_CHECK=1
 
-kubectl krew install <<EOF
-oidc-login
-modify-secret
-resource-capacity
-access-matrix
-whoami
-tree
-netshoot/netshoot
+{{ range .krew.index -}}
+add_index {{ .name | quote }} {{ .url | quote }}
+{{ end }}
 
+kubectl krew install <<EOF
+{{ range .krew.plugins -}}
+{{ . }}
+{{ end -}}
 EOF

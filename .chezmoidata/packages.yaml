@@ -99,3 +99,18 @@ brew_packages:
     - "bpytop" # better htop
     - "ctop"   # docker contianer top
 
+krew:
+  index:
+    - name: default
+      url: https://github.com/kubernetes-sigs/krew-index.git
+    - name: netshoot
+      url: https://github.com/nilic/kubectl-netshoot.git
+  plugins:
+    - oidc-login
+    - modify-secret
+    - resource-capacity
+    - access-matrix
+    - whoami
+    - tree
+    - netshoot/netshoot
+
