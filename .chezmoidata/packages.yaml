@@ -7,6 +7,7 @@ brew_packages:
     taps:
     - 'homebrew/cask-fonts'
     - 'hashicorp/tap'
+    - robusta-dev/homebrew-krr
 
     brews:
     - 'mas' # Mac App Store manager
@@ -18,6 +19,7 @@ brew_packages:
     - "num-utils" # math
     - "jc"
     - "watch"
+    - krr # Prometheus-based Kubernetes Resource Recommendations
 
     # bitwarden-cli in install_brew_packages.sh.tmpl
 
