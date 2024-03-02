@@ -67,7 +67,6 @@ plugins:
     description: "logs|less"
     scopes:
     - po
-    - containers
     command: bash
     background: false
     args:
@@ -83,12 +82,33 @@ plugins:
     - $CONTEXT
     - --kubeconfig
     - $KUBECONFIG
+  log-less-container:
+    shortCut: Shift-L
+    description: "logs|less"
+    scopes:
+    - containers
+    command: bash
+    background: false
+    args:
+    - -c
+    - '"$@" | less'
+    - dummy-arg
+    - kubectl
+    - logs
+    - -c
+    - $NAME
+    - $POD
+    - -n
+    - $NAMESPACE
+    - --context
+    - $CONTEXT
+    - --kubeconfig
     - $KUBECONFIG
 
   # Annotate each line in the given resource's YAML with information from the managedFields to show who last modified the field.
   # Source: https://github.com/knight42/kubectl-blame
   blame:
-    shortCut: b
+    shortCut: Shift-B
     confirm: false
     description: "Blame"
     scopes:
@@ -97,7 +117,15 @@ plugins:
     background: false
     args:
       - -c
-      - "kubectl-blame $RESOURCE_NAME $NAME -n $NAMESPACE --context $CONTEXT | less"
+      - '"$@" | less'
+      - dummy-arg
+      - kubectl-blame 
+      - $RESOURCE_NAME 
+      - $NAME
+      - -n
+      - $NAMESPACE
+      - --context
+      - $CONTEXT
 
   # Get recommendations for CPU/Memory requests and limits using Robusta KRR
   # Requires Prometheus in the Cluster and Robusta KRR (https://github.com/robusta-dev/krr) on your system
