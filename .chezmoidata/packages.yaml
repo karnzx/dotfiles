@@ -91,6 +91,7 @@ brew_packages:
     - "kubectx"
     - 'hashicorp/tap/terraform'
     - "helm"
+    - kustomize
     - "helmfile"
     - "krew"
     - "argocd"
