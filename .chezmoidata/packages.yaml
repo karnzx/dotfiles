@@ -37,6 +37,7 @@ brew_packages:
     - "cheatsheet"
     - "prettyclean"
     - "itsycal"
+    - shottr # screen capture tools
     - monitorcontrol
     # fonts
     - "font-meslo-lg-nerd-font"
