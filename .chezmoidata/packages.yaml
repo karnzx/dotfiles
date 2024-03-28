@@ -90,8 +90,8 @@ brew_packages:
     - "awscli"
     - "kubectl"
     - "kubectx"
-    - 'hashicorp/tap/terraform'
     - "helm"
+    - tfenv
     - kustomize
     - "helmfile"
     - "krew"
