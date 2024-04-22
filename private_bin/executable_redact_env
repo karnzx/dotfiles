@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Check if a file path is provided
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 path/to/your/.env \n"
+    cat <<EOF
+  Set sensitive values to redacted
+$ export REDACT_SENSITIVE_KEYS="API_KEY,DB_PASSWORD"
+  then alias to cat
+$ alias cat=redact_env
+  or directly run 
+$ redact_env {env_file_path}
+EOF
+    exit 1
+fi
+
+ENV_FILE="$1"
+
+# Use the SENSITIVE_KEYS environment variable to specify sensitive keys
+# Expecting a comma-separated list of keys (e.g., "API_KEY,SECRET_KEY,PASSWORD")
+# If not set, default to an empty array
+IFS=',' read -r -a SENSITIVE_KEYS <<< "${REDACT_SENSITIVE_KEYS:-}"
+
+# Function to redact sensitive values
+redact_sensitive_values() {
+    while IFS= read -r line; do
+        for key in "${SENSITIVE_KEYS[@]}"; do
+            if [[ "$line" == $key*=* ]]; then
+                # Extract the value using cut and calculate its length
+                value=$(echo "$line" | cut -d'=' -f2-)
+                length=${#value}
+                # Replace the value with block characters
+                redacted_value=$(printf '█%.0s' $(seq 1 $length))
+                line="${key}=${redacted_value}"
+                break
+            fi
+        done
+        echo "$line"
+    done < "$ENV_FILE"
+}
+
+redact_sensitive_values
