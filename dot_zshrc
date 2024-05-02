@@ -178,8 +178,6 @@ fi
 (( $+commands[bat] )) && alias cat="bat"
 
 alias vim=$VISUAL
-## netstat
-alias netstat="netstat -tulpn"
 ## find text in files
 alias findstr="grep -rnE "
 ## Web app dev LAMP stack; Linux, Apache, MySQL, PHP

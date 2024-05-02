@@ -12,6 +12,9 @@ alias powershell="/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0//powershell.exe
 ## Split 3 panes for workspace
 alias ide="wt -w 0 sp -H -s .35 -D 2> /dev/null \; sp -V -D \; mf up"
 
+## netstat
+alias netstat="netstat -tulpn"
+
 # vagrant WSL2
 # require plugins: virtualbox_WSL2
 export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
