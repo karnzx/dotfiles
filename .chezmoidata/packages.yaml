@@ -11,6 +11,7 @@ brew_packages:
 
     brews:
     - 'mas' # Mac App Store manager
+    - coreutils
     - "git"
     - "curl"
     - "wget"
