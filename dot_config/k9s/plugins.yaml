@@ -138,7 +138,6 @@ plugins:
       - deployments
       - daemonsets
       - statefulsets
-      - jobs
     command: bash
     background: false
     confirm: false
