@@ -21,6 +21,7 @@ brew_packages:
     - "jc"
     - "watch"
     - krr # Prometheus-based Kubernetes Resource Recommendations
+    - gnu-tar
 
     # bitwarden-cli in install_brew_packages.sh.tmpl
 
@@ -86,6 +87,7 @@ brew_packages:
     - "ghq" # Manage remote repository clones
     - "git-standup"
     - "oha" # web load test in Rust https://github.com/hatoo/oha
+    - "pre-commit"
 
     # devops
     - "awscli"
