@@ -22,6 +22,9 @@ brew_packages:
     - "watch"
     - krr # Prometheus-based Kubernetes Resource Recommendations
     - gnu-tar
+    - qemu
+    - docker # docker cli
+    - colima # container on mac
 
     # bitwarden-cli in install_brew_packages.sh.tmpl
 
@@ -47,7 +50,6 @@ brew_packages:
     - "font-caskaydia-cove-nerd-font"
     - "font-caskaydia-mono-nerd-font"
     # dev
-    - "docker"
     - "visual-studio-code"
     # vpn
     - "openvpn-connect"
@@ -122,3 +124,5 @@ krew:
     - netshoot/netshoot
     - blame
     - get-all
+    - evict-pod
+    - browse-pvc
