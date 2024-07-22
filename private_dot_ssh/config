@@ -1,6 +1,7 @@
 Include config_hosts
 Include config.local
 Include pageant.conf # For window
+IgnoreUnknown UseKeychain # For non MacOS
 
 Host *
   ServerAliveInterval 60
@@ -11,3 +12,7 @@ Host *
   ControlMaster auto
   ControlPersist 72000
   ControlPath ~/.ssh/s/%C
+  UseKeychain yes
+
+# For MacOS to permanent add key to agent use $ ssh-add --apple-use-keychain ~/.ssh/key_name
+
