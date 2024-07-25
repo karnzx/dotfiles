@@ -25,6 +25,7 @@ brew_packages:
     - qemu
     - docker # docker cli
     - colima # container on mac
+    - jordanbaird-ice # Free Bartender
 
     # bitwarden-cli in install_brew_packages.sh.tmpl
 
