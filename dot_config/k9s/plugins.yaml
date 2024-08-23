@@ -117,15 +117,7 @@ plugins:
     background: false
     args:
       - -c
-      - '"$@" | less'
-      - dummy-arg
-      - kubectl-blame 
-      - $RESOURCE_NAME 
-      - $NAME
-      - -n
-      - $NAMESPACE
-      - --context
-      - $CONTEXT
+      - "kubectl-blame $RESOURCE_NAME $NAME -n $NAMESPACE --context $CONTEXT | less"
 
   # Get recommendations for CPU/Memory requests and limits using Robusta KRR
   # Requires Prometheus in the Cluster and Robusta KRR (https://github.com/robusta-dev/krr) on your system
@@ -153,3 +145,4 @@ plugins:
         break
         fi
         done
+
