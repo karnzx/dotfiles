@@ -3,11 +3,10 @@
 # no need to update and clean up commands
 # brew auto update before install (brew update)
 # brew auto cleanup old version after 30 days (brew cleanup)
-HOMEBREW_NO_INSTALL_UPGRADE=1
 
 {{ if eq .chezmoi.os "darwin" -}}
 
-brew bundle --no-lock --file=/dev/stdin <<EOF
+brew bundle --no-upgrade --no-lock --file=/dev/stdin <<EOF
 {{ range .brew_packages.darwin.taps -}}
 tap {{ . | quote }}
 {{ end -}}
@@ -30,7 +29,7 @@ mas {{ .name | quote }}, id: {{ .id }}
 {{ end -}}
 {{ end -}} # end macos section
 
-brew bundle --no-lock --file=/dev/stdin <<EOF
+brew bundle --no-upgrade --no-lock --file=/dev/stdin <<EOF
 {{ range .brew_packages.linux.taps -}}
 tap {{ . | quote }}
 {{ end -}}

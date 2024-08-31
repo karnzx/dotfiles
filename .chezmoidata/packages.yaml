@@ -5,109 +5,110 @@ brew_packages:
   # HomeBrew MacOS only
   darwin:
     taps:
-    - 'homebrew/cask-fonts'
-    - 'hashicorp/tap'
-    - robusta-dev/homebrew-krr
+      - "homebrew/cask-fonts"
+      - "hashicorp/tap"
+      - robusta-dev/homebrew-krr
 
     brews:
-    - 'mas' # Mac App Store manager
-    - coreutils
-    - "git"
-    - "curl"
-    - "wget"
-    - "tmux"
-    - "tldr"
-    - "num-utils" # math
-    - "jc"
-    - "watch"
-    - krr # Prometheus-based Kubernetes Resource Recommendations
-    - gnu-tar
-    - qemu
-    - docker # docker cli
-    - colima # container on mac
-    - jordanbaird-ice # Free Bartender
+      - "mas" # Mac App Store manager
+      - coreutils
+      - "git"
+      - "curl"
+      - "wget"
+      - "tmux"
+      - "tldr"
+      - "num-utils" # math
+      - "jc"
+      - "watch"
+      - krr # Prometheus-based Kubernetes Resource Recommendations
+      - gnu-tar
+      - qemu
+      - docker # docker cli
+      - colima # container on mac
+      - jordanbaird-ice # Free Bartender
 
     # bitwarden-cli in install_brew_packages.sh.tmpl
 
     casks:
-    # common
-    - "google-chrome"
-    - "brave-browser"
-    - "iterm2"
-    - "obsidian"
-    - "rectangle"
-    - "onedrive"
-    - "unnaturalscrollwheels"
-    - "slack"
-    - "raycast"
-    - "cheatsheet"
-    - "prettyclean"
-    - "itsycal"
-    - shottr # screen capture tools
-    - monitorcontrol
-    # fonts
-    - "font-meslo-lg-nerd-font"
-    - "font-hack-nerd-font"
-    - "font-caskaydia-cove-nerd-font"
-    - "font-caskaydia-mono-nerd-font"
-    # dev
-    - "visual-studio-code"
-    # vpn
-    - "openvpn-connect"
+      # common
+      - "google-chrome"
+      - "brave-browser"
+      - "iterm2"
+      - "obsidian"
+      - "rectangle"
+      - "onedrive"
+      - "unnaturalscrollwheels"
+      - "slack"
+      - "raycast"
+      - "cheatsheet"
+      - "prettyclean"
+      - "itsycal"
+      - shottr # screen capture tools
+      - monitorcontrol
+      # fonts
+      - "font-meslo-lg-nerd-font"
+      - "font-hack-nerd-font"
+      - "font-caskaydia-cove-nerd-font"
+      - "font-caskaydia-mono-nerd-font"
+      # dev
+      - "visual-studio-code"
+      # vpn
+      - "openvpn-connect"
 
-    # fonts
-    - "font-meslo-lg-nerd-font"
-    - "font-hack-nerd-font"
-    - "font-caskaydia-cove-nerd-font"
-    - "font-caskaydia-mono-nerd-font"
+      # fonts
+      - "font-meslo-lg-nerd-font"
+      - "font-hack-nerd-font"
+      - "font-caskaydia-cove-nerd-font"
+      - "font-caskaydia-mono-nerd-font"
 
     ## MAS (Mac Apple Store)
     mas:
-    - name: 'Bitwarden'
-      id: 1352778147
-    - name: 'RunCat'
-      id: 1429033973
+      - name: "Bitwarden"
+        id: 1352778147
+      - name: "RunCat"
+        id: 1429033973
 
   # LinuxBrew (Linux, WSL2) and additional for MacOS
   linux:
     taps: {}
     brews:
-    - 'chezmoi'
+      - "chezmoi"
 
-    # utils
-    - "neovim"
-    - "diff-so-fancy"
-    - "ripgrep"
-    - "eza"
-    - "yq"
-    - "fx" # interactive with JSON
-    - "jq"
-    - "bat"
+      # utils
+      - "neovim"
+      - "diff-so-fancy"
+      - "ripgrep"
+      - "eza"
+      - "yq"
+      - "fx" # interactive with JSON
+      - "jq"
+      - "bat"
+      - "fd"
 
-    # dev
-    - "mycli" # mysql cli
-    - "glab"
-    - "ghq" # Manage remote repository clones
-    - "git-standup"
-    - "oha" # web load test in Rust https://github.com/hatoo/oha
-    - "pre-commit"
+      # dev
+      - "mycli" # mysql cli
+      - "glab"
+      - "ghq" # Manage remote repository clones
+      - "git-standup"
+      - "oha" # web load test in Rust https://github.com/hatoo/oha
+      - "pre-commit"
 
-    # devops
-    - "awscli"
-    - "kubectl"
-    - "kubectx"
-    - "helm"
-    - tfenv
-    - kustomize
-    - "helmfile"
-    - "krew"
-    - "argocd"
-    - "k9s"
-    - "minikube"
+      # devops
+      - "awscli"
+      - "kubectl"
+      - "kubectx"
+      - "helm"
+      - tfenv
+      - kustomize
+      - "helmfile"
+      - "krew"
+      - "argocd"
+      - "k9s"
+      - "minikube"
 
-    # monitoring
-    - "bpytop" # better htop
-    - "ctop"   # docker contianer top
+      # monitoring
+      - "bpytop" # better htop
+      - "ctop" # docker contianer top
 
 krew:
   index:
