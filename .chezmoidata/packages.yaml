@@ -45,6 +45,7 @@ brew_packages:
       - "itsycal"
       - shottr # screen capture tools
       - monitorcontrol
+      - the-unarchiver
       # fonts
       - "font-meslo-lg-nerd-font"
       - "font-hack-nerd-font"
