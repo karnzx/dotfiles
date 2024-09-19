@@ -35,7 +35,6 @@ brew_packages:
       - "brave-browser"
       - "iterm2"
       - "obsidian"
-      - "rectangle"
       - "onedrive"
       - "unnaturalscrollwheels"
       - "slack"
