@@ -26,7 +26,6 @@ brew_packages:
       - qemu
       - docker # docker cli
       - colima # container on mac
-      - "jordanbaird-ice" # Free Bartender
       - tgswitch
       - tfswitch
       - jinja2-cli
@@ -60,6 +59,8 @@ brew_packages:
       - "visual-studio-code"
       # vpn
       - "openvpn-connect"
+      - "jordanbaird-ice" # Free Bartender
+      - "aws-vault"
 
       # fonts
       - "font-meslo-lg-nerd-font"
