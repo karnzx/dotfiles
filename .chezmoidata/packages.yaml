@@ -8,6 +8,7 @@ brew_packages:
       - "homebrew/cask-fonts"
       - "hashicorp/tap"
       - robusta-dev/homebrew-krr
+      - warrensbox/tap # tg/tfswitch
 
     brews:
       - "mas" # Mac App Store manager
@@ -25,13 +26,18 @@ brew_packages:
       - qemu
       - docker # docker cli
       - colima # container on mac
-      - jordanbaird-ice # Free Bartender
+      - "jordanbaird-ice" # Free Bartender
+      - tgswitch
+      - tfswitch
+      - jinja2-cli
+      - gomplate
 
     # bitwarden-cli in install_brew_packages.sh.tmpl
 
     casks:
       # common
       - "google-chrome"
+      - arc
       - "brave-browser"
       - "iterm2"
       - "obsidian"
