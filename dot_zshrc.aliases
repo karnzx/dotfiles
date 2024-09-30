@@ -9,3 +9,5 @@ alias kctx="kubectx"
 
 # look and use ssh
 alias gq="ghq get -l -p"
+
+alias tg='terragrunt'
