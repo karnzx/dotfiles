@@ -30,6 +30,9 @@ brew_packages:
       - tfswitch
       - jinja2-cli
       - gomplate
+      # aws cli utils
+      - "aws-vault"
+      - "aws-sso-cli"
 
     # bitwarden-cli in install_brew_packages.sh.tmpl
 
@@ -60,7 +63,6 @@ brew_packages:
       # vpn
       - "openvpn-connect"
       - "jordanbaird-ice" # Free Bartender
-      - "aws-vault"
 
       # fonts
       - "font-meslo-lg-nerd-font"
