@@ -130,7 +130,7 @@ krew:
     - modify-secret
     - resource-capacity
     - access-matrix
-    - whoami
+    - rbac-tool
     - tree
     - netshoot/netshoot
     - blame
