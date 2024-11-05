@@ -11,3 +11,5 @@ alias kctx="kubectx"
 alias gq="ghq get -l -p"
 
 alias tg='terragrunt'
+
+alias git-pull-all="find . -type d -name .git -exec echo {} \; -exec git --git-dir={} --work-tree=$PWD/{}/.. pull \;"
