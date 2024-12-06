@@ -6,9 +6,6 @@ brew_packages:
   darwin:
     taps:
       - "homebrew/cask-fonts"
-      - "hashicorp/tap"
-      - robusta-dev/homebrew-krr
-      - warrensbox/tap # tg/tfswitch
 
     brews:
       - "mas" # Mac App Store manager
@@ -21,18 +18,9 @@ brew_packages:
       - "num-utils" # math
       - "jc"
       - "watch"
-      - krr # Prometheus-based Kubernetes Resource Recommendations
       - gnu-tar
       - qemu
-      - docker # docker cli
       - colima # container on mac
-      - tgswitch
-      - tfswitch
-      - jinja2-cli
-      - gomplate
-      # aws cli utils
-      - "aws-vault"
-      - "aws-sso-cli"
 
     # bitwarden-cli in install_brew_packages.sh.tmpl
 
@@ -79,7 +67,10 @@ brew_packages:
 
   # LinuxBrew (Linux, WSL2) and additional for MacOS
   linux:
-    taps: {}
+    taps:
+      - "hashicorp/tap"
+      - robusta-dev/homebrew-krr
+      - warrensbox/tap # tg/tfswitch
     brews:
       - "chezmoi"
 
@@ -107,13 +98,21 @@ brew_packages:
       - "kubectl"
       - "kubectx"
       - "helm"
-      - tfenv
+      - krr # Prometheus-based Kubernetes Resource Recommendations
+      - tgswitch
+      - tfswitch
       - kustomize
       - "helmfile"
       - "krew"
       - "argocd"
       - "k9s"
       - "minikube"
+      - jinja2-cli
+      - docker # docker cli
+      - gomplate
+      # aws cli utils
+      - "aws-vault"
+      - "aws-sso-cli"
 
       # monitoring
       - "bpytop" # better htop
