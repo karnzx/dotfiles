@@ -28,7 +28,7 @@ brew_packages:
       # common
       - "google-chrome"
       - arc
-      - "brave-browser"
+      - firefox
       - "iterm2"
       - "obsidian"
       - "onedrive"
