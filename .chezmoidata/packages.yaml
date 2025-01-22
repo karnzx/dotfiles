@@ -28,7 +28,6 @@ brew_packages:
       # common
       - "google-chrome"
       - arc
-      - firefox
       - "iterm2"
       - "obsidian"
       - "onedrive"
@@ -84,6 +83,9 @@ brew_packages:
       - "jq"
       - "bat"
       - "fd"
+      - gpg
+      - git-crypt
+      - inetutils
 
       # dev
       - "mycli" # mysql cli
@@ -113,6 +115,8 @@ brew_packages:
       # aws cli utils
       - "aws-vault"
       - "aws-sso-cli"
+      - jsonnet
+      - kubeconform
 
       # monitoring
       - "bpytop" # better htop
