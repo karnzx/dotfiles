@@ -64,6 +64,7 @@ export PAGER=less
 export SYSTEMD_LESS=${LESS}S
 export MANOPT=--no-hyphenation
 export HOMEBREW_NO_ANALYTICS=1
+export TLDR_AUTO_UPDATE_DISABLED=1
 
 ## k8s (krew)
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
