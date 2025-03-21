@@ -14,7 +14,7 @@ brew_packages:
       - "curl"
       - "wget"
       - "tmux"
-      - "tldr"
+      - tlrc
       - "num-utils" # math
       - "jc"
       - "watch"
@@ -34,7 +34,6 @@ brew_packages:
       - "unnaturalscrollwheels"
       - "slack"
       - "raycast"
-      - "cheatsheet"
       - "prettyclean"
       - "itsycal"
       - shottr # screen capture tools
@@ -67,7 +66,6 @@ brew_packages:
   # LinuxBrew (Linux, WSL2) and additional for MacOS
   linux:
     taps:
-      - "hashicorp/tap"
       - robusta-dev/homebrew-krr
       - warrensbox/tap # tg/tfswitch
     brews:
