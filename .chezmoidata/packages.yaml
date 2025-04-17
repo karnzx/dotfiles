@@ -5,7 +5,6 @@ brew_packages:
   # HomeBrew MacOS only
   darwin:
     taps:
-      - "homebrew/cask-fonts"
 
     brews:
       - "mas" # Mac App Store manager
