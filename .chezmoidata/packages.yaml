@@ -84,6 +84,8 @@ brew_packages:
       - gpg
       - git-crypt
       - inetutils
+      - zoxide # better z jumps
+      - mise # replace asdf
 
       # dev
       - "mycli" # mysql cli
@@ -107,6 +109,7 @@ brew_packages:
       - "argocd"
       - "k9s"
       - "minikube"
+      - kubecm # kubectl context switcher and management
       - jinja2-cli
       - docker # docker cli
       - gomplate
@@ -138,3 +141,4 @@ krew:
     - get-all
     - evict-pod
     - browse-pvc
+    - node-shell # access into node
