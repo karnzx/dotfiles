@@ -11,3 +11,5 @@ fpath=(/opt/homebrew/opt/curl/share/zsh/site-functions/ # curl
 # change config paths
 export K9S_CONFIG_DIR=~/.config/k9s
 
+
+alias reloaddns="dscacheutil -flushcache && sudo killall -HUP mDNSResponder"

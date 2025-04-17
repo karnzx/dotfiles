@@ -13,3 +13,7 @@ alias gq="ghq get -l -p"
 alias tg='terragrunt'
 
 alias git-pull-all="find . -type d -name .git -exec echo {} \; -exec git --git-dir={} --work-tree={}/.. pull \;"
+alias git-prune-branches="""
+git fetch --prune
+git branch -vv | grep 'gone]' | awk '{print $1}' | xargs git branch -D
+"""
