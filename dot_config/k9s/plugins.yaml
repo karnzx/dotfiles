@@ -1,5 +1,5 @@
 plugins:
-  # edit secret 
+  # edit secret
   edit-secret:
     shortCut: Ctrl-X
     description: "Edit Decoded Secret"
@@ -37,73 +37,73 @@ plugins:
     confirm: false
     description: Get Events
     scopes:
-    - all
+      - all
     command: sh
     background: false
     args:
-    - -c
-    - "watch -n 5 kubectl get events --context $CONTEXT --namespace $NAMESPACE --field-selector involvedObject.name=$NAME"
+      - -c
+      - "watch -n 5 kubectl get events --context $CONTEXT --namespace $NAMESPACE --field-selector involvedObject.name=$NAME"
 
   # Logs
   raw-logs-follow:
     shortCut: Ctrl-L
     description: logs -f
     scopes:
-    - po
+      - po
     command: kubectl
     background: false
     args:
-    - logs
-    - -f
-    - $NAME
-    - -n
-    - $NAMESPACE
-    - --context
-    - $CONTEXT
-    - --kubeconfig
-    - $KUBECONFIG
+      - logs
+      - -f
+      - $NAME
+      - -n
+      - $NAMESPACE
+      - --context
+      - $CONTEXT
+      - --kubeconfig
+      - $KUBECONFIG
   log-less:
     shortCut: Shift-L
     description: "logs|less"
     scopes:
-    - po
+      - po
     command: bash
     background: false
     args:
-    - -c
-    - '"$@" | less'
-    - dummy-arg
-    - kubectl
-    - logs
-    - $NAME
-    - -n
-    - $NAMESPACE
-    - --context
-    - $CONTEXT
-    - --kubeconfig
-    - $KUBECONFIG
+      - -c
+      - '"$@" | less'
+      - dummy-arg
+      - kubectl
+      - logs
+      - $NAME
+      - -n
+      - $NAMESPACE
+      - --context
+      - $CONTEXT
+      - --kubeconfig
+      - $KUBECONFIG
   log-less-container:
     shortCut: Shift-L
     description: "logs|less"
     scopes:
-    - containers
+      - containers
     command: bash
     background: false
     args:
-    - -c
-    - '"$@" | less'
-    - dummy-arg
-    - kubectl
-    - logs
-    - -c
-    - $NAME
-    - $POD
-    - -n
-    - $NAMESPACE
-    - --context
-    - $CONTEXT
-    - --kubeconfig
-    - $KUBECONFIG
+      - -c
+      - '"$@" | less'
+      - dummy-arg
+      - kubectl
+      - logs
+      - -c
+      - $NAME
+      - $POD
+      - -n
+      - $NAMESPACE
+      - --context
+      - $CONTEXT
+      - --kubeconfig
+      - $KUBECONFIG
 
   # Annotate each line in the given resource's YAML with information from the managedFields to show who last modified the field.
   # Source: https://github.com/knight42/kubectl-blame
@@ -145,4 +145,18 @@ plugins:
         break
         fi
         done
+        # Inspect certificate chains with openssl.
 
+  node-shell:
+    shortCut: Ctrl-N
+    description: "Open a root shell on a node using the node-shell plugin"
+    scopes:
+      - nodes
+    command: kubectl
+    args:
+      - node-shell
+      - $NAME
+      - --context
+      - $CONTEXT
+    background: false
+    confirm: false
