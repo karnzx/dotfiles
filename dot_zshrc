@@ -31,7 +31,6 @@ plugin_repo=(
 	romkatv/zsh-prompt-benchmark
 	ohmyzsh/ohmyzsh
 	djui/alias-tips
-	redxtech/zsh-asdf-direnv
 	mattmc3/zman # zsh docs search plugin
 )
 z4h install "${plugin_repo[@]}" || return
@@ -65,6 +64,8 @@ export SYSTEMD_LESS=${LESS}S
 export MANOPT=--no-hyphenation
 export HOMEBREW_NO_ANALYTICS=1
 export TLDR_AUTO_UPDATE_DISABLED=1
+export AWS_REGION=ap-southeast-1
+export PYTHON_VENV_NAME=".venv"
 
 ## k8s (krew)
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
@@ -87,9 +88,11 @@ plugins=(
 	ohmyzsh/ohmyzsh/plugins/kubectl
 	ohmyzsh/ohmyzsh/plugins/brew
 	ohmyzsh/ohmyzsh/plugins/terraform
+  ohmyzsh/ohmyzsh/plugins/python
+  ohmyzsh/ohmyzsh/plugins/mise
+  ohmyzsh/ohmyzsh/plugins/zoxide
 	# others
 	djui/alias-tips
-	redxtech/zsh-asdf-direnv
 	mattmc3/zman
 	)
 z4h load -c -- "${plugins[@]}"
@@ -250,9 +253,3 @@ z4h source -c -- $ZDOTDIR/.zshrc.local
 z4h source -c -- $ZDOTDIR/.zshrc.env
 
 z4h compile -- $ZDOTDIR/{.zshenv,.zprofile,.zshrc,.zlogin,.zlogout}
-
-# asdf
-# ** Dont delete this line. source "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
-# use to fool the command "asdf direnv setup --shell zsh --verison ..." from automatic modify this file
-# i use z4h source instead of source, because complie file is a bit faster
-z4h source -c -- "${XDG_CONFIG_HOME:-$HOME/.config}/asdf-direnv/zshrc"
