@@ -74,12 +74,10 @@ export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 # export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
 # export PATH=$PATH:/mnt/d/VirtualBox # VirtualBox installed path on Window
 
-# # Custom plugin options
-# ....
-
 ## use plugins
 # z4h source ohmyzsh/ohmyzsh/lib/diagnostics.zsh  # source an individual file
 ## load plugins
+mkdir -p $ZSH_CACHE_DIR/completions
 plugins=(
 	# OhMyZsh
 	ohmyzsh/ohmyzsh/plugins/git
