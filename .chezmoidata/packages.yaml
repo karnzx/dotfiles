@@ -85,6 +85,7 @@ brew_packages:
       - inetutils
       - zoxide # better z jumps
       - mise # replace asdf
+      - age # encryption tool
 
       # dev
       - "mycli" # mysql cli
