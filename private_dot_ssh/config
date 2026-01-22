@@ -1,3 +1,5 @@
+private_dot_ssh/configInclude $HOME/.colima/ssh_config
+
 Include config_hosts
 Include config.local
 Include pageant.conf # For window
@@ -11,7 +13,7 @@ Host *
   EscapeChar `
   ControlMaster auto
   ControlPersist 72000
-  ControlPath ~/.ssh/s/%C
+  ControlPath ~/.ssh/s/%r@%h:%p
   UseKeychain yes
 
 # For MacOS to permanent add key to agent use $ ssh-add --apple-use-keychain ~/.ssh/key_name
