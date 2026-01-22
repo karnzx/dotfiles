@@ -194,3 +194,16 @@ ssh_hostkey(){
 	ssh-keygen -lf $file
 	rm -rf $file
 }
+
+# Python UV
+va () {
+    source .venv/bin/activate 2>/dev/null || source ../.venv/bin/activate 2>/dev/null || echo 'no .env found in this or parent directory' && false
+}
+va! () { 
+    va || vc && va
+}
+vc () {
+    uv venv
+}
+vd () { deactivate; }
+
