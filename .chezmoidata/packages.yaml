@@ -20,6 +20,7 @@ brew_packages:
       - gnu-tar
       - qemu
       - colima # container on mac
+      - stats
 
     # bitwarden-cli in install_brew_packages.sh.tmpl
 
@@ -59,8 +60,6 @@ brew_packages:
     mas:
       - name: "Bitwarden"
         id: 1352778147
-      - name: "RunCat"
-        id: 1429033973
 
   # LinuxBrew (Linux, WSL2) and additional for MacOS
   linux:
